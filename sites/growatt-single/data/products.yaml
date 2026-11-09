@@ -1,0 +1,252 @@
+# Every product in the build: panels, inverter, breakers, boards and the parts
+# inside the PV boxes. build.yaml and combiners.yaml refer to them by id (the
+# name ending in a colon, like jinko-tiger-neo-590).
+#
+#   name      full product name, shown on cards and in the detail panel
+#   short     optional short name, used in the sizing checks
+#   icon      pv, inverter, mppt, battery, combiner, fuse, mcb, mccb, spd, busbar,
+#             shunt, gx, db, meter, grid or home
+#   about     one line on what it does
+#   specs     key: value pairs. Each key needs a label in spec_labels below.
+#             Use null for a value you don't know yet: it stays hidden on the page
+#             and the build lists it, so you can see what's still missing.
+#   note, advice   optional extra lines in the detail panel
+#   links     datasheet, buy and alternatives. Mark affiliate links with
+#             affiliate: true so the page labels them.
+
+spec_labels:   # spec key: [label shown on the page, unit]
+  pmax_w: [Power, W]
+  voc_v: [Voc, V]
+  isc_a: [Isc, A]
+  imp_a: [Imp, A]
+  voc_coef_pct: [Voc temp. coeff., "%/°C"]
+  max_fuse_a: [Max series fuse, A]
+  inverter_va: [Max apparent power, VA]
+  cont_w_25c: [Rated output, W]
+  peak_w: [Peak for 10 s, W]
+  battery_v: [Battery, ""]
+  charge_a: [Max charge and discharge, A]
+  pv_voc_max_v: ["PV voltage, absolute max", V]
+  pv_w_max: [Max PV input power, W]
+  mppt_range: [MPPT range, ""]
+  trackers: [MPPTs, ""]
+  mppt_currents: [MPPT input current, ""]
+  pv_op_a: [PV current per string MPPT, A]
+  pv_isc_max_a: [PV short-circuit per string MPPT, A]
+  ac_in_max_a: [Max AC input current, A]
+  parallel: [Parallel, ""]
+  comms: [Comms, ""]
+  efficiency: [Peak efficiency, ""]
+  current_a: [Frame, A]
+  trip: [Trip, ""]
+  poles: [Poles, ""]
+  voltage_vdc: [Voltage, V DC]
+  fuse_a: [String fuses, A]
+  fuses: [Fuses, ""]
+  mcb_2p_a: [2P breaker, A]
+  spd_ucpv_v: [SPD voltage, V DC]
+  breaker_vdc: [Breaker voltage, V DC]
+  spd_v: [Max voltage, V DC]
+  kwh: [Energy, kWh]
+  cells: [Cells, ""]
+  nominal_v: [Nominal, V]
+  ah: [Capacity, Ah]
+  chem: [Chemistry, ""]
+  bms: [BMS, ""]
+  bms_a: [BMS current, A]
+  rating_a: [Rating, A]
+  bars: [Bars, ""]
+  main_a: [Main breaker, A]
+  spd: [Surge protector, ""]
+  deye_in_a: [Breaker to each Deye grid port, A]
+  mcb_a: [MCB, A]
+  rcbo: [RCBO, ""]
+  phase: [Supply, ""]
+  meter: [Meter, ""]
+  ct: [Export control, ""]
+  spd_type: [Class, ""]
+  imax: [Max discharge, ""]
+  uc_v: [Uc, V AC]
+  joins: [Joins, ""]
+
+products:
+
+  jinko-tiger-neo-590:
+    name: Jinko Tiger Neo N-type 72HL4, 590 W
+    short: Jinko 590 W
+    icon: pv
+    about: Solar panel. Turns sunlight into DC electricity.
+    specs:
+      pmax_w: 590
+      voc_v: 52.62
+      isc_a: 14.13
+      imp_a: 13.5
+      voc_coef_pct: -0.25
+      max_fuse_a: null
+    note: One panel model across the whole array, so every string behaves the same.
+
+  growatt-spf6000-es-plus:
+    name: Growatt SPF 6000 ES Plus, 6 kW, off-grid, 48 V battery
+    short: Growatt SPF 6000
+    icon: inverter
+    about: Off-grid inverter-charger with two built-in solar trackers. Runs the house from solar and battery, and uses grid as a backup charger and bypass. It doesn’t export to grid.
+    specs:
+      cont_w_25c: 6000
+      inverter_va: 6000
+      peak_w: 12000
+      battery_v: 48 V
+      charge_a: 100
+      trackers: 2
+      pv_w_max: 8000
+      pv_voc_max_v: 500
+      mppt_range: 120 to 450 V
+      mppt_currents: "16 + 16 A, one string per tracker"
+      pv_op_a: 16
+      pv_isc_max_a: null
+      parallel: Up to 6 units
+      comms: "CAN and RS485 to the BMS, Wi-Fi logger"
+      efficiency: 93%
+    note: "Max charge 100 A from solar and 80 A from grid. The home JK BMS is set to 88 A continuous charge, so set the Growatt’s maximum charge current to 80 A."
+    links:
+      datasheet: https://en.growatt.com/products/spf-6000-es-plus
+      buy:
+        - name: Fouani (Nigeria)
+          url: https://fouanistore.com/ng/en/product/growatt-spf-6000-es-hybrid-6kw-48v-big-pv-input-inverter
+
+  pv-box-2ch:
+    name: PV box, 2 separate channels, Feeo parts
+    icon: combiner
+    about: PV box. Where the panel strings are protected and can be switched off before they reach the inverter.
+    specs:
+      fuses: 4, on + and − of each string
+      fuse_a: 23
+      spd_ucpv_v: 600
+      mcb_2p_a: null
+      breaker_vdc: null
+    note: Two separate channels, one per Growatt tracker, built from the same Feeo fuses, 2-pole breakers and 600 V surge protectors as the home system’s combiner.
+    links:
+      buy:
+        - name: Feeo fuse holder on AliExpress
+          url: https://s.click.aliexpress.com/e/_c41K6QGX
+          affiliate: true
+
+  feeo-fuse-23:
+    name: Feeo PV fuse and holder, 23 A
+    icon: fuse
+    about: PV fuse. Blows to protect a string’s cable if too much current flows back into it.
+    specs:
+      fuse_a: 23
+    links:
+      buy:
+        - name: AliExpress
+          url: https://s.click.aliexpress.com/e/_c41K6QGX
+          affiliate: true
+
+  feeo-spd-600:
+    name: Feeo DC surge protector, 600 V
+    icon: spd
+    about: Surge protector. Diverts voltage spikes from lightning or switching to earth before they reach the equipment.
+    specs:
+      spd_v: 600
+
+  feeo-mcb-2p:
+    name: Feeo DC breaker, 2 pole
+    icon: mcb
+    about: DC breaker. Switches the string off and trips on overload.
+    specs:
+      current_a: null
+      voltage_vdc: null
+
+  beny-bdm-250:
+    name: ZJBeny DC MCCB, 250 A frame, in enclosure
+    icon: mccb
+    about: DC moulded-case breaker. Protects the battery cable from overload and short circuit, and isolates the inverter from the batteries.
+    specs:
+      current_a: 250
+      trip: Adjustable
+      poles: 2
+      voltage_vdc: 500
+    note: The same adjustable 250 A unit as on the home system, set to suit the Growatt.
+    links:
+      buy:
+        - name: ZJBeny store on Alibaba
+          url: https://zjbeny.en.alibaba.com/search/product?SearchText=mccb
+      alternatives:
+        - name: Nanque 2P MCCB, 200 A
+          url: https://s.click.aliexpress.com/e/_c3VDGhOR
+          affiliate: true
+
+  busbar-48v:
+    name: Battery busbar pair
+    icon: busbar
+    about: Busbar. Copper bars where the inverter and the battery connect, with room for a second pack.
+    specs:
+      bars: Positive and negative
+      rating_a: null
+
+  diy-lfp-14k7:
+    name: Deriy EVE LiFePO4 battery, 14.7 kWh
+    icon: battery
+    about: LiFePO4 battery pack. Stores energy for night and cloudy days. Its BMS protects the cells from overcharge, overdischarge and too much current.
+    specs:
+      kwh: 14.7
+      cells: 16S
+      nominal_v: 51.2
+      ah: null
+      chem: LiFePO4, EVE cells
+      bms: JK inverter BMS
+      bms_a: 200
+      comms: CAN to the Growatt over RJ45
+    note: Deriy pack built on EVE LiFePO4 cells with a JK inverter BMS. The Growatt reads state of charge and charge limits from the BMS, so no separate battery monitor is needed.
+    links:
+      buy:
+        - name: Deriy Energy
+          url: https://www.deriyenergy.com/
+
+  chint-nxu-ii-275:
+    name: Chint NXU-II Type 2 SPD, 2P, 40 kA, 275 V
+    icon: spd
+    about: Surge protector. Diverts voltage spikes from lightning or switching to earth before they reach the equipment.
+    specs:
+      spd_type: Type 2
+      poles: 2
+      imax: 40 kA
+      uc_v: 275
+    advice: The local Chint dealer didn’t stock the 275 V version, so this one came from AliExpress.
+    links:
+      buy:
+        - name: AliExpress
+          url: https://s.click.aliexpress.com/e/_c3GayHMx
+          affiliate: true
+
+  grid-board:
+    name: "Grid board: Chint MCB, SPD, MCB"
+    icon: db
+    about: Grid distribution board. Takes the utility supply through breakers and surge protection, then feeds the Growatt’s AC input.
+    specs:
+      phase: Single phase
+      meter: Utility kWh meter
+      main_a: null
+      spd: Chint NXU-II, 275 V
+    note: The grid only charges the battery and bypasses to the house when solar and battery run short. There’s no CT and no export.
+    advice: Buy Chint breakers and RCBOs from an authorised Chint dealer in Nigeria.
+
+  ac-board-light:
+    name: "Light-load board: Chint MCB, SPD, RCBO"
+    icon: db
+    about: Distribution board. Breakers, surge protection and an RCBO, which cuts power on overload or earth leakage to protect people from shock.
+    specs:
+      mcb_a: null
+      spd: Chint NXU-II, 275 V
+      rcbo: null
+    advice: Buy Chint breakers and RCBOs from an authorised Chint dealer in Nigeria.
+
+  ac-board-heavy:
+    name: "Heavy-load board: Chint MCB, SPD, RCBO"
+    icon: db
+    about: Distribution board. Breakers, surge protection and an RCBO, which cuts power on overload or earth leakage to protect people from shock.
+    specs:
+      mcb_a: null
+      spd: Chint NXU-II, 275 V
+      rcbo: null
+    advice: Buy Chint breakers and RCBOs from an authorised Chint dealer in Nigeria.

@@ -1,0 +1,136 @@
+# This design: the parts used and how many, how the panel strings are wired,
+# the page text, the three energy-flow views and the battery-side check
+# settings. Products are described in products.yaml; positions on the drawing
+# live in layout.yaml.
+
+version: "0.1"
+updated: 2026-11-09   # shown in the footer, with the version
+
+# Text at the top of the page and in the "Why this design" section.
+# Text fields can use <b> for bold.
+page:
+  title: Project Anor · one Growatt SPF 6000, entry level
+  description: An entry-level alternative to the Project Anor home solar system, built around one Growatt SPF 6000 ES Plus off-grid inverter, 9 Jinko panels on its two built-in trackers and one Deriy battery pack.
+  brand: alternative design
+  eyebrow: Entry alternative · 48 V · one Growatt SPF 6000 ES Plus
+  h1: Project Anor on one Growatt
+  lead: The smallest of the alternatives. One Growatt SPF 6000 ES Plus runs the house from 9 Jinko 590 W panels (5.3 kWp) on its two built-in solar trackers and one Deriy 14.7 kWh pack. Grid is a backup charger and bypass. Light loads and one air conditioner share its 6 kW output.
+  inverters_label: One inverter
+  glance:
+    - {icon: mppt, cat: solar, title: Two trackers, one panel model, text: "9 Jinko 590 W panels in strings of 5 and 4, one string per built-in Growatt tracker, at up to about 275 V. No separate solar chargers."}
+    - {icon: battery, cat: batt, title: One battery pack, text: "One Deriy 14.7 kWh pack through a 250 A breaker, with room on the busbar for a second. The JK BMS talks CAN to the Growatt, so no SmartShunt or GX."}
+    - {icon: home, cat: load, title: One output for everything, text: "The Growatt has a single AC output. Light loads and a limited set of heavy loads share it, so the heavy-load budget matters more here than on the Deye designs."}
+  budget:
+    title: One AC, about 4 kW for heavy loads
+    lead: "Everything shares the Growatt’s 6 kW output. Allow about 1.5 kW for the light loads and a margin for motor start-up, and roughly 4 kW is left: one air conditioner, the pump and the cooker. The hours are a typical day; wattages are typical figures, so check your own appliances’ labels."
+    budget_w: 4000
+    light_kwh: 6
+    sun_hours: 4
+    derate: 0.7
+    rows:
+      - {load: "Air conditioner, 1.5 HP inverter type", watts: 1100, qty: 1, hours: 6, note: One at most. Afternoon and evening.}
+      - {load: "Deep-well pump, 1 HP", watts: 750, qty: 1, hours: 1, note: Run it in the daytime.}
+      - {load: Induction cooker, watts: 2000, qty: 1, hours: 1}
+      - {load: Electric oven, watts: 2500, qty: 0, hours: 0, note: "Not on this system, except on grid bypass.", status: part}
+      - {load: Water heater, watts: 2000, qty: 0, hours: 0, note: "Not on this system, except on grid bypass.", status: part}
+    settings:
+      - "Output priority <b>SBU</b>: solar first, then battery, then grid."
+      - "Battery type set to the lithium protocol that matches the JK BMS, so the Growatt reads state of charge over CAN."
+      - "<b>Back to grid at 30%</b> battery and <b>back to battery at 80%</b>, so a cloudy day doesn’t empty the pack."
+      - "Maximum charge current <b>80 A</b>, under the JK BMS’s 88 A setting."
+      - These are starting points. Raise the back-to-grid level if the light loads run short before morning.
+  upgrades:
+    - "<b>A second battery pack</b> on the same busbar: 29.4 kWh."
+    - "<b>More panels</b>: up to 8 per string, about 7.5 kWp in all, under the Growatt’s 8 kW PV limit."
+    - "<b>A second SPF 6000 ES Plus</b> in parallel: 12 kW and two more trackers. The Growatt parallels up to 6 units."
+    - "<b>Or move to the <a href=\"https://deye.anor.openculture.org.ng\">one-Deye design</a></b>: grid-tied with a CT, three trackers, and a separate smart-load port for heavy loads."
+  notes:
+    title: Why this design
+    lead: The current install grew one piece at a time and carries technical debt. This page sketches the cheapest way in, using the same panels and battery packs.
+    items:
+      - {h: What goes, text: "The Multi RS Solar, both SmartSolar chargers, Combiners C and D, the SmartShunt, the DIY GX and the MultiPlus-II. One Growatt does the basic work of all of them."}
+      - {h: Why, text: "It’s the lowest cost per kW of the three alternatives, with high-voltage trackers that take the same Jinko strings as the Deye designs."}
+      - {h: The trade-off, text: "<b>It powers the least.</b> 6 kW on one output and one battery pack. It’s an off-grid inverter: grid charges and bypasses, but solar can’t offset grid-side loads and there’s no export."}
+      - {h: Panels, text: "Standardised on the Jinko Tiger Neo 590 W. 9 panels make 5.3 kWp."}
+    alt_title: Other options
+    alternatives:
+      - {name: "Deye SUN-8K-SG06LP1-EU-CM3, 8 kW single phase", url: "https://deye.com/product/sun-7-12k-sg06lp1-eu-cm3/", text: "The next step up: 8 kW, three trackers, a CT for grid offset and a smart-load port for heavy loads. See the one-Deye design."}
+      - {name: "Deye SUN-12K-SG06LP1-EU-CM3, 12 kW single phase", url: "https://deye.com/product/sun-7-12k-sg06lp1-eu-cm3/", text: "Same family at 12 kW, with up to 19.2 kW of PV."}
+      - {name: "Deye SUN-12K-SG04LP3-EU, 12 kW three phase", url: "https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/", text: "For a three-phase supply. Same 48 V battery, 2 MPPTs."}
+  footer: "Links marked Affiliate are AliExpress affiliate links: if you buy through them, Openculture earns a small commission at no extra cost to you. The Growatt, Fouani, Deye, ZJBeny and Deriy links are not affiliate links."
+
+parts:
+  - {id: pv-a, product: jinko-tiger-neo-590, qty: 5, series: 5, parallel: 1, layout: 5 in series, feeds: inv}
+  - {id: pv-b, product: jinko-tiger-neo-590, qty: 4, series: 4, parallel: 1, layout: 4 in series, feeds: inv}
+  - {id: box-1, product: pv-box-2ch, qty: 1}
+  - {id: inv, product: growatt-spf6000-es-plus, qty: 1}
+  - {id: brk, product: beny-bdm-250, qty: 1}
+  - {id: busbar, product: busbar-48v, qty: 1}
+  - {id: bat, product: diy-lfp-14k7, qty: 1}
+  - {id: spd-ac, product: chint-nxu-ii-275, qty: null, note: Used on the grid board and both load boards., show_on: gridbd}
+  - {id: gridbd, product: grid-board, qty: 1}
+  - {id: acb-light, product: ac-board-light, qty: 1}
+  - {id: acb-heavy, product: ac-board-heavy, qty: 1}
+
+short_names:
+  pv-a: PV 1
+  pv-b: PV 2
+
+groups:
+  - title: Solar array
+    cards: [[pv-a, pv-b], [box-1]]
+  - title: Inverter
+    cards: [[inv]]
+  - title: Battery and DC side
+    cards: [[bat], [busbar], [brk]]
+  - title: Grid and AC side
+    cards: [[gridbd], [acb-light], [acb-heavy], [spd-ac]]
+
+other_blocks:
+  grid:
+    title: Grid supply
+    icon: meter
+    category: grid
+    about: Single-phase utility supply through the kWh meter. Feeds the Growatt’s AC input, which charges the battery and bypasses to the house when solar and battery run short.
+    rows:
+      - [Supply, Single phase]
+      - [Feeds, Growatt AC input]
+  light:
+    title: Light loads
+    icon: home
+    category: load
+    about: "On the Growatt AC output: TV, refrigerator, ceiling fans, lights, network switch, routers, power tools, blender and laptops."
+    rows:
+      - [Supplied by, Growatt AC output]
+      - [In an outage, Stay on]
+  heavy:
+    title: Heavy loads
+    icon: home
+    category: load
+    about: "Also on the Growatt AC output, within about 4 kW: one air conditioner, the deep-well pump and an induction cooker. See the heavy-load budget."
+    rows:
+      - [Supplied by, Growatt AC output]
+      - [Budget, "About 4 kW, one AC"]
+
+modes:
+  day:
+    caption: <b>Sunny day.</b> The two strings feed the Growatt’s trackers. It runs the house and charges the battery.
+    flowing: [w-pva, w-pvb, w-boxa, w-boxb, w-dc, w-brk, w-batp, w-batn, w-out, w-light, w-heavyin, w-heavy]
+    reversed: []
+  night:
+    caption: <b>Night, grid off.</b> No solar. The Growatt runs the house from the 14.7 kWh pack until it reaches the back-to-grid level.
+    flowing: [w-dc, w-brk, w-batp, w-batn, w-out, w-light, w-heavyin, w-heavy]
+    reversed: [w-dc, w-brk, w-batp, w-batn]
+  grid:
+    caption: <b>Grid on, battery low.</b> The Growatt bypasses grid to the house and recharges the battery.
+    flowing: [w-grid, w-gridin, w-out, w-light, w-heavyin, w-heavy, w-dc, w-brk, w-batp, w-batn]
+    reversed: []
+
+checks:
+  battery: bat
+  inverters: [inv]
+  chargers: [inv]
+  charger_breakers:
+    brk: inv
+  low_battery_v: 48
+  inverter_efficiency: 0.93

@@ -1,0 +1,157 @@
+# Where everything sits on the schematic. You only need this file to add, move
+# or re-route something on the drawing; specs and parts live in the other files.
+#
+#   at      for a block: [x, y, width, height], measured from the top-left corner
+#   style   tile (picture on top, the default), side (icon on the left) or stack
+#   path    an SVG path for a wire. "M115 230 V280" starts at x=115, y=230 and runs
+#           down to y=280. H runs sideways to an x, V up or down to a y.
+
+canvas: [1400, 1320]
+
+blocks:
+  - id: pv-a
+    part: pv-a
+    short: PV 1
+    at: [30, 30, 240, 200]
+    title: PV 1 · 3.54 kWp
+    subtitle: 6 × Jinko 590 W
+    icon: pv
+    photo_height: 120
+    panels: {count: 6, cols: 3, size: 30}
+  - id: pv-b
+    part: pv-b
+    short: PV 2
+    at: [290, 30, 240, 200]
+    title: PV 2 · 3.54 kWp
+    subtitle: 6 × Jinko 590 W
+    icon: pv
+    photo_height: 120
+    panels: {count: 6, cols: 3, size: 30}
+  - id: pv-c
+    part: pv-c
+    short: PV 3
+    at: [550, 30, 240, 200]
+    title: PV 3 · 2.95 kWp
+    subtitle: 5 × Jinko 590 W
+    icon: pv
+    photo_height: 120
+    panels: {count: 5, cols: 3, size: 30}
+  - id: box-1
+    part: box-1
+    short: PV box
+    at: [30, 280, 760, 84]
+    title: PV box
+    subtitle: 3 in 3 out · fuses, breaker and SPD on each channel
+    icon: combiner
+    style: side
+    opens: pv-box-1
+  - id: deye
+    part: deye
+    short: Deye 8K
+    at: [30, 420, 760, 300]
+    title: Deye SUN-8K-SG06LP1-EU-CM3
+    subtitle: 8 kW · 48 V battery · 3 MPPT, up to 500 V
+    icon: inverter
+    photo_height: 170
+    ports: [[solar, PV 1-3], [grid, GRID], [batt, BAT], [load, LOAD], [load, GEN]]
+  - id: brk-deye
+    part: brk-deye
+    short: Deye breaker
+    at: [330, 790, 160, 120]
+    title: BENY 250 A
+    subtitle: Deye battery
+    icon: mccb
+    style: stack
+  - id: busbar
+    part: busbar
+    at: [30, 960, 760, 70]
+    title: Battery busbar
+    subtitle: Copper bars joining the inverter to the batteries
+    icon: busbar
+    style: side
+  - id: bat
+    part: bat
+    short: Battery bank
+    at: [30, 1080, 760, 210]
+    title: Battery bank · 29.4 kWh
+    subtitle: 2 × Deriy 14.7 kWh LiFePO4, stacked · 16S · JK BMS 200 A
+    icon: battery
+    photo_height: 130
+    packs: 2
+  - id: grid
+    at: [1030, 30, 340, 84]
+    title: Grid supply
+    subtitle: Single phase · kWh meter
+    icon: meter
+    style: side
+  - id: gridbd
+    part: gridbd
+    at: [1030, 150, 340, 84]
+    title: Grid board
+    subtitle: 2P MCB · T2 SPD · CT clamp
+    icon: db
+    category: grid
+    style: side
+  - id: acb-light
+    part: acb-light
+    at: [1030, 300, 340, 84]
+    title: Light-load board
+    subtitle: Chint MCB · T2 SPD · RCBO
+    icon: db
+    style: side
+  - id: light
+    at: [1030, 420, 340, 200]
+    title: Light loads
+    subtitle: On the Deye LOAD output
+    icon: home
+    photo_height: 120
+    loads: [lightbulb, fan, tv, refrigerator, router, laptop]
+  - id: acb-heavy
+    part: acb-heavy
+    at: [1030, 700, 340, 84]
+    title: Heavy-load board
+    subtitle: On the GEN port · smart load
+    icon: db
+    style: side
+  - id: heavy
+    at: [1030, 820, 340, 200]
+    title: Heavy loads
+    subtitle: About 5 kW budget · see below
+    icon: home
+    photo_height: 120
+    loads: [air-vent, droplets, flame, microwave, thermometer]
+
+wires:
+  - {id: w-pva, from: pv-a, to: box-1, type: solar, path: M150 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-pvb, from: pv-b, to: box-1, type: solar, path: M410 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-pvc, from: pv-c, to: box-1, type: solar, path: M670 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-boxa, from: box-1, to: deye, type: solar, path: M150 364 V420, size: 10 mm²}
+  - {id: w-boxb, from: box-1, to: deye, type: solar, path: M410 364 V420, size: 10 mm²}
+  - {id: w-boxc, from: box-1, to: deye, type: solar, path: M670 364 V420, size: 10 mm²}
+  - {id: w-deyedc, from: deye, to: brk-deye, type: batt, path: M410 720 V790, size: 50 mm², length: 2 m}
+  - {id: w-brk, from: brk-deye, to: busbar, type: batt, path: M410 910 V960, size: 50 mm²}
+  - {id: w-batp, from: busbar, to: bat, type: batt, path: M200 1030 V1080, pole: "+", size: 50 mm², length: "3.5 m, equal length"}
+  - {id: w-batn, from: busbar, to: bat, type: batt, path: M620 1030 V1080, pole: "-", size: 50 mm², length: "3.5 m, equal length"}
+  - {id: w-grid, from: grid, to: gridbd, type: grid, path: M1200 114 V150}
+  - {id: w-gridin, from: gridbd, to: deye, type: grid, path: M1030 192 H930 V470 H790}
+  - {id: w-lightout, from: deye, to: acb-light, type: load, path: M790 560 H990 V342 H1030}
+  - {id: w-light, from: acb-light, to: light, type: load, path: M1200 384 V420}
+  - {id: w-genout, from: deye, to: acb-heavy, type: load, path: M790 640 H990 V742 H1030}
+  - {id: w-heavy, from: acb-heavy, to: heavy, type: load, path: M1200 784 V820}
+  - {id: w-earthl, from: acb-light, to: earth, type: none, path: M1370 342 H1392 V370, earth_at: [1392, 374]}
+  - {id: w-earthh, from: acb-heavy, to: earth, type: none, path: M1370 742 H1392 V770, earth_at: [1392, 774]}
+  - {id: d-bms, from: bat, to: deye, type: data, bus: can, cable: RJ45, label: CAN to JK BMS, path: M790 1185 H850 V700 H790}
+  - {id: d-ct, from: gridbd, to: deye, type: data, bus: ct, cable: CT lead, label: CT clamp on the grid supply, path: M1060 234 V250 H960 V490 H790}
+
+labels:
+  - {text: MPPT 1, at: [158, 400]}
+  - {text: MPPT 2, at: [418, 400]}
+  - {text: MPPT 3, at: [678, 400]}
+  - {text: GRID, at: [800, 462]}
+  - {text: LOAD, at: [800, 552]}
+  - {text: GEN · smart load, at: [800, 632]}
+  - {text: BAT, at: [418, 780]}
+  - {text: "+", at: [208, 1068]}
+  - {text: −, at: [628, 1068]}
+  - {text: BMS CAN, at: [858, 1176], color: can}
+  - {text: CT, at: [968, 482], color: ct}

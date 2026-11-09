@@ -1,0 +1,57 @@
+# The battery page (index.html#battery): how the four packs are wired to the
+# busbar, the cables, the measured balance and the JK BMS settings.
+
+title: Battery bank
+lead: Four Deriy 14.7 kWh LiFePO4 packs in parallel, stacked and numbered 1 to 4 from top to bottom. Every pack has its own direct cable to the busbar, on either the positive or the negative side.
+
+# Packs, top to bottom, as they stand in the stack.
+packs: [1, 2, 3, 4]
+
+# Pack-to-pack links. Each pair shares both poles.
+links:
+  - {between: [1, 2], size: 50 mm², length: 1.2 ft}
+  - {between: [3, 4], size: 50 mm², length: 1.2 ft}
+
+# Runs from the packs to the busbar.
+runs:
+  - {pack: 1, pole: "+", size: 50 mm², length: 3.5 m}
+  - {pack: 4, pole: "+", size: 50 mm², length: 3.5 m}
+  - {pack: 2, pole: "-", size: 50 mm², length: 3.5 m}
+  - {pack: 3, pole: "-", size: 50 mm², length: 3.5 m}
+runs_note: All four runs are the same length.
+
+steps:
+  - Packs <b>1 and 2</b> are joined on both poles with 50 mm² cable, and so are packs <b>3 and 4</b>.
+  - The <b>+ busbar</b> takes its two runs from the + of packs <b>1 and 4</b>.
+  - The <b>battery-minus bar</b> takes its two runs from the − of packs <b>2 and 3</b>.
+  - Every pack has one direct run to the busbar, on + or on −, and all four runs are the same length.
+  - Each Deye’s battery cable lands on the same bars through its own 250 A breaker, and both cables are the same length so the two units share current evenly. There’s no shunt: the master Deye reads state of charge from the JK BMS.
+
+busbar:
+  title: Home-built busbar
+  text: Two copper bars in an enclosure. Without the SmartShunt, the battery-minus and load-minus bars become one bar.
+
+# Measured current share between packs.
+balance:
+  total_a: 200
+  min_a: 48
+  max_a: 51
+  text: In service for over a year. With around 200 A going into the bank, each pack carries between 48 and 51 A.
+
+bms:
+  name: JK inverter BMS
+  role:
+    - Talks CAN to the master Deye over RJ45, which passes the limits to the second unit over the parallel link.
+    - State of charge on the Deye screen and Wi-Fi logger comes from the BMS.
+  # Per-cell voltages. The page also shows each one for the 16-cell pack.
+  cells_in_series: 16
+  volts:
+    - {label: Balancing starts at, cell_v: 3.40}
+    - {label: Overvoltage protection (OVP), cell_v: 3.60}
+    - {label: OVP recovery (OVPR), cell_v: 3.40}
+    - {label: Charge voltage (RCV), cell_v: 3.45}
+    - {label: Float voltage (RFV), cell_v: 3.35}
+    - {label: 100% state of charge at, cell_v: 3.49}
+  currents:
+    - {label: Continuous charge current, a: 88}
+    - {label: Continuous discharge current, a: 100}

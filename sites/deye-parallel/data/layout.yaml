@@ -1,0 +1,80 @@
+# Where everything sits on the schematic. You only need this file to add, move
+# or re-route something on the drawing; specs and parts live in the other files.
+#
+#   at      for a block: [x, y, width, height], measured from the top-left corner
+#   style   tile (picture on top, the default), side (icon on the left) or stack
+#   path    an SVG path for a wire. "M115 230 V280" starts at x=115, y=230 and runs
+#           down to y=280. H runs sideways to an x, V up or down to a y.
+
+canvas: [1780, 1460]
+
+blocks:
+  - {id: pv-1, part: pv-1, short: PV 1, at: [30, 30, 190, 200], title: PV 1 · 3.54 kWp, subtitle: 6 × Jinko 590 W, icon: pv, photo_height: 120, panels: {count: 6, cols: 3, size: 30}}
+  - {id: pv-2, part: pv-2, short: PV 2, at: [230, 30, 190, 200], title: PV 2 · 3.54 kWp, subtitle: 6 × Jinko 590 W, icon: pv, photo_height: 120, panels: {count: 6, cols: 3, size: 30}}
+  - {id: pv-3, part: pv-3, short: PV 3, at: [430, 30, 190, 200], title: PV 3 · 3.54 kWp, subtitle: 6 × Jinko 590 W, icon: pv, photo_height: 120, panels: {count: 6, cols: 3, size: 30}}
+  - {id: pv-4, part: pv-4, short: PV 4, at: [660, 30, 190, 200], title: PV 4 · 3.54 kWp, subtitle: 6 × Jinko 590 W, icon: pv, photo_height: 120, panels: {count: 6, cols: 3, size: 30}}
+  - {id: pv-5, part: pv-5, short: PV 5, at: [860, 30, 190, 200], title: PV 5 · 3.54 kWp, subtitle: 6 × Jinko 590 W, icon: pv, photo_height: 120, panels: {count: 6, cols: 3, size: 30}}
+  - {id: pv-6, part: pv-6, short: PV 6, at: [1060, 30, 190, 200], title: PV 6 · 3.54 kWp, subtitle: 6 × Jinko 590 W, icon: pv, photo_height: 120, panels: {count: 6, cols: 3, size: 30}}
+  - {id: box-1, part: box-1, short: PV box 1, at: [30, 280, 590, 84], title: PV box 1, subtitle: "3 channels · fuses, breaker, SPD each", icon: combiner, style: side, opens: pv-box-1}
+  - {id: box-2, part: box-2, short: PV box 2, at: [660, 280, 590, 84], title: PV box 2, subtitle: "3 channels · fuses, breaker, SPD each", icon: combiner, style: side, opens: pv-box-2}
+  - {id: deye-1, part: deye-1, short: Deye 1, at: [30, 420, 590, 300], title: Deye 1 · master, subtitle: SUN-8K-SG06LP1-EU-CM3 · 8 kW, icon: inverter, photo_height: 170, ports: [[solar, PV 1-3], [grid, GRID], [batt, BAT], [load, LOAD], [load, GEN]]}
+  - {id: deye-2, part: deye-2, short: Deye 2, at: [660, 420, 590, 300], title: Deye 2 · slave, subtitle: SUN-8K-SG06LP1-EU-CM3 · 8 kW, icon: inverter, photo_height: 170, ports: [[solar, PV 4-6], [grid, GRID], [batt, BAT], [load, LOAD], [load, GEN]]}
+  - {id: brk-1, part: brk-1, short: Deye 1 breaker, at: [245, 790, 160, 120], title: BENY 250 A, subtitle: Deye 1 battery, icon: mccb, style: stack}
+  - {id: brk-2, part: brk-2, short: Deye 2 breaker, at: [875, 790, 160, 120], title: BENY 250 A, subtitle: Deye 2 battery, icon: mccb, style: stack}
+  - {id: busbar, part: busbar, at: [30, 960, 1220, 70], title: Battery busbar, subtitle: Copper bars joining both inverters to the batteries, icon: busbar, style: side}
+  - {id: bat, part: bat, short: Battery bank, at: [260, 1090, 760, 330], title: Battery bank · 58.8 kWh, subtitle: "4 × Deriy 14.7 kWh LiFePO4, stacked · 16S · JK BMS 200 A", icon: battery, photo_height: 250, packs: 4}
+  - {id: grid, at: [1340, 30, 390, 84], title: Grid supply, subtitle: Single phase · kWh meter, icon: meter, style: side}
+  - {id: gridbd, part: gridbd, at: [1340, 150, 390, 84], title: Grid board, subtitle: "2P MCB · T2 SPD · 2 × 50 A · CT", icon: db, category: grid, style: side}
+  - {id: acb-light, part: acb-light, at: [1340, 290, 390, 84], title: Light-load board, subtitle: On the joined LOAD outputs, icon: db, style: side}
+  - {id: light, at: [1340, 400, 390, 200], title: Light loads, subtitle: Always on, icon: home, photo_height: 120, loads: [lightbulb, fan, tv, refrigerator, router, laptop]}
+  - {id: acb-heavy, part: acb-heavy, at: [1340, 700, 390, 84], title: Heavy-load board, subtitle: On the GEN ports · smart load, icon: db, style: side}
+  - {id: heavy, at: [1340, 820, 390, 200], title: Heavy loads, subtitle: About 13 kW budget · see below, icon: home, photo_height: 120, loads: [air-vent, droplets, flame, microwave, thermometer]}
+
+wires:
+  - {id: w-pv1, from: pv-1, to: box-1, type: solar, path: M125 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-pv2, from: pv-2, to: box-1, type: solar, path: M325 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-pv3, from: pv-3, to: box-1, type: solar, path: M525 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-pv4, from: pv-4, to: box-2, type: solar, path: M755 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-pv5, from: pv-5, to: box-2, type: solar, path: M955 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-pv6, from: pv-6, to: box-2, type: solar, path: M1155 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-b1a, from: box-1, to: deye-1, type: solar, path: M125 364 V420, size: 10 mm²}
+  - {id: w-b1b, from: box-1, to: deye-1, type: solar, path: M325 364 V420, size: 10 mm²}
+  - {id: w-b1c, from: box-1, to: deye-1, type: solar, path: M525 364 V420, size: 10 mm²}
+  - {id: w-b2a, from: box-2, to: deye-2, type: solar, path: M755 364 V420, size: 10 mm²}
+  - {id: w-b2b, from: box-2, to: deye-2, type: solar, path: M955 364 V420, size: 10 mm²}
+  - {id: w-b2c, from: box-2, to: deye-2, type: solar, path: M1155 364 V420, size: 10 mm²}
+  - {id: w-dc1, from: deye-1, to: brk-1, type: batt, path: M325 720 V790, size: 50 mm², length: "2 m, same as Deye 2"}
+  - {id: w-dc2, from: deye-2, to: brk-2, type: batt, path: M955 720 V790, size: 50 mm², length: "2 m, same as Deye 1"}
+  - {id: w-brk1, from: brk-1, to: busbar, type: batt, path: M325 910 V960, size: 50 mm²}
+  - {id: w-brk2, from: brk-2, to: busbar, type: batt, path: M955 910 V960, size: 50 mm²}
+  - {id: w-batp, from: busbar, to: bat, type: batt, path: M420 1030 V1090, pole: "+", size: 2 × 50 mm², length: "3.5 m each, equal length"}
+  - {id: w-batn, from: busbar, to: bat, type: batt, path: M860 1030 V1090, pole: "-", size: 2 × 50 mm², length: "3.5 m each, equal length"}
+  - {id: w-grid, from: grid, to: gridbd, type: grid, path: M1535 114 V150}
+  - {id: w-grid1, from: gridbd, to: deye-1, type: grid, path: M1340 192 H1300 V250 H640 V560 H620}
+  - {id: w-grid2, from: gridbd, to: deye-2, type: grid, path: M1340 192 H1300 V560 H1250}
+  - {id: w-load1, from: deye-1, to: acb-light, type: load, path: M620 640 H645 V730 H1290 V332 H1340}
+  - {id: w-load2, from: deye-2, to: acb-light, type: load, path: M1250 640 H1290}
+  - {id: w-light, from: acb-light, to: light, type: load, path: M1535 374 V400}
+  - {id: w-gen1, from: deye-1, to: acb-heavy, type: load, path: M620 690 H652 V770 H1300 V742 H1340}
+  - {id: w-gen2, from: deye-2, to: acb-heavy, type: load, path: M1250 690 H1300 V742 H1340}
+  - {id: w-heavy, from: acb-heavy, to: heavy, type: load, path: M1535 784 V820}
+  - {id: w-earthl, from: acb-light, to: earth, type: none, path: M1730 332 H1752 V360, earth_at: [1752, 364]}
+  - {id: w-earthh, from: acb-heavy, to: earth, type: none, path: M1730 742 H1752 V770, earth_at: [1752, 774]}
+  - {id: d-par, from: deye-1, to: deye-2, type: data, bus: par, cable: RJ45, label: Parallel link, path: M620 470 H660}
+  - {id: d-bms, from: bat, to: deye-1, type: data, bus: can, cable: RJ45, label: CAN to JK BMS, path: M260 1255 H14 V600 H30}
+  - {id: d-ct, from: gridbd, to: deye-1, type: data, bus: ct, cable: CT lead, label: CT clamp on the grid supply, path: M1380 234 V266 H648 V610 H620}
+
+labels:
+  - {text: PARALLEL, at: [640, 400], anchor: middle, color: par}
+  - {text: GRID, at: [604, 552], anchor: end}
+  - {text: LOAD, at: [604, 632], anchor: end}
+  - {text: GEN, at: [604, 682], anchor: end}
+  - {text: GRID, at: [1262, 552]}
+  - {text: LOAD, at: [1262, 632]}
+  - {text: GEN, at: [1262, 682]}
+  - {text: BAT, at: [333, 780]}
+  - {text: BAT, at: [963, 780]}
+  - {text: "+", at: [428, 1078]}
+  - {text: −, at: [868, 1078]}
+  - {text: BMS CAN, at: [22, 1246], color: can}
+  - {text: CT, at: [656, 620], color: ct}

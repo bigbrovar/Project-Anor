@@ -1,0 +1,33 @@
+# What's inside the PV box. The id (pv-box-1) is also the page address of its
+# wiring view: index.html#pv-box-1
+#
+#   part               the box's part id in build.yaml
+#   kind               pair = one separate channel per array (one or more)
+#   arrays             the panel arrays (from build.yaml) that feed this box
+#   string_protection  the fuse or breaker on each string, as a product id.
+#                      The sizing checks test its rating.
+#   surge_protector    the DC surge protector, as a product id with an spd_v spec
+#   inside             the parts listed under "In this box"
+#   steps              "How it's wired", one line per step (<b> for bold)
+
+pv-box-1:
+  title: PV box
+  short: PV 1 and 2
+  part: box-1
+  kind: pair
+  arrays: [pv-a, pv-b]
+  string_protection: feeo-fuse-23
+  surge_protector: feeo-spd-600
+  lead: One box with two separate channels, built from the same Feeo parts as the home system. Each string gets its own fuses, breaker and surge protector, then runs to its own Growatt tracker.
+  channels:
+    - {array: pv-a, to: Growatt · MPPT 1}
+    - {array: pv-b, to: Growatt · MPPT 2}
+  inside:
+    - {product: feeo-fuse-23, qty: 4, where: + and − of each string}
+    - {product: feeo-mcb-2p, qty: 2, where: "one per string, both poles"}
+    - {product: feeo-spd-600, qty: 2, where: "one per string, across + and −"}
+  steps:
+    - Each string’s <b>+ and −</b> go through their own 23 A fuse.
+    - The fused pair goes into a <b>2-pole breaker</b>, so one switch isolates the string.
+    - A <b>600 V Feeo surge protector</b> sits across + and −, with its earth to the local earth reference.
+    - Each channel leaves the box to its own <b>Growatt MPPT</b>. The strings are never joined.

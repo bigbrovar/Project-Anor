@@ -1,0 +1,1084 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Template for build.py: the __PLACEHOLDERS__ and the DATA block are filled in from data/*.yaml. -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>__TITLE__</title>
+<meta name="description" content="__DESC__">
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="theme-color" content="#0A0E12" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F4F6F8" media="(prefers-color-scheme: light)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: dark control-room canvas from the Openculture guide; energy colours carry meaning (solar amber, battery teal, grid blue, home AC violet); schematic is the hero, checks and parts below. */
+:root{
+  --bg:#0A0E12; --bg2:#0E1318; --surface:#121920; --surface2:#18212A; --line:#222C36; --line2:#2E3A46;
+  --ink:#EAF0F4; --muted:#8C99A6; --faint:#5D6A76;
+  --solar:#F7B53B; --batt:#2ED3A6; --grid:#5E9DFF; --load:#B38CFF; --bad:#FF6B5E; --warn:#F7B53B; --ok:#2ED3A6;
+  --solar-t:rgba(247,181,59,.13); --batt-t:rgba(46,211,166,.13); --grid-t:rgba(94,157,255,.13); --load-t:rgba(179,140,255,.13); --bad-t:rgba(255,107,94,.13); --none-t:rgba(140,153,166,.13); --can:#F472B6; --mk3:#A3E635;
+  --on-accent:#1A1300;
+  --f-d:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --f-b:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-m:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:14px;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#F4F6F8; --bg2:#EDF1F4; --surface:#FFFFFF; --surface2:#F3F6F9; --line:#DFE5EB; --line2:#CDD5DE;
+  --ink:#0E1620; --muted:#5A6774; --faint:#8995A1;
+  --solar:#C47F00; --batt:#0B9B76; --grid:#2B6BDB; --load:#7447D6; --bad:#D63A2D; --warn:#B87500; --ok:#0B9B76;
+  --solar-t:rgba(196,127,0,.13); --batt-t:rgba(11,155,118,.12); --grid-t:rgba(43,107,219,.11); --load-t:rgba(116,71,214,.11); --bad-t:rgba(214,58,45,.11); --none-t:rgba(90,103,116,.1); --can:#C0307A; --mk3:#4D7C0F;
+  --on-accent:#FFFFFF; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#F4F6F8; --bg2:#EDF1F4; --surface:#FFFFFF; --surface2:#F3F6F9; --line:#DFE5EB; --line2:#CDD5DE;
+  --ink:#0E1620; --muted:#5A6774; --faint:#8995A1;
+  --solar:#C47F00; --batt:#0B9B76; --grid:#2B6BDB; --load:#7447D6; --bad:#D63A2D; --warn:#B87500; --ok:#0B9B76;
+  --solar-t:rgba(196,127,0,.13); --batt-t:rgba(11,155,118,.12); --grid-t:rgba(43,107,219,.11); --load-t:rgba(116,71,214,.11); --bad-t:rgba(214,58,45,.11); --none-t:rgba(90,103,116,.1); --can:#C0307A; --mk3:#4D7C0F;
+  --on-accent:#FFFFFF; color-scheme:light}
+
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + var(--hh,64px) + 14px);-webkit-text-size-adjust:100%;text-size-adjust:100%}
+[hidden]{display:none!important}
+body{margin:0;background:var(--bg);color:var(--ink);font:15.5px/1.55 var(--f-b);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-d);margin:0;line-height:1.08;text-wrap:balance;letter-spacing:-.02em}
+h1{font-size:clamp(2rem,5vw,3.2rem);font-weight:760}
+h2{font-size:clamp(1.35rem,2.4vw,1.75rem);font-weight:720}
+h3{font-size:1.02rem;font-weight:700;letter-spacing:-.01em}
+.m{font-family:var(--f-m);font-variant-numeric:tabular-nums}
+.eyebrow{font:600 .74rem/1 var(--f-b);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0}
+.wrap{max-width:1240px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+button{font:inherit;color:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--solar);outline-offset:2px;border-radius:6px}
+.muted{color:var(--muted)}
+.sr{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.skip{position:absolute;left:12px;top:-80px;z-index:40;background:var(--solar);color:var(--on-accent);padding:9px 14px;border-radius:10px;font-weight:700;text-decoration:none}
+.skip:focus{top:calc(env(safe-area-inset-top,0px) + 10px)}
+
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:10px 16px;padding-block:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-d);font-weight:760;font-size:1.08rem;letter-spacing:-.02em}
+.brand .logo{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--solar);color:var(--on-accent)}
+.brand .logo svg{width:17px;height:17px}
+.brand small{font:500 .82rem var(--f-b);color:var(--muted);letter-spacing:0}
+.top nav{margin-left:auto;display:flex;gap:2px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px}
+.top nav a{padding:6px 13px;border-radius:999px;text-decoration:none;font-weight:600;font-size:.86rem;color:var(--muted);white-space:nowrap}
+.top nav a:hover{color:var(--ink)}
+.top nav a[aria-current="true"]{background:var(--surface2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+@media (max-width:560px){.top nav{margin-left:0;width:100%;max-width:100%;justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none}.top nav::-webkit-scrollbar{display:none}.top nav a{padding:6px 8px;font-size:.8rem;flex:none}}
+
+main{padding-block:40px 80px}
+main>*{min-width:0}
+.view{display:grid;gap:44px}
+.view>*{min-width:0}
+#v-comb,#v-batt{gap:28px}
+.bset{width:100%;border-collapse:collapse;font-size:.88rem}
+.bset th,.bset td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left}
+.bset th{font:600 .7rem var(--f-b);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.bset td.n{font-family:var(--f-m);font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap}
+.bset th.n{text-align:right}
+.bal{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.bal .v{font:500 1.6rem var(--f-m);letter-spacing:-.02em}
+.cbl{list-style:none;margin:0;padding:0;display:grid;gap:8px;font-size:.88rem}
+.cbl li{display:flex;justify-content:space-between;gap:12px;border-bottom:1px solid var(--line);padding-bottom:8px}
+.cbl li span:last-child{font-family:var(--f-m);font-size:.8rem;color:var(--muted);text-align:right;white-space:nowrap}
+h1[tabindex="-1"]:focus{outline:none}
+.btwo{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:28px;align-items:start}
+@media (max-width:900px){.btwo{grid-template-columns:minmax(0,1fr)}}
+.bpanel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;display:grid;gap:14px;align-content:start}
+.bpanel ul.role{margin:0;padding-left:18px;color:var(--muted);font-size:.88rem;display:grid;gap:4px}
+.bshot{margin:0;border-radius:var(--r);overflow:hidden;border:1px solid var(--line);background:var(--surface)}
+.bshot img{display:block;width:100%;height:auto}
+.bshot figcaption{padding:14px 16px;font-size:.88rem;color:var(--muted)}
+.bshot figcaption b{color:var(--ink)}
+.cv svg .bpos{fill:none;stroke:var(--batt);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.cv svg .bneg{fill:none;stroke:var(--muted);stroke-width:3.5;stroke-linecap:round;stroke-linejoin:round}
+.cv svg .pbar{fill:var(--batt-t);stroke:var(--batt);stroke-width:1.5}
+.cv svg .nbar{fill:var(--bg2);stroke:var(--muted);stroke-width:1.5}
+.legend i.bp{background:var(--batt)}
+.lead{color:var(--muted);font-size:1.08rem;max-width:62ch;margin:14px 0 0}
+.hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end}
+@media (max-width:860px){.hero{grid-template-columns:minmax(0,1fr)}}
+.chips{display:grid;grid-template-columns:repeat(2,minmax(130px,1fr));gap:8px}
+.spec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px}
+.spec .v{font:500 1.1rem var(--f-m)}
+.spec .k{font-size:.74rem;color:var(--muted)}
+
+.flowbox{background:radial-gradient(1200px 500px at 50% -10%,color-mix(in srgb,var(--solar) 7%,transparent),transparent 60%),var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden;overflow:clip}
+.flowbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--line)}
+.modes{display:flex;gap:4px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:3px;flex-wrap:wrap}
+.modes button{display:flex;align-items:center;gap:7px;border:0;background:transparent;border-radius:9px;padding:7px 12px;font-weight:650;font-size:.85rem;color:var(--muted)}
+.modes button svg{width:15px;height:15px}
+.modes button[aria-pressed="true"]{background:var(--surface2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-left:auto;font-size:.78rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:16px;height:3px;border-radius:2px}
+.legend i.can{height:0;border-top:3px dotted var(--can);border-radius:0;background:none}
+.legend i.mk3,.legend i.par{height:0;border-top:3px dotted var(--mk3);border-radius:0;background:none}
+.legend i.ct{height:0;border-top:3px dotted var(--grid);border-radius:0;background:none}
+.tscroll{overflow-x:auto}
+.bset td small{display:block;font-size:.76rem}
+.bset small.b-fit,.bset td.b-fit{color:var(--ok)} .bset small.b-part{color:var(--warn)} .bset small.b-no{color:var(--bad)}
+.bset tr.tot td{font-weight:650;color:var(--ink)}
+.bset td.b-fit{color:var(--ok)} .bset td.b-part{color:var(--warn)} .bset td.b-no{color:var(--bad)}
+.alts{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.alts li{display:grid;gap:2px;font-size:.88rem;color:var(--muted)}
+.alts a{font-weight:650;color:var(--ink)}
+.flowgrid{display:grid;grid-template-columns:minmax(0,1fr) 330px}
+@media (max-width:1060px){.flowgrid{grid-template-columns:minmax(0,1fr)}}
+.flowgrid>*{min-width:0}
+.stage{position:relative}
+.canvas{overflow-x:auto;overflow-y:hidden;padding:10px;overscroll-behavior-x:contain;scrollbar-width:thin;scrollbar-color:var(--line2) transparent}
+.canvas svg{display:block;width:100%;height:auto}
+.canvas.fl{-webkit-mask-image:linear-gradient(90deg,transparent,#000 36px);mask-image:linear-gradient(90deg,transparent,#000 36px)}
+.canvas.fr{-webkit-mask-image:linear-gradient(270deg,transparent,#000 36px);mask-image:linear-gradient(270deg,transparent,#000 36px)}
+.canvas.fl.fr{-webkit-mask-image:linear-gradient(90deg,transparent,#000 36px,#000 calc(100% - 36px),transparent);mask-image:linear-gradient(90deg,transparent,#000 36px,#000 calc(100% - 36px),transparent)}
+.canvas.grab{cursor:grab}
+.canvas.grabbing{cursor:grabbing;user-select:none;-webkit-user-select:none}
+.zoom{position:sticky;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:2;width:max-content;margin:-60px auto 14px 14px;display:flex;gap:2px;padding:3px;background:color-mix(in srgb,var(--surface) 86%,transparent);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:1px solid var(--line2);border-radius:12px;box-shadow:0 6px 22px rgba(0,0,0,.22)}
+.zoom button{min-width:34px;height:32px;padding:0 9px;display:grid;place-items:center;border:0;border-radius:9px;background:transparent;color:var(--muted);font-weight:650;font-size:.82rem}
+.zoom button:hover:not(:disabled){background:var(--surface2);color:var(--ink)}
+.zoom button:disabled{opacity:.35;cursor:default}
+.zoom button svg{width:16px;height:16px}
+.caption{padding:0 18px 16px;font-size:.88rem;color:var(--muted);display:flex;gap:8px;align-items:flex-start}
+.caption svg{margin-top:3px;flex:none}
+.caption b{color:var(--ink);font-weight:650}
+.hint{padding:0 18px 16px;font-size:.78rem;color:var(--faint)}
+.hint .hov{display:none}
+@media (hover:hover){.hint .hov{display:inline}}
+
+/* svg diagram */
+.wire{fill:none;stroke:var(--line2);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;transition:stroke .2s}
+.flow{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:2 12;opacity:0;transition:opacity .4s}
+.flow.on{opacity:1;animation:run 1.1s linear infinite}
+.flow.rev{animation-direction:reverse}
+.flow.solar{stroke:var(--solar)} .flow.batt{stroke:var(--batt)} .flow.grid{stroke:var(--grid)} .flow.load{stroke:var(--load)}
+.glow{fill:none;stroke-width:9;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity .4s}
+.glow.on{opacity:.16}
+.glow.solar{stroke:var(--solar)} .glow.batt{stroke:var(--batt)} .glow.grid{stroke:var(--grid)} .glow.load{stroke:var(--load)}
+.dataw{fill:none;stroke-width:2.2;stroke-dasharray:1 6;stroke-linecap:round;stroke-linejoin:round;opacity:.95}
+.dataw.can{stroke:var(--can)} .dataw.mk3{stroke:var(--mk3)} .dataw.par{stroke:var(--mk3)} .dataw.ct{stroke:var(--grid)}
+.tagtxt.can{fill:var(--can)} .tagtxt.mk3{fill:var(--mk3)} .tagtxt.par{fill:var(--mk3)} .tagtxt.ct{fill:var(--grid)}
+@keyframes run{to{stroke-dashoffset:-28}}
+@media (prefers-reduced-motion:reduce){.flow.on{animation:none;stroke-dasharray:none}}
+.node{cursor:pointer}
+.node .card{fill:var(--surface2);stroke:var(--line2);stroke-width:1.2;transition:stroke .2s}
+.node .ph{fill:var(--bg2)}
+.node .ph.solar{fill:var(--solar-t)} .node .ph.batt{fill:var(--batt-t)} .node .ph.grid{fill:var(--grid-t)} .node .ph.load{fill:var(--load-t)} .node .ph.hub{fill:var(--bg2)} .node .ph.none{fill:var(--none-t)}
+.ci.solar{color:var(--solar)} .ci.batt{color:var(--batt)} .ci.grid{color:var(--grid)} .ci.load{color:var(--load)} .ci.hub{color:var(--ink)} .ci.none{color:var(--muted)}
+.tint.solar{background:var(--solar-t);color:var(--solar)} .tint.batt{background:var(--batt-t);color:var(--batt)} .tint.grid{background:var(--grid-t);color:var(--grid)} .tint.load{background:var(--load-t);color:var(--load)} .tint.hub{background:var(--bg2);color:var(--ink)} .tint.none{background:var(--none-t);color:var(--muted)}
+.node:hover .card,.node:focus-visible .card{stroke:var(--faint)}
+.node.sel .card{stroke:var(--solar);stroke-width:2}
+.node:focus{outline:none}
+.node:focus-visible .card{stroke:var(--solar);stroke-width:2.5}
+.node .ttl{font:650 17px var(--f-b);fill:var(--ink)}
+.node .sub{font:400 13px var(--f-m);fill:var(--muted)}
+.tagtxt{font:600 11.5px var(--f-b);letter-spacing:.08em;text-transform:uppercase;fill:var(--faint)}
+.earthl{stroke:var(--faint);stroke-width:2.2;stroke-linecap:round}
+.node .open{font:600 11px var(--f-b);letter-spacing:.06em;text-transform:uppercase;fill:var(--solar)}
+/* connection tracing: hover a block to see what it is wired to */
+#diagram .w,#diagram .node,#diagram .dataw,#diagram .labs{transition:opacity .18s}
+#diagram.trace .node:not(.tr),#diagram.trace .w:not(.tr),#diagram.trace .dataw:not(.tr){opacity:.2}
+#diagram.trace .labs{opacity:.3}
+#diagram .w.tr .wire,#diagram .w.sw .wire{stroke:var(--faint)}
+#diagram .dataw.tr,#diagram .dataw.sw{stroke-width:3.2}
+@media (prefers-reduced-motion:reduce){#diagram .w,#diagram .node,#diagram .dataw,#diagram .labs{transition:none}}
+
+.detail{border-left:1px solid var(--line);padding:20px;display:grid;gap:14px;align-content:start}
+@media (max-width:1060px){.detail{border-left:0;border-top:1px solid var(--line)}}
+.d-photo{height:140px;border-radius:14px;display:grid;place-items:center;overflow:hidden;position:relative}
+.d-photo svg{width:80px;height:80px}
+.d-photo .qty{position:absolute;top:10px;left:10px;font:500 .74rem var(--f-m);background:var(--surface);color:var(--ink);padding:3px 8px;border-radius:99px}
+.d-kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.86rem;margin:0}
+.d-kv dt{color:var(--muted)} .d-kv dd{margin:0;font-family:var(--f-m);font-size:.8rem;text-align:right;overflow-wrap:anywhere}
+.d-acts{display:flex;gap:8px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 14px;border-radius:12px;border:0;background:var(--solar);color:var(--on-accent);text-decoration:none;font-weight:700;font-size:.86rem}
+.btn:hover{filter:brightness(1.06)}
+.btn svg{width:15px;height:15px}
+.note{font-size:.84rem;color:var(--muted);margin:0}
+.wired{display:grid;gap:9px}
+.wchips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{display:inline-flex;align-items:center;gap:7px;padding:5px 10px;border-radius:99px;border:1px solid var(--line);background:var(--bg2);font-size:.8rem;font-weight:600;color:var(--ink);line-height:1.3;text-align:left}
+button.chip:hover{border-color:var(--line2)}
+.chip i{width:8px;height:8px;border-radius:50%;background:var(--c);flex:none}
+.chip small{color:var(--muted);font-weight:500;font-size:.74rem}
+.t-solar{--c:var(--solar)} .t-batt{--c:var(--batt)} .t-grid{--c:var(--grid)} .t-load{--c:var(--load)} .t-can{--c:var(--can)} .t-mk3{--c:var(--mk3)} .t-par{--c:var(--mk3)} .t-ct{--c:var(--grid)} .t-none{--c:var(--faint)}
+.dsz{display:flex;align-items:center;gap:8px;font-size:.84rem;color:var(--muted);text-decoration:none;padding:9px 12px;border-radius:10px;border:1px solid var(--line);background:var(--bg2)}
+.dsz:hover{border-color:var(--line2)}
+.dsz b{color:var(--ink);font-weight:650}
+.dsz svg{width:15px;height:15px;flex:none;color:var(--c)}
+.dsz .go{margin-left:auto;color:var(--faint)}
+
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.glance{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:860px){.glance{grid-template-columns:minmax(0,1fr)}}
+.g{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:10px;align-content:start}
+.g .gi{width:38px;height:38px;border-radius:10px;display:grid;place-items:center}
+.g .gi svg{width:24px;height:24px}
+.g p{margin:0;font-size:.9rem;color:var(--muted)}
+
+/* install photo with numbered callouts */
+.install{display:grid;grid-template-columns:minmax(0,440px) minmax(0,1fr);gap:36px;align-items:center}
+@media (max-width:820px){.install{grid-template-columns:minmax(0,1fr)}}
+.shot{position:relative;margin:0;border-radius:22px;overflow:hidden;border:1px solid var(--line);background:var(--surface)}
+.shot img{display:block;width:100%;height:auto}
+.pin{position:absolute;left:var(--x);top:var(--y);transform:translate(-50%,-50%);width:32px;height:32px;padding:0;border-radius:50%;border:2px solid #fff;background:#F7B53B;color:#1A1300;font:750 .85rem/1 var(--f-b);display:grid;place-items:center;box-shadow:0 2px 12px rgba(0,0,0,.5)}
+.pin::after{content:"";position:absolute;inset:-8px;border-radius:50%;border:2px solid #fff;opacity:0;transform:scale(.6);transition:opacity .2s,transform .2s}
+.pin:hover::after,.pin.hot::after{opacity:.9;transform:scale(1)}
+.pin:focus-visible{outline:3px solid #fff;outline-offset:3px;border-radius:50%}
+.spots{list-style:none;padding:0;margin:22px 0 0;display:grid;gap:8px;max-width:440px}
+.spots button{width:100%;display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;border:1px solid var(--line);background:var(--surface);text-align:left;font-weight:600;font-size:.92rem}
+.spots button:hover{border-color:var(--line2)}
+.spots button.hot{border-color:var(--solar)}
+.spots .n{width:22px;height:22px;border-radius:50%;background:var(--solar);color:var(--on-accent);font:750 .74rem/1 var(--f-b);display:grid;place-items:center;flex:none}
+.spots .ti{width:34px;height:34px;border-radius:9px;display:grid;place-items:center;flex:none}
+.spots .ti svg{width:22px;height:22px}
+.spots small{display:block;font:400 .76rem var(--f-m);color:var(--muted)}
+.spots .go{margin-left:auto;color:var(--faint)}
+
+/* sizing checks */
+.ck-top{display:flex;gap:14px 24px;align-items:center;justify-content:space-between;flex-wrap:wrap;margin:18px 0}
+.temp{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 14px}
+.temp label{font-size:.86rem;font-weight:600;display:flex;align-items:center;gap:7px}
+.temp label svg{width:16px;height:16px;color:var(--grid)}
+.temp input{accent-color:var(--solar);width:150px;margin:0}
+.temp output{font:500 .92rem var(--f-m);min-width:44px;text-align:right}
+.ck-help{flex-basis:100%;margin:-4px 0 0;font-size:.8rem;color:var(--faint)}
+.score{display:flex;gap:6px 16px;font-size:.86rem;color:var(--muted);flex-wrap:wrap}
+.score span{display:inline-flex;align-items:center;gap:7px}
+.score i{width:9px;height:9px;border-radius:50%;background:var(--c)}
+.score b{font-family:var(--f-m);color:var(--ink);font-weight:500}
+.s-ok{--c:var(--ok)} .s-warn{--c:var(--warn)} .s-bad{--c:var(--bad)}
+.arrays{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+@media (max-width:900px){.arrays{grid-template-columns:minmax(0,1fr)}}
+.arr{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:16px;align-content:start;transition:border-color .2s,box-shadow .2s}
+.arr:target,.arr.lit{border-color:var(--solar);box-shadow:0 0 0 4px var(--solar-t)}
+.arr-h{display:grid;grid-template-columns:44px minmax(0,1fr);gap:3px 12px;align-items:center}
+.arr-h .ti{width:44px;height:44px;border-radius:11px;display:grid;place-items:center;grid-row:span 2}
+.arr-h .ti svg{width:28px;height:28px}
+.arr-h .sp{font:400 .76rem/1.45 var(--f-m);color:var(--muted)}
+.gauges{list-style:none;margin:0;padding:0;display:grid;gap:13px}
+.gauge{display:grid;grid-template-columns:18px minmax(0,1fr);gap:6px 9px;align-items:start;font-size:.86rem}
+.gauge .gt{display:flex;flex-wrap:wrap;align-items:baseline;gap:1px 12px;min-width:0}
+.gauge .gs{margin-top:1px;width:18px;height:18px;border-radius:6px;display:grid;place-items:center;color:var(--c);background:color-mix(in srgb,var(--c) 16%,transparent)}
+.gauge .gs svg{width:12px;height:12px}
+.gauge .gv{margin-left:auto;font:500 .8rem var(--f-m);color:var(--muted);text-align:right;white-space:nowrap}
+.gauge .gv b{color:var(--ink);font-weight:500}
+.gauge .gb{grid-column:2;height:6px;border-radius:99px;background:var(--bg2);box-shadow:inset 0 0 0 1px var(--line);position:relative}
+.gauge .gb .f{position:absolute;left:0;top:0;bottom:0;width:var(--p);border-radius:inherit;background:var(--c);transition:width .25s}
+.gauge .gb .lim{position:absolute;top:-4px;bottom:-4px;width:2px;margin-left:-1px;left:var(--l);background:var(--ink);opacity:.6;border-radius:1px}
+.gauge .gb .win{position:absolute;top:0;bottom:0;left:var(--a);width:var(--w);background:color-mix(in srgb,var(--ok) 30%,transparent);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ok) 65%,transparent);border-radius:2px}
+.gauge .gb .mk{position:absolute;top:-5px;bottom:-5px;width:4px;margin-left:-2px;left:var(--m);background:var(--c);border-radius:2px;box-shadow:0 0 0 2px var(--surface)}
+@media (prefers-reduced-motion:reduce){.gauge .gb .f{transition:none}}
+.vd{margin:0;font-size:.85rem;color:var(--muted);display:grid;grid-template-columns:18px minmax(0,1fr);gap:9px}
+.arr .vd{padding-top:14px;border-top:1px solid var(--line)}
+.vd+.vd{border-top:0;padding-top:0}
+.vd svg{color:var(--c);margin-top:3px;width:16px;height:16px}
+.vd b{color:var(--ink);font-weight:650}
+.ck-sub{margin:30px 0 12px}
+.checks{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);list-style:none;margin:0;padding:6px}
+.checks li{display:grid;grid-template-columns:28px minmax(0,1fr);gap:2px 10px;padding:12px}
+.checks li+li{border-top:1px solid var(--line)}
+.st{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;grid-row:span 3}
+.st svg{width:14px;height:14px}
+.st.ok{background:var(--batt-t);color:var(--ok)} .st.warn{background:var(--solar-t);color:var(--warn)} .st.bad{background:var(--bad-t);color:var(--bad)}
+.checks .t{font-weight:650;font-size:.92rem}
+.checks .mm{font:400 .76rem/1.5 var(--f-m);color:var(--muted);overflow-wrap:anywhere}
+.checks .d{font-size:.84rem;color:var(--muted)}
+details.behind{margin-top:14px;border:1px dashed var(--line2);border-radius:var(--r);padding:14px 18px}
+details.behind summary{cursor:pointer;font-weight:650;font-size:.92rem}
+details.behind ul{margin:12px 0 0;padding-left:18px;display:grid;gap:8px;font-size:.86rem;color:var(--muted);max-width:80ch}
+details.behind code{font:500 .8rem var(--f-m);color:var(--ink);background:var(--bg2);padding:1px 5px;border-radius:5px}
+details.behind p{margin:12px 0 0;font-size:.84rem;color:var(--muted);max-width:80ch}
+
+/* parts */
+.pgroups{display:grid;gap:30px}
+.pgroup h3{margin:0 0 12px;display:flex;align-items:baseline;gap:10px}
+.pgroup h3 small{font:500 .8rem var(--f-b);color:var(--muted);letter-spacing:0}
+.parts{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px}
+.part{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:grid;grid-template-rows:auto 1fr;transition:border-color .2s,box-shadow .2s}
+.part:hover{border-color:var(--line2)}
+.part.lit{border-color:var(--solar);box-shadow:0 0 0 4px var(--solar-t)}
+.part .pp{height:104px;display:grid;place-items:center;position:relative}
+.part .pp svg{width:56px;height:56px}
+.part .qty{position:absolute;top:10px;left:10px;font:500 .74rem var(--f-m);background:var(--surface);color:var(--ink);padding:3px 8px;border-radius:99px}
+.part .pb{padding:14px;display:grid;gap:7px;align-content:start}
+.part h4{margin:0;font:650 1rem/1.3 var(--f-b)}
+.pbtn{background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
+.pbtn::after{content:"";position:absolute;inset:0;border-radius:var(--r)}
+.pbtn:focus-visible{outline:none}
+.pbtn:focus-visible::after{outline:2px solid var(--solar);outline-offset:-2px}
+.pk{display:flex;flex-wrap:wrap;gap:3px 12px;margin:0;font-size:.78rem;line-height:1.45}
+.pk div{display:flex;gap:5px;min-width:0}
+.pk dt{color:var(--muted)}
+.pk dd{margin:0;font-family:var(--f-m);font-size:.76rem;color:var(--ink)}
+.part .ps{font:400 .76rem/1.5 var(--f-m);color:var(--muted)}
+.part .go{font-size:.8rem;font-weight:600;color:var(--solar)}
+.part .pr{display:flex;justify-content:flex-end;align-items:center;gap:8px;margin-top:6px;padding-top:10px;border-top:1px solid var(--line);font-size:.82rem}
+.part .pr a{position:relative;z-index:1;color:var(--solar);font-weight:600;text-decoration:none}
+.part .pr a:hover{text-decoration:underline}
+footer{border-top:1px solid var(--line);padding-block:24px;font-size:.84rem;color:var(--muted)}
+footer .wrap{display:grid;gap:4px}
+
+/* links, alternatives, advice */
+.links{display:grid;gap:8px}
+.lnk{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;border-radius:10px;background:var(--bg2);border:1px solid var(--line);text-decoration:none;font-size:.86rem;font-weight:600}
+.lnk:hover{border-color:var(--line2)}
+.lnk .lk{display:flex;align-items:center;gap:8px;min-width:0}
+.lnk svg{width:14px;height:14px;flex:none;color:var(--solar)}
+.aff{font:700 .62rem var(--f-b);letter-spacing:.06em;text-transform:uppercase;color:var(--faint);flex:none}
+.lnk .alt{font-weight:500;color:var(--muted)}
+.advice{font-size:.84rem;color:var(--ink);background:var(--grid-t);border-radius:10px;padding:10px 12px;margin:0;display:flex;gap:8px}
+.advice svg{flex:none;margin-top:3px;color:var(--grid)}
+
+/* combiner view */
+.crumb{font-size:.86rem;color:var(--muted);margin:0 0 14px}
+.crumb a{color:var(--muted);text-decoration:none}
+.crumb a:hover{color:var(--ink)}
+#ch1:focus{outline:none}
+.boxtabs{display:flex;gap:4px;flex-wrap:wrap;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:3px;width:max-content;max-width:100%}
+.boxtabs a{padding:7px 12px;border-radius:9px;text-decoration:none;font-weight:650;font-size:.85rem;color:var(--muted)}
+.boxtabs a[aria-current="page"]{background:var(--surface2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.cgrid{display:grid;grid-template-columns:minmax(0,1fr) 340px}
+@media (max-width:1060px){.cgrid{grid-template-columns:minmax(0,1fr)}}
+.cgrid>*{min-width:0}
+.cside{border-left:1px solid var(--line);padding:20px;display:grid;gap:22px;align-content:start}
+@media (max-width:1060px){.cside{border-left:0;border-top:1px solid var(--line)}}
+.cside .eyebrow{margin-bottom:12px}
+.steps{margin:0;padding-left:20px;display:grid;gap:8px;font-size:.9rem;color:var(--muted)}
+.steps li::marker{font-family:var(--f-m);color:var(--faint)}
+.steps b{color:var(--ink);font-weight:650}
+.inbox{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.inbox li{display:grid;grid-template-columns:40px minmax(0,1fr);gap:0 12px;align-items:start}
+.inbox .ti{width:40px;height:40px;border-radius:10px;display:grid;place-items:center}
+.inbox .ti svg{width:26px;height:26px}
+.inbox .ib{display:grid;gap:4px;min-width:0}
+.inbox .nm{font-weight:650;font-size:.9rem;line-height:1.3}
+.inbox .ab{font-size:.8rem;color:var(--muted)}
+.inbox .sp{font:400 .74rem/1.5 var(--f-m);color:var(--muted)}
+.inbox .links{margin-top:4px}
+.csz{display:grid;gap:12px}
+.csz .eyebrow{margin-bottom:0}
+.csz a{color:var(--solar);font-weight:600;font-size:.84rem;text-decoration:none}
+.csz a:hover{text-decoration:underline}
+.cv svg .pos{fill:none;stroke:var(--solar);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.cv svg .neg{fill:none;stroke:var(--muted);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.cv svg .pe{fill:none;stroke:var(--faint);stroke-width:2;stroke-dasharray:5 4;stroke-linecap:round;stroke-linejoin:round}
+.cv svg .encl{fill:none;stroke:var(--line2);stroke-width:1.5;stroke-dasharray:7 6}
+.cv svg .bar{fill:var(--solar-t);stroke:var(--solar);stroke-width:1.5}
+.cv svg .lbl{font:600 11.5px var(--f-b);letter-spacing:.08em;text-transform:uppercase;fill:var(--faint)}
+.cv svg .val{font:500 13px var(--f-m);fill:var(--ink)}
+.cv svg .valm{font:400 12px var(--f-m);fill:var(--muted)}
+.cv svg .comp rect.cb{fill:var(--surface2);stroke:var(--line2);stroke-width:1.2}
+.cv .canvas svg{min-width:640px}
+.legend i.neg{background:var(--muted)}
+.legend i.pe{height:0;border-top:2px dashed var(--faint);border-radius:0}
+
+@media print{
+  :root{
+    --bg:#FFFFFF; --bg2:#F3F6F9; --surface:#FFFFFF; --surface2:#F7F9FB; --line:#DFE5EB; --line2:#CDD5DE;
+    --ink:#0E1620; --muted:#4A5763; --faint:#7D8994;
+    --solar:#B87500; --batt:#0B9B76; --grid:#2B6BDB; --load:#7447D6; --bad:#D63A2D; --warn:#B87500; --ok:#0B9B76;
+    --solar-t:rgba(196,127,0,.13); --batt-t:rgba(11,155,118,.12); --grid-t:rgba(43,107,219,.11); --load-t:rgba(116,71,214,.11); --bad-t:rgba(214,58,45,.11); --none-t:rgba(90,103,116,.1); --can:#C0307A; --mk3:#4D7C0F;
+    --on-accent:#FFFFFF; color-scheme:light}
+  body{font-size:12.5px}
+  .top,.skip,.modes,.zoom,.hint,.spots,.temp,.pr,.links,.d-acts,.wired,.dsz{display:none!important}
+  main{padding-block:0}
+  .flowbox,.part,.g,.arr,.checks li,.install{break-inside:avoid}
+  .canvas{overflow:visible;padding:0;-webkit-mask-image:none!important;mask-image:none!important}
+  .canvas svg{width:100%!important}
+  .flowgrid,.cgrid{grid-template-columns:minmax(0,1fr)}
+  .detail,.cside{border:0}
+  details.behind{display:block}
+  details.behind>*{display:block}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#schematic">Skip to the schematic</a>
+<header class="top"><div class="wrap">
+  <a class="brand" href="#top"><span class="logo" data-i="sun"></span>openculture <small>__BRAND__</small></a>
+  <nav aria-label="Sections">
+    <a href="#schematic">Schematic</a>
+    <a href="#why">Why</a>
+    <a href="#checks">Checks</a>
+    <a href="#parts-h">Parts</a>
+    <a href="#__FIRSTBOX__">PV box</a>
+    <a href="#battery">Battery</a>
+  </nav>
+</div></header>
+
+<main class="wrap" id="top">
+<div id="v-main" class="view">
+  <section class="hero" aria-labelledby="h1">
+    <div>
+      <p class="eyebrow">__EYEBROW__</p>
+      <h1 id="h1" style="margin-top:10px">__H1__</h1>
+      <p class="lead">__LEAD__</p>
+    </div>
+    <div class="chips">
+      <div class="spec"><div class="v" id="c-pv">0</div><div class="k" id="c-pvk">Solar</div></div>
+      <div class="spec"><div class="v" id="c-bat">0</div><div class="k" id="c-batk">Battery</div></div>
+      <div class="spec"><div class="v" id="c-inv">0</div><div class="k">__INVLABEL__</div></div>
+      <div class="spec"><div class="v">48 V</div><div class="k">System voltage, 16S</div></div>
+    </div>
+  </section>
+
+  <section class="flowbox" id="schematic" aria-labelledby="schem-h">
+    <h2 id="schem-h" class="sr">Wiring schematic</h2>
+    <div class="flowbar">
+      <div class="modes" role="group" aria-label="Show energy flow for">
+        <button type="button" data-mode="day" aria-pressed="true"><span data-i="sun"></span>Sunny day</button>
+        <button type="button" data-mode="night" aria-pressed="false"><span data-i="moon"></span>Night</button>
+        <button type="button" data-mode="grid" aria-pressed="false"><span data-i="utility-pole"></span>Grid on</button>
+      </div>
+      <div class="legend" aria-label="Legend">
+        <span><i style="background:var(--solar)"></i>Solar DC</span>
+        <span><i style="background:var(--batt)"></i>Battery DC</span>
+        <span><i style="background:var(--grid)"></i>Grid AC</span>
+        <span><i style="background:var(--load)"></i>Home AC</span>
+        <span data-bus="can"><i class="can"></i>CAN to BMS, RJ45</span>
+        <span data-bus="par"><i class="par"></i>Parallel link, RJ45</span>
+        <span data-bus="ct"><i class="ct"></i>CT clamp lead</span>
+      </div>
+    </div>
+    <div class="flowgrid">
+      <div>
+        <div class="stage">
+          <div class="canvas" id="canvas"><svg id="diagram" viewBox="0 0 __CANVAS_W__ __CANVAS_H__" role="group" aria-label="Wiring schematic of the home solar system. Each block is a button."></svg></div>
+          <div class="zoom" role="group" aria-label="Zoom the schematic">
+            <button type="button" id="z-out" aria-label="Zoom out"><span data-i="minus"></span></button>
+            <button type="button" id="z-fit" aria-label="Fit the schematic to the width">Fit</button>
+            <button type="button" id="z-in" aria-label="Zoom in"><span data-i="plus"></span></button>
+          </div>
+        </div>
+        <div class="caption" id="caption" aria-live="polite"></div>
+        <div class="hint">Select any block for its specs and wiring. The PV box opens to show the wiring inside. <span class="hov">Hover a block to trace its connections.</span></div>
+      </div>
+      <aside class="detail" id="detail" aria-label="Selected block"></aside>
+    </div>
+    <p class="sr" id="live" aria-live="polite"></p>
+  </section>
+
+  <section aria-labelledby="glance-h">
+    <div class="sec-h"><h2 id="glance-h">The layout at a glance</h2></div>
+    <div class="glance" id="glance"></div>
+  </section>
+
+  <section id="why" aria-labelledby="why-h">
+    <h2 id="why-h"></h2>
+    <p class="lead" id="why-lead"></p>
+    <div class="glance" id="why-items" style="margin-top:18px"></div>
+    <div class="btwo" style="margin-top:12px">
+      <div class="bpanel" id="budget-p"><div><p class="eyebrow">Heavy loads</p><h3 style="margin-top:8px" id="budget-h"></h3></div><p class="note" id="budget-lead" style="margin:0"></p><div class="tscroll"><table class="bset" id="budget"></table></div><ul class="role" id="budget-set"></ul></div>
+      <div style="display:grid;gap:12px;align-content:start">
+        <div class="bpanel" id="up-p"><p class="eyebrow">Upgrade path</p><ol class="steps" id="ups"></ol></div>
+        <div class="bpanel"><p class="eyebrow" id="alt-h"></p><ul class="alts" id="alts"></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section id="checks" aria-labelledby="checks-h">
+    <h2 id="checks-h">Sizing checks</h2>
+    <p class="lead">Do the strings and breakers suit the equipment they feed? Each check is worked out live from the datasheet numbers in the parts list, so it updates whenever the data does.</p>
+    <div class="ck-top">
+      <div class="temp">
+        <label for="t-cold"><span data-i="thermometer"></span>Coldest morning</label>
+        <input type="range" id="t-cold" min="0" max="25" step="1" value="10" aria-describedby="t-help">
+        <output id="t-out" for="t-cold">10 °C</output>
+      </div>
+      <div class="score" id="score" aria-live="polite"></div>
+      <p class="ck-help" id="t-help">Panels make more voltage in the cold, so voltage limits are checked at the coldest cell temperature you expect.</p>
+    </div>
+    <div class="arrays" id="arrays"></div>
+    <h3 class="ck-sub">Battery side</h3>
+    <ul class="checks" id="syschecks"></ul>
+    <details class="behind">
+      <summary>How these are worked out</summary>
+      <ul>
+        <li><b>Cold voltage:</b> <code>Voc × panels in series × (1 + |temp. coeff.| × (25 °C − coldest °C))</code>, compared with the charger’s absolute maximum PV voltage. The temperature coefficient comes from each panel’s datasheet.</li>
+        <li><b>Short-circuit current:</b> <code>Isc × strings in parallel</code>, compared with the charger’s maximum PV short-circuit current.</li>
+        <li><b>Working current and panel power:</b> compared with what the charger or tracker accepts. Going over isn’t unsafe; the charger trims the excess, which is called clipping.</li>
+        <li><b>String fuses and breakers:</b> IEC 62548 puts their rating between <code>1.5 × Isc</code> and <code>2.4 × Isc</code> of one panel, and no higher than the panel’s maximum series fuse rating.</li>
+        <li><b>Surge protectors:</b> their rated DC voltage should stay above the string’s cold open-circuit voltage.</li>
+        <li><b>Battery side:</b> the battery breaker at 1.25 × the inverter’s maximum battery current; inverter draw at a near-empty 48 V and about 94% efficiency; current shared evenly across the packs; panel power against each inverter’s maximum PV input.</li>
+      </ul>
+      <p>A sanity check for readers, not a substitute for a qualified installer or Growatt’s own sizing tools.</p>
+    </details>
+  </section>
+
+  <section id="parts-sec" aria-labelledby="parts-h">
+    <div class="sec-h"><h2 id="parts-h">Parts</h2><span class="muted" style="font-size:.88rem">Tap a card to find it on the schematic</span></div>
+    <div class="pgroups" id="parts"></div>
+  </section>
+</div>
+
+<div id="v-comb" class="view" hidden></div>
+<div id="v-batt" class="view" hidden></div>
+</main>
+
+<footer><div class="wrap"><span class="m" style="color:var(--ink)">__H1__ · v__VERSION__ · __UPDATED__</span><span>An alternative design for <a href="https://project.anor.openculture.org.ng" target="_blank" rel="noopener">Project Anor</a>, by <a href="https://x.com/bigbrovar" target="_blank" rel="noopener">Bigbrovar</a>. A design sketch, not an installation guide.</span><span>__FOOTER__</span></div></footer>
+
+<script>
+"use strict";
+/* ---------- icons ---------- */
+const ICONS={
+ "sun":'<circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>',
+ "moon":'<path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>',
+ "utility-pole":'<path d="M12 2v20"/><path d="M2 5h20"/><path d="M3 3v2"/><path d="M7 3v2"/><path d="M17 3v2"/><path d="M21 3v2"/><path d="m19 5-7 7-7-7"/>',
+ "lightbulb":'<path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/>',
+ "fan":'<path d="M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z"/><path d="M12 12v.01"/>',
+ "tv":'<rect width="20" height="15" x="2" y="7" rx="2" ry="2"/><polyline points="17 2 12 7 7 2"/>',
+ "router":'<rect width="20" height="8" x="2" y="14" rx="2"/><path d="M6.01 18H6"/><path d="M10.01 18H10"/><path d="M15 10v4"/><path d="M17.84 7.17a4 4 0 0 0-5.66 0"/><path d="M20.66 4.34a8 8 0 0 0-11.31 0"/>',
+ "laptop":'<path d="M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16"/>',
+ "refrigerator":'<path d="M5 6a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6Z"/><path d="M5 10h14"/><path d="M15 7v6"/>',
+ "air-vent":'<path d="M6 12H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><path d="M6 8h12"/><path d="M18.3 17.7a2.5 2.5 0 0 1-3.16 3.83 2.53 2.53 0 0 1-1.14-2V12"/><path d="M6.6 15.6A2 2 0 1 0 10 17v-5"/>',
+ "droplets":'<path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z"/><path d="M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/>',
+ "microwave":'<rect width="20" height="15" x="2" y="4" rx="2"/><rect width="8" height="7" x="6" y="8" rx="1"/><path d="M18 8v7"/><path d="M6 19v2"/><path d="M18 19v2"/>',
+ "flame":'<path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/>',
+ "thermometer":'<path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0Z"/>',
+ "check":'<path d="M20 6 9 17l-5-5"/>',
+ "alert":'<path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>',
+ "x":'<path d="M18 6 6 18"/><path d="m6 6 12 12"/>',
+ "help":'<circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/>',
+ "info":'<circle cx="12" cy="12" r="10"/><path d="M12 16v-4"/><path d="M12 8h.01"/>',
+ "external":'<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>',
+ "arrow-right":'<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>',
+ "plus":'<path d="M5 12h14"/><path d="M12 5v14"/>',
+ "minus":'<path d="M5 12h14"/>'
+};
+/* flat component icons, 48x48, monochrome with a soft fill; colour comes from the energy type */
+const F='fill="currentColor" fill-opacity=".18"';
+const CI={
+ pv:`<path ${F} d="M11 9h28l-4 21H7z"/><path d="M11 9h28l-4 21H7z"/><path d="M20.3 9 17 30M29.7 9 26 30M9 19.5h28.5"/><path d="M22 30v8M15 38h14"/>`,
+ inverter:`<rect ${F} x="11" y="5" width="26" height="38" rx="5"/><rect x="11" y="5" width="26" height="38" rx="5"/><rect x="16" y="11" width="16" height="9" rx="2" fill="currentColor" fill-opacity=".35"/><path d="M16 29.5c2-4 4-4 6 0s4 4 6 0 2.6-2.6 4-1.4"/><path d="M17 37h3M23 37h3M29 37h2"/>`,
+ battery:`<rect ${F} x="3" y="10" width="42" height="29" rx="3"/><rect x="3" y="10" width="42" height="29" rx="3"/><path d="M6 13h36" stroke-opacity=".45"/><rect x="18" y="15" width="12" height="6" rx="1" fill="currentColor" fill-opacity=".45"/><circle cx="24" cy="25.5" r="1.6"/><rect x="7" y="30" width="5" height="5" rx="1"/><rect x="13.5" y="30" width="5" height="5" rx="1"/><rect x="29.5" y="30" width="5" height="5" rx="1"/><rect x="36" y="30" width="5" height="5" rx="1"/><path d="M21 33h1.5M24 33h1.5" stroke-width="2.4"/>`,
+ mcb:`<rect ${F} x="12" y="5" width="24" height="38" rx="4"/><rect x="12" y="5" width="24" height="38" rx="4"/><path d="M24 5v38"/><rect x="15.5" y="19" width="5" height="10" rx="1.5" fill="currentColor"/><rect x="27.5" y="19" width="5" height="10" rx="1.5" fill="currentColor"/><circle cx="18" cy="11" r="2"/><circle cx="30" cy="11" r="2"/><circle cx="18" cy="37" r="2"/><circle cx="30" cy="37" r="2"/>`,
+ spd:`<path ${F} d="M24 5l15 5.5V21c0 9.5-6.4 16.6-15 21-8.6-4.4-15-11.5-15-21V10.5z"/><path d="M24 5l15 5.5V21c0 9.5-6.4 16.6-15 21-8.6-4.4-15-11.5-15-21V10.5z"/><path d="M26.5 13 19.5 25h6l-2 10 7.5-13h-6z" fill="currentColor"/>`,
+ mccb:`<rect ${F} x="13" y="4" width="22" height="40" rx="4"/><rect x="13" y="4" width="22" height="40" rx="4"/><rect x="19" y="8" width="10" height="4" rx="1"/><rect x="19" y="36" width="10" height="4" rx="1"/><rect x="19.5" y="17" width="9" height="14" rx="2" fill="currentColor"/>`,
+ db:`<rect ${F} x="6" y="8" width="36" height="32" rx="4"/><rect x="6" y="8" width="36" height="32" rx="4"/><path d="M11 14h26"/><rect x="11" y="18" width="4" height="10" rx="1" fill="currentColor"/><rect x="17.5" y="18" width="4" height="10" rx="1" fill="currentColor"/><rect x="24" y="18" width="4" height="10" rx="1" fill="currentColor"/><rect x="30.5" y="18" width="4" height="10" rx="1" fill="currentColor" fill-opacity=".35"/><path d="M11 34h26"/>`,
+ grid:`<path d="M24 5 15 43M24 5l9 38M12 13h24M14.5 21h19M18.3 21l12.6 12M29.7 21 17.1 33M17 33h14"/><circle cx="12" cy="13" r="1.6" fill="currentColor"/><circle cx="36" cy="13" r="1.6" fill="currentColor"/>`,
+ home:`<path ${F} d="M11 20v20h26V20L24 9z"/><path d="M6 23 24 8l18 15M11 19.5V40h26V19.5"/><rect x="20" y="28" width="8" height="12" rx="1"/>`,
+ earth:`<path d="M24 6v18M12 24h24M16 30h16M20 36h8M23 42h2"/>`,
+ /* new in this page, same style */
+ mppt:`<rect ${F} x="9" y="6" width="30" height="36" rx="5"/><rect x="9" y="6" width="30" height="36" rx="5"/><circle cx="24" cy="17" r="4"/><path d="M24 9.5v1.5M24 23v1.5M16.5 17H18M30 17h1.5M18.7 11.7l1 1M28.3 21.3l1 1M18.7 22.3l1-1M28.3 12.7l1-1"/><path d="M15 31h18" stroke-opacity=".5"/><circle cx="17" cy="36.5" r="1.8" fill="currentColor"/><circle cx="22" cy="36.5" r="1.8" fill="currentColor"/><circle cx="26" cy="36.5" r="1.8"/><circle cx="31" cy="36.5" r="1.8"/>`,
+ combiner:`<rect ${F} x="6" y="8" width="36" height="32" rx="4"/><rect x="6" y="8" width="36" height="32" rx="4"/><rect x="11.5" y="15" width="6" height="18" rx="2"/><rect x="21" y="15" width="6" height="18" rx="2"/><rect x="30.5" y="15" width="6" height="18" rx="2"/><path d="M14.5 13v22M24 13v22M33.5 13v22" stroke-opacity=".55"/>`,
+ busbar:`<rect ${F} x="4" y="16" width="40" height="8" rx="2"/><rect x="4" y="16" width="40" height="8" rx="2"/><rect ${F} x="4" y="30" width="40" height="8" rx="2"/><rect x="4" y="30" width="40" height="8" rx="2"/><circle cx="11" cy="20" r="1.6" fill="currentColor"/><circle cx="20" cy="20" r="1.6" fill="currentColor"/><circle cx="28" cy="20" r="1.6" fill="currentColor"/><circle cx="37" cy="20" r="1.6" fill="currentColor"/><circle cx="11" cy="34" r="1.6" fill="currentColor"/><circle cx="20" cy="34" r="1.6" fill="currentColor"/><circle cx="28" cy="34" r="1.6" fill="currentColor"/><circle cx="37" cy="34" r="1.6" fill="currentColor"/><path d="M8 11h3M9.5 9.5v3M8 44h3"/>`,
+ shunt:`<rect ${F} x="12" y="22" width="24" height="12" rx="2"/><rect x="12" y="22" width="24" height="12" rx="2"/><path d="M4 28h8M36 28h8"/><path d="M19 22v12M24 22v12M29 22v12" stroke-opacity=".55"/><rect x="17" y="9" width="14" height="9" rx="2"/><path d="M24 18v4"/><path d="M20.5 13.5h7" stroke-opacity=".6"/>`,
+ gx:`<rect ${F} x="5" y="9" width="38" height="30" rx="4"/><rect x="5" y="9" width="38" height="30" rx="4"/><rect x="12" y="16" width="13" height="13" rx="2"/><path d="M15 13v3M18.5 13v3M22 13v3M15 29v3M18.5 29v3M22 29v3"/><rect x="31" y="15" width="7" height="6" rx="1.2" fill="currentColor" fill-opacity=".35"/><rect x="31" y="25" width="7" height="6" rx="1.2" fill="currentColor" fill-opacity=".35"/><path d="M11 35h4" stroke-opacity=".5"/>`,
+ fuse:`<rect ${F} x="16" y="8" width="16" height="32" rx="3"/><rect x="16" y="8" width="16" height="32" rx="3"/><path d="M24 2v6M24 40v6"/><path d="M20 16h8M20 32h8" stroke-opacity=".55"/><path d="M24 16v16"/>`,
+ meter:`<rect ${F} x="10" y="5" width="28" height="38" rx="5"/><rect x="10" y="5" width="28" height="38" rx="5"/><rect x="15" y="11" width="18" height="8" rx="1.5"/><circle cx="24" cy="30" r="4.5"/><path d="M24 30l3-2"/><path d="M16 46v-3M32 46v-3"/>`
+};
+const CAT={fuse:"solar",pv:"solar",combiner:"solar",spd:"solar",mppt:"solar",inverter:"hub",mccb:"batt",battery:"batt",busbar:"batt",shunt:"batt",grid:"grid",meter:"grid",db:"load",home:"load",earth:"none",gx:"none",mcb:"solar"};
+const cicon=(k,sw=2)=>`<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${CI[k]}</svg>`;
+const ico=(n,sw=1.8,sz)=>`<svg viewBox="0 0 24 24"${sz?` width="${sz}" height="${sz}"`:""} fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||""}</svg>`;
+document.querySelectorAll("[data-i]").forEach(e=>e.insertAdjacentHTML("beforeend",ico(e.dataset.i)));
+document.querySelectorAll("[data-c]").forEach(e=>e.insertAdjacentHTML("beforeend",cicon(e.dataset.c,1.8)));
+
+/* DATA: generated by build.py from the files in data/. Edit those, not this block. */
+/*__DATA__*/
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const reduce=matchMedia("(prefers-reduced-motion: reduce)").matches;
+const partById=id=>PARTS.find(p=>p.id===id);
+const prod=pid=>PRODUCTS[partById(pid).product];
+const spec=(pid,k)=>{const v=prod(pid).specs[k];return v===undefined?null:v;};
+const pspec=(prodId,k)=>{const v=PRODUCTS[prodId].specs[k];return v===undefined?null:v;};
+const fmtN=(n,d=0)=>Number(n).toLocaleString("en-NG",{minimumFractionDigits:d,maximumFractionDigits:d});
+const f1=n=>Number(n).toLocaleString("en-NG",{maximumFractionDigits:1});
+function fmtSpec(k,v){const L=LABELS[k]||[k,""];if(v===null)return null;if(typeof v==="number")return Number(v).toLocaleString("en-NG",{maximumFractionDigits:2})+(L[1]?" "+L[1]:"");return v;}
+const esc=s=>String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const nodeById=id=>NODES.find(n=>n.id===id);
+const nodeName=id=>{const n=nodeById(id);return n?(n.short||n.t):id;};
+const WORD={ok:"within limits",warn:"worth noting",bad:"needs fixing"};
+const STICON={ok:"check",warn:"alert",bad:"x"};
+
+/* ---------- totals from data ---------- */
+const PV=PARTS.filter(p=>p.series);
+const PANELS=PV.reduce((a,p)=>a+p.qty,0);
+const PV_KWP=PV.reduce((a,p)=>a+p.qty*PRODUCTS[p.product].specs.pmax_w,0)/1000;
+const BATP=partById(CHECKCFG.battery),BAT_KWH=BATP.qty*PRODUCTS[BATP.product].specs.kwh;
+$("#c-pv").textContent=PV_KWP.toFixed(2)+" kWp";$("#c-pvk").textContent=`Solar, ${PANELS} panels`;
+$("#c-bat").textContent=BAT_KWH.toFixed(1)+" kWh";$("#c-batk").textContent=`Battery, ${BATP.qty} packs`;
+$("#c-inv").textContent=CHECKCFG.inverters.map(id=>spec(id,"cont_w_25c")/1000).join(" + ")+" kW";
+document.querySelectorAll(".legend [data-bus]").forEach(e=>{if(!WIRING.some(w=>w.bus===e.dataset.bus))e.remove();});
+function renderPage(){
+  const card=g=>`<div class="g"><div class="gi tint ${g.cat}">${cicon(g.icon,1.8)}</div><h3>${g.title}</h3><p>${g.text}</p></div>`;
+  $("#glance").innerHTML=PAGE.glance.map(card).join("");
+  const N=PAGE.notes;$("#why-h").textContent=N.title;$("#why-lead").innerHTML=N.lead;
+  $("#why-items").innerHTML=N.items.map(x=>`<div class="g"><h3>${x.h}</h3><p>${x.text}</p></div>`).join("");
+  $("#alt-h").textContent=N.alt_title;
+  const B=PAGE.budget;$("#budget-h").textContent=B.title;$("#budget-lead").innerHTML=B.lead;
+  const peak=B.rows.reduce((x,r)=>x+r.w*r.q,0),heavy=B.rows.reduce((x,r)=>x+r.w*r.q*r.h/1000,0),sun=PV_KWP*B.derate*B.sun_hours,tot=heavy+B.light_kwh;
+  $("#budget").innerHTML=`<thead><tr><th>Load</th><th class="n">Each</th><th class="n">Max</th><th class="n">Hours a day</th><th class="n">kWh a day</th></tr></thead><tbody>${B.rows.map(r=>`<tr><td>${esc(r.load)}${r.note?`<small class="b-${r.st}">${esc(r.note)}</small>`:""}</td><td class="n">${fmtN(r.w)} W</td><td class="n">${r.q}</td><td class="n">${f1(r.h)}</td><td class="n">${f1(r.w*r.q*r.h/1000)}</td></tr>`).join("")}
+    <tr class="tot"><td>Heavy loads, all on at once</td><td class="n b-${peak>B.budget_w?"no":"fit"}" colspan="2">${fmtN(peak)} W</td><td class="n" colspan="2">of ${fmtN(B.budget_w)} W</td></tr>
+    <tr class="tot"><td>A day’s use, with about ${f1(B.light_kwh)} kWh of light loads</td><td class="n b-${tot>sun?"part":"fit"}" colspan="4">${f1(tot)} kWh · solar about ${f1(sun)} kWh</td></tr></tbody>`;
+  $("#budget-set").innerHTML=B.settings.map(x=>`<li>${x}</li>`).join("");
+  if(PAGE.upgrades.length)$("#ups").innerHTML=PAGE.upgrades.map(x=>`<li>${x}</li>`).join("");else $("#up-p").hidden=true;
+  $("#alts").innerHTML=N.alternatives.map(a=>`<li><a href="${a.url}" target="_blank" rel="noopener">${esc(a.name)} ↗</a><span>${a.text}</span></li>`).join("");}
+if(["rs","mppt-c","mppt-d"].every(id=>partById(id))){const rsN=PV.filter(p=>p.feeds==="rs").reduce((a,p)=>a+p.qty,0),v=["mppt-c","mppt-d"].map(id=>spec(id,"pv_voc_max_v"));
+ $("#g-solar").textContent=`${rsN} panels go straight into the Multi RS’s two built-in trackers at high voltage. The other ${PANELS-rsN} go through two SmartSolar chargers, one ${v[0]} V and one ${v[1]} V, straight into the batteries.`;}
+
+/* ---------- main schematic ---------- */
+function nodeSVG(n){
+  const c=n.cat||CAT[n.ic],r=14;
+  const icn=(k,x,y,s,sw,cc)=>`<svg class="ci ${cc||c}" x="${x}" y="${y}" width="${s}" height="${s}" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round">${CI[k]}</svg>`;
+  let g=`<g class="node" tabindex="0" role="button" data-id="${n.id}" aria-label="${n.t}, ${n.s}${n.open?", opens the wiring inside":""}"><rect class="card" x="${n.x}" y="${n.y}" width="${n.w}" height="${n.h}" rx="${r}"/>`;
+  if(n.side){const s=n.h-20,bx=n.x+10,by=n.y+10;
+    g+=`<rect class="ph ${c}" x="${bx}" y="${by}" width="${s}" height="${s}" rx="11"/>`;
+    const is=Math.round(s*.66);g+=icn(n.ic,bx+(s-is)/2,by+(s-is)/2,is,2);
+    const tx=bx+s+14;g+=`<text class="ttl" x="${tx}" y="${n.y+n.h/2-3}">${n.t}</text><text class="sub" x="${tx}" y="${n.y+n.h/2+16}">${n.s}</text>`;
+    if(n.open)g+=`<text class="open" x="${n.x+n.w-14}" y="${n.y+22}" text-anchor="end">Inside ›</text>`;}
+  else if(n.stack){const bx=n.x+10,by=n.y+10,bw=n.w-20,ph=54;
+    g+=`<rect class="ph ${c}" x="${bx}" y="${by}" width="${bw}" height="${ph}" rx="10"/>`+icn(n.ic,bx+(bw-40)/2,by+7,40,2);
+    g+=`<text class="ttl" x="${n.x+12}" y="${n.y+ph+34}" style="font-size:16px">${n.t}</text><text class="sub" x="${n.x+12}" y="${n.y+ph+53}">${n.s}</text>`;}
+  else{const ph=n.ph||100,bx=n.x+10,by=n.y+10,bw=n.w-20;
+    g+=`<rect class="ph ${c}" x="${bx}" y="${by}" width="${bw}" height="${ph}" rx="11"/>`;
+    if(n.slabs){const pw=330,ph2=54,gp=6,sx=bx+(bw-pw)/2,sy=by+(ph-(n.slabs*ph2+(n.slabs-1)*gp))/2;
+      for(let i=0;i<n.slabs;i++)g+=packSVG(sx,sy+i*(ph2+gp),pw,ph2);}
+    else if(n.count){const s=n.isz||40,gap=n.gap||6,cols=n.cols||2,rows=Math.ceil(n.count/cols),tw=cols*s+(cols-1)*gap,th=rows*s+(rows-1)*gap,sx=bx+(bw-tw)/2,sy=by+(ph-th)/2;
+      for(let i=0;i<n.count;i++)g+=icn(n.ic,sx+(i%cols)*(s+gap),sy+Math.floor(i/cols)*(s+gap),s,s>40?1.6:2.2);}
+    else if(n.loads){const s=24,gap=16,tw=n.loads.length*s+(n.loads.length-1)*gap,sx=bx+(bw-tw)/2;
+      g+=icn("home",bx+(bw-50)/2,by+12,50,1.6);
+      n.loads.forEach((l,i)=>{g+=`<svg class="ci load" x="${sx+i*(s+gap)}" y="${by+ph-s-12}" width="${s}" height="${s}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONS[l]}</svg>`;});}
+    else{const is=Math.min(ph-46,110);g+=icn(n.ic,bx+(bw-is)/2,by+(ph-is)/2-12,is,1.4);}
+    if(n.ports){n.ports.forEach(([k,l],i)=>{const px=bx+14+i*66;g+=`<circle cx="${px+4}" cy="${by+ph-14}" r="3.5" class="ci ${k}" fill="currentColor"/><text class="tagtxt" x="${px+12}" y="${by+ph-10}">${l}</text>`;});}
+    g+=`<text class="ttl" x="${n.x+16}" y="${n.y+ph+38}">${n.t}</text><text class="sub" x="${n.x+16}" y="${n.y+ph+58}">${n.s}</text>`;}
+  return g+"</g>";}
+function packSVG(x,y,w,h){
+  const c=x+w/2,term=(tx)=>`<rect x="${tx}" y="${y+h-21}" width="15" height="15" rx="2.5" fill="currentColor" fill-opacity=".22" stroke="currentColor" stroke-width="1.4"/><circle cx="${tx+7.5}" cy="${y+h-13.5}" r="3" fill="none" stroke="currentColor" stroke-width="1.4"/>`;
+  let g=`<g class="ci batt"><rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="1.6"/><path d="M${x+6} ${y+5}H${x+w-6}" stroke="currentColor" stroke-opacity=".45" stroke-width="1.2"/>`;
+  g+=`<rect x="${c-30}" y="${y+9}" width="60" height="17" rx="2.5" fill="currentColor" fill-opacity=".38" stroke="currentColor" stroke-width="1.2"/>`;
+  [0,1,2].forEach(k=>g+=`<circle cx="${c+40}" cy="${y+12+k*6}" r="1.6" fill="currentColor"/>`);
+  g+=`<circle cx="${c}" cy="${y+36}" r="4" fill="none" stroke="currentColor" stroke-width="1.4"/>`;
+  [-18,-6,6].forEach(k=>g+=`<rect x="${c+k}" y="${y+h-12}" width="9" height="7" rx="1" fill="none" stroke="currentColor" stroke-width="1.2"/>`);
+  g+=term(x+10)+term(x+30)+term(x+w-45)+term(x+w-25);
+  g+=`<text x="${x+10}" y="${y+17}" style="font:700 10px var(--f-b);letter-spacing:.08em" fill="currentColor">${esc(PRODUCTS[BATP.product].name.split(" ")[0].toUpperCase())}</text><text x="${x+w-10}" y="${y+17}" text-anchor="end" style="font:600 10px var(--f-m)" fill="currentColor">${fmtN(PRODUCTS[BATP.product].specs.kwh,1)} kWh</text>`;
+  g+=`<text x="${x+48}" y="${y+h-9}" style="font:700 10px var(--f-b)" fill="currentColor">+</text><text x="${x+w-56}" y="${y+h-9}" text-anchor="end" style="font:700 11px var(--f-b)" fill="currentColor">−</text></g>`;
+  return g;}
+function earth(x,y){return `<g><line class="earthl" x1="${x-18}" y1="${y}" x2="${x+18}" y2="${y}"/><line class="earthl" x1="${x-11}" y1="${y+7}" x2="${x+11}" y2="${y+7}"/><line class="earthl" x1="${x-5}" y1="${y+14}" x2="${x+5}" y2="${y+14}"/></g>`;}
+const dg=$("#diagram");
+function drawDiagram(){
+  let s="";
+  WIRING.filter(w=>w.type!=="data").forEach(w=>{
+    s+=`<g class="w" data-w="${w.id}" data-a="${w.from}" data-b="${w.to}">${cableText(w)?`<title>${esc(cableText(w))}</title>`:""}<path class="wire" d="${w.d}"/>`;
+    if(w.type!=="none")s+=`<path class="glow ${w.type}" d="${w.d}"/><path class="flow ${w.type}" d="${w.d}"/>`;
+    if(w.sym){const [x,y]=w.sym;s+=earth(x,y)+`<text class="tagtxt" x="${x}" y="${y+32}" text-anchor="middle">Earth</text>`;}
+    s+="</g>";});
+  WIRING.filter(w=>w.type==="data").forEach(w=>{s+=`<path class="dataw ${w.bus}" data-w="${w.id}" data-a="${w.from}" data-b="${w.to}" d="${w.d}"><title>${w.label}, ${w.cable}</title></path>`;});
+  s+=`<g class="labs" aria-hidden="true">${LABS.map(l=>`<text class="tagtxt${l.c?" "+l.c:""}" x="${l.x}" y="${l.y}"${l.a?` text-anchor="${l.a}"`:""}>${esc(l.t)}</text>`).join("")}</g>`;
+  NODES.forEach(n=>s+=nodeSVG(n));
+  dg.innerHTML=s;
+}
+function setMode(m){const M=MODES[m];
+  document.querySelectorAll(".modes button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.mode===m));
+  dg.querySelectorAll("g.w").forEach(g=>{const on=M.on.includes(g.dataset.w),rv=M.rev.includes(g.dataset.w);g.querySelectorAll(".glow,.flow").forEach(p=>{p.classList.toggle("on",on);p.classList.toggle("rev",rv);});});
+  $("#caption").innerHTML=ico(m==="day"?"sun":m==="night"?"moon":"utility-pole",1.8,16)+`<span>${M.cap}</span>`;}
+document.querySelectorAll(".modes button").forEach(b=>b.onclick=()=>setMode(b.dataset.mode));
+
+/* ---------- tracing: hover or focus a block to see what it is wired to ---------- */
+function linked(id){const near=new Set([id]),ws=[];
+  dg.querySelectorAll("[data-a]").forEach(w=>{if(w.dataset.a===id||w.dataset.b===id){ws.push(w);near.add(w.dataset.a);near.add(w.dataset.b);}});
+  return {near,ws};}
+let traced=null,tT=0;
+function trace(id){if(id===traced)return;traced=id;
+  dg.querySelectorAll(".tr").forEach(e=>e.classList.remove("tr"));
+  dg.classList.toggle("trace",!!id);if(!id)return;
+  const {near,ws}=linked(id);ws.forEach(w=>w.classList.add("tr"));
+  near.forEach(n=>{const g=dg.querySelector(`.node[data-id="${n}"]`);if(g)g.classList.add("tr");});}
+function markSel(id){dg.querySelectorAll(".sw").forEach(e=>e.classList.remove("sw"));if(id)linked(id).ws.forEach(w=>w.classList.add("sw"));}
+
+/* ---------- zoom and pan ---------- */
+const cv=$("#canvas"),zIn=$("#z-in"),zOut=$("#z-out"),zFit=$("#z-fit");
+const ZW=[780,1100,1400,1800];
+let zoomW=null,drag=null,eatClick=false;
+const fitW=()=>Math.max(200,cv.clientWidth-20);
+const svgW=()=>dg.getBoundingClientRect().width||fitW();
+const levels=()=>{const f=fitW();return [f,...ZW.filter(w=>w>f*1.08)];};
+function fades(){const max=cv.scrollWidth-cv.clientWidth;cv.classList.toggle("fl",cv.scrollLeft>2);cv.classList.toggle("fr",max>2&&cv.scrollLeft<max-2);}
+function zoomUI(){const L=levels(),w=svgW();zOut.disabled=zFit.disabled=zoomW==null;zIn.disabled=w>=L[L.length-1]-1;
+  cv.classList.toggle("grab",cv.scrollWidth>cv.clientWidth+1);fades();}
+function setZoom(w,keep=true){
+  const f=fitW(),target=(w==null||w<=f*1.02)?null:Math.min(w,ZW[ZW.length-1]);
+  const oldW=svgW(),r=dg.getBoundingClientRect(),cx=cv.scrollLeft+cv.clientWidth/2;
+  const fy=r.height?Math.min(1,Math.max(0,(innerHeight/2-r.top)/r.height)):0;
+  zoomW=target;dg.style.width=target?target+"px":"";
+  if(keep&&oldW){const nw=svgW();cv.scrollLeft=(cx-10)*nw/oldW+10-cv.clientWidth/2;
+    if(r.top<innerHeight&&r.bottom>0){const r2=dg.getBoundingClientRect();window.scrollBy(0,(r2.top+fy*r2.height)-(r.top+fy*r.height));}}
+  zoomUI();}
+zIn.onclick=()=>{const w=svgW(),nx=levels().find(v=>v>w+1);if(nx)setZoom(nx);};
+zOut.onclick=()=>{const w=svgW(),L=levels(),pv=L.filter(v=>v<w-1).pop();setZoom(pv==null||pv===L[0]?null:pv);};
+zFit.onclick=()=>setZoom(null);
+cv.addEventListener("scroll",fades,{passive:true});
+new ResizeObserver(()=>{if(zoomW!=null&&zoomW<=fitW()*1.02){zoomW=null;dg.style.width="";}zoomUI();}).observe(cv);
+/* drag to pan with a mouse when zoomed in; touch scrolls natively */
+cv.addEventListener("pointerdown",e=>{if(e.pointerType!=="mouse"||e.button!==0||cv.scrollWidth<=cv.clientWidth+1)return;
+  drag={x:e.clientX,y:e.clientY,sl:cv.scrollLeft,sy:scrollY,moved:false,id:e.pointerId};});
+addEventListener("pointermove",e=>{if(!drag||e.pointerId!==drag.id)return;const dx=e.clientX-drag.x,dy=e.clientY-drag.y;
+  if(!drag.moved&&Math.hypot(dx,dy)>5){drag.moved=true;cv.classList.add("grabbing");trace(null);}
+  if(drag.moved){cv.scrollLeft=drag.sl-dx;window.scrollTo(scrollX,drag.sy-dy);}});
+addEventListener("pointerup",e=>{if(!drag||e.pointerId!==drag.id)return;if(drag.moved){eatClick=true;setTimeout(()=>eatClick=false,0);}cv.classList.remove("grabbing");drag=null;});
+addEventListener("pointercancel",()=>{if(drag){cv.classList.remove("grabbing");drag=null;}});
+cv.addEventListener("click",e=>{if(eatClick){e.stopPropagation();e.preventDefault();eatClick=false;}},true);
+function revealNode(id){const n=nodeById(id);if(!n||cv.scrollWidth<=cv.clientWidth+1)return;
+  const k=svgW()/CANVAS.w,cx=10+(n.x+n.w/2)*k;cv.scrollTo({left:cx-cv.clientWidth/2,behavior:reduce?"auto":"smooth"});}
+
+dg.addEventListener("pointerover",e=>{if(e.pointerType!=="mouse"||(drag&&drag.moved))return;const n=e.target.closest(".node");clearTimeout(tT);fTrace=false;
+  if(n)trace(n.dataset.id);else tT=setTimeout(()=>trace(null),140);});
+dg.addEventListener("pointerleave",()=>{clearTimeout(tT);tT=setTimeout(()=>trace(null),140);});
+let fTrace=false;
+dg.addEventListener("focusin",e=>{const n=e.target.closest(".node");if(n&&n.matches(":focus-visible")){fTrace=true;trace(n.dataset.id);}});
+dg.addEventListener("focusout",()=>{if(fTrace){fTrace=false;trace(null);}});
+
+/* ---------- shared bits ---------- */
+function specRows(p,part){
+  const rows=[];
+  if(part&&part.layout)rows.push(["Wiring",part.layout,""]);
+  Object.entries(p.specs).filter(([,v])=>v!==null).forEach(([k,v])=>{const L=LABELS[k]||[k];rows.push([L[0],fmtSpec(k,v),""]);});
+  return rows;}
+function kv(rows){return `<dl class="d-kv">${rows.map(([k,v])=>`<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl>`;}
+function linkList(p){
+  const L=p.links||{},out=[];
+  (L.buy||[]).forEach(b=>out.push(`<a class="lnk" href="${b.u}" target="_blank" rel="noopener"><span class="lk">${ico("external",2)}<span>${esc(b.s)}</span></span>${b.aff?'<span class="aff">Affiliate</span>':""}</a>`));
+  if(L.datasheet)out.push(`<a class="lnk" href="${L.datasheet}" target="_blank" rel="noopener"><span class="lk">${ico("external",2)}<span>Datasheet</span></span></a>`);
+  (L.alts||[]).forEach(a=>out.push(`<a class="lnk" href="${a.u}" target="_blank" rel="noopener"><span class="lk">${ico("external",2)}<span><span class="alt">Alternative:</span> ${esc(a.n)}</span></span>${a.aff?'<span class="aff">Affiliate</span>':""}</a>`+(a.note?`<p class="note" style="font-size:.8rem">${a.note}</p>`:"")));
+  return out.length?`<div class="links">${out.join("")}</div>`:"";}
+const advice=p=>p.advice?`<p class="advice">${ico("info",2,15)}<span>${p.advice}</span></p>`:"";
+function wireLabel(w){if(w.type==="data")return w.label;
+  return {solar:"PV DC",batt:"DC"+(w.pole?" "+(w.pole==="-"?"−":w.pole):""),grid:"Grid AC",load:"AC",none:""}[w.type];}
+function cableText(w){return [w.size,w.len].filter(Boolean).join(" · ");}
+function wiredHTML(id){
+  const seen=new Set(),chips=[];
+  WIRING.filter(w=>w.from===id||w.to===id).forEach(w=>{const o=w.from===id?w.to:w.from,key=o+"|"+(w.bus||w.type);if(seen.has(key))return;seen.add(key);
+    if(o==="earth"){chips.push(`<span class="chip t-none"><i></i>Earth</span>`);return;}
+    const t=w.type==="data"?w.bus:w.type;
+    chips.push(`<button type="button" class="chip t-${t}" data-go="${o}"><i></i>${nodeName(o)}<small>${[wireLabel(w),cableText(w)].filter(Boolean).join(" · ")}</small></button>`);});
+  return chips.length?`<div class="wired"><p class="eyebrow">Wired to</p><div class="wchips">${chips.join("")}</div></div>`:"";}
+
+/* ---------- sizing checks, computed from the data ---------- */
+let COLD=10,CHECKS={},lastScore="";
+const coldF=(prodId,t=COLD)=>1+Math.abs(pspec(prodId,"voc_coef_pct")??0.3)/100*(25-t); /* Voc rises as cells cool below the 25 °C test temperature */
+function strInfo(pid,t=COLD){const pt=partById(pid),pr=pt.product,v=pspec(pr,"voc_v");
+  return {pt,pr,voc:v,isc:pspec(pr,"isc_a"),imp:pspec(pr,"imp_a"),maxFuse:pspec(pr,"max_fuse_a"),v:v*pt.series,vc:v*pt.series*coldF(pr,t),n:pt.series,p:pt.parallel,w:pt.qty*pspec(pr,"pmax_w")};}
+const devLimits=dev=>{const s=prod(dev).specs,per=(s.trackers||1)>1;return {voc:s.pv_voc_max_v??null,isc:s.pv_isc_max_a??null,op:s.pv_op_a??null,w:(per?s.pv_w_per_tracker:s.pv_w_48v)??null};};
+const combOf=pvId=>Object.keys(COMBINERS).find(k=>COMBINERS[k].arrays.includes(pvId));
+const feedLabel=pvId=>{const C=COMBINERS[combOf(pvId)],ch=(C.channels||[]).find(c=>c.pv===pvId);return (ch?ch.to:C.to).replace(/ · PV in$/,"");};
+function gRatio(key,label,val,lim,unit,d,soft){const r=val/lim;return {kind:"ratio",key,label,val,lim,unit,d,st:soft?(r>1?"warn":"ok"):(r>1?"bad":r>.95?"warn":"ok")};}
+function gRange(key,label,rating,lo,hi,isc){return {kind:"range",key,label,rating,lo,hi,st:rating>hi?"bad":rating>=lo?"ok":rating>=1.25*isc?"warn":"bad"};}
+function gaugeHTML(g){
+  let val,bar;
+  if(g.kind==="ratio"){const max=g.val>g.lim?g.val*1.06:g.lim,p=Math.min(100,g.val/max*100),l=g.lim/max*100;
+    val=`<b>${g.d?f1(g.val):fmtN(g.val)}</b> / ${fmtN(g.lim)} ${g.unit}`;
+    bar=`<span class="f" style="--p:${p.toFixed(1)}%"></span>${g.val>g.lim?`<span class="lim" style="--l:${l.toFixed(1)}%"></span>`:""}`;}
+  else{const max=Math.max(g.hi,g.rating)*1.25,a=g.lo/max*100,w=(g.hi-g.lo)/max*100,m=g.rating/max*100;
+    val=`<b>${f1(g.rating)} A</b> · needs ${f1(g.lo)}–${f1(g.hi)} A`;
+    bar=`<span class="win" style="--a:${a.toFixed(1)}%;--w:${w.toFixed(1)}%"></span><span class="mk" style="--m:${m.toFixed(1)}%"></span>`;}
+  return `<li class="gauge s-${g.st}"><span class="gs" aria-hidden="true">${ico(STICON[g.st],3)}</span><span class="gt"><span class="gl">${g.label}<span class="sr">, ${WORD[g.st]}</span></span><span class="gv">${val}</span></span><span class="gb" aria-hidden="true">${bar}</span></li>`;}
+const vdHTML=x=>`<p class="vd s-${x.st}">${ico(x.st==="bad"?"x":"alert",2.4)}<span>${x.h}</span></p>`;
+function arrayCheck(pvId){
+  const s=strInfo(pvId),dev=s.pt.feeds,L=devLimits(dev),C=COMBINERS[combOf(pvId)];
+  const isc=s.isc*s.p,imp=s.imp*s.p,g=[],v=[],who=(prod(dev).specs.trackers||1)>1?"tracker":"charger";
+  if(L.voc!=null)g.push(gRatio("volt",`Open-circuit voltage at ${COLD}\u00A0°C`,s.vc,L.voc,"V",1));
+  if(L.isc!=null)g.push(gRatio("isc","Short-circuit current",isc,L.isc,"A",1));
+  if(L.op!=null)g.push(gRatio("op","Working current",imp,L.op,"A",1,true));
+  if(L.w!=null)g.push(gRatio("pow","Panel power",s.w,L.w,"W",0,true));
+  const spdV=pspec(C.spd.p,C.spd.k);if(spdV!=null)g.push(gRatio("spd","Surge protector voltage",s.vc,spdV,"V",1));
+  const rating=pspec(C.prot.p,C.prot.k),lo=1.5*s.isc,hi=Math.min(2.4*s.isc,s.maxFuse??Infinity);
+  if(rating!=null)g.push(gRange("prot",C.prot.what==="fuses"?"String fuses":"String breakers",rating,lo,hi,s.isc));
+  const G=k=>g.find(x=>x.key===k);
+  const V=G("volt");if(V&&V.st!=="ok")v.push({k:"volt",st:V.st,h:V.st==="bad"?`<b>Too much voltage.</b> On a ${COLD}\u00A0°C morning this string reaches ${f1(s.vc)} V, over the ${fmtN(L.voc)} V limit. Use fewer panels in series.`:`<b>Little voltage headroom.</b> On a ${COLD}\u00A0°C morning this string reaches ${f1(s.vc)} V, within 5% of the ${fmtN(L.voc)} V limit.`});
+  const I=G("isc");if(I&&I.st!=="ok")v.push({k:"isc",st:I.st,h:I.st==="bad"?`<b>Short-circuit current over the limit.</b> ${f1(isc)} A is more than the ${fmtN(L.isc)} A the ${who} is rated for, which can damage it.`:`<b>Short-circuit current close to the limit.</b> ${f1(isc)} A against the ${who}’s ${fmtN(L.isc)} A.`});
+  const clip=[],W=G("pow"),O=G("op");
+  if(W&&W.st!=="ok")clip.push([`${fmtN(L.w)} W`,`${fmtN(s.w)} W`]);
+  if(O&&O.st!=="ok")clip.push([`${f1(L.op)} A`,`${f1(imp)} A`]);
+  if(clip.length)v.push({k:"clip",st:"warn",h:`<b>Clips at midday.</b> The ${who} accepts up to ${clip.map(c=>c[0]).join(" and ")}, and this string can make ${clip.map(c=>c[1]).join(" at ")}, so the extra is trimmed when the sun is strongest. That’s normal for an oversized string, as long as voltage and short-circuit current stay inside the limits above.`});
+  const S=G("spd");if(S&&S.st!=="ok")v.push({k:"spd",st:S.st,h:`<b>Surge protector voltage ${S.st==="bad"?"too low":"tight"}.</b> The string reaches ${f1(s.vc)} V on a ${COLD}\u00A0°C morning against a ${fmtN(spdV)} V rating.`});
+  const P=G("prot");
+  if(P&&P.st!=="ok"){const what=C.prot.what,ex=[16,20,25,30,32,40,50,63].filter(x=>x>=P.lo&&x<=P.hi).pop(),win=`${f1(P.lo)}–${f1(P.hi)} A`;
+    if(P.rating>P.hi)v.push({k:"prot",st:"bad",h:`<b>String ${what} rated too high.</b> ${P.rating} A is above the panels’ ${f1(s.maxFuse)} A maximum series fuse rating, so they can’t protect the panels. ${ex?`A ${ex} A rating fits the ${win} window.`:`Pick a rating inside the ${win} window.`}`});
+    else if(P.st==="warn")v.push({k:"prot",st:"warn",h:`<b>String ${what} a little small.</b> ${P.rating} A is just under the usual minimum of 1.5 × Isc (${f1(P.lo)} A). Trips are unlikely at this margin, but ${ex?`a ${ex} A rating would fit`:"a rating inside"} the ${win} window${ex?"":" would bring it in line"}.`});
+    else v.push({k:"prot",st:"bad",h:`<b>String ${what} undersized.</b> ${P.rating} A is well under 1.5 × Isc (${f1(P.lo)} A), and the panels’ working current of ${f1(s.imp)} A already uses ${Math.round(s.imp/P.rating*100)}% of it, so they can trip on hot, bright days. ${ex?`A ${ex} A rating fits the ${win} window.`:`Pick a rating inside the ${win} window.`}`});}
+  return {pvId,s,dev,g,v};}
+function arrayCard(r){
+  const pt=r.s.pt,p=PRODUCTS[pt.product],n=nodeById(r.pvId);
+  return `<article class="arr" id="chk-${r.pvId}"><div class="arr-h"><span class="ti tint solar">${cicon("pv",1.8)}</span><h3>${n.short} <span class="muted" style="font-weight:600">→ ${feedLabel(r.pvId)}</span></h3><span class="sp">${pt.qty} × ${p.short||p.name} · ${pt.layout} · ${fmtN(r.s.w/1000,2)} kWp</span></div>
+    <ul class="gauges">${r.g.map(gaugeHTML).join("")}</ul>${r.v.map(vdHTML).join("")}</article>`;}
+function sysChecks(){
+  const out=[],cfg=CHECKCFG,word=n=>["no","one","two","three","four","five","six","seven","eight","nine"][n]||String(n);
+  const pairs=Object.entries(cfg.charger_breakers||{}).map(([b,d])=>({b:spec(b,"current_a"),c:spec(d,"charge_a"),d}));
+  if(pairs.length){const brOK=pairs.every(x=>x.b>=x.c*1.25);
+    out.push({st:brOK?"ok":"bad",t:"Battery breakers",mm:pairs.map(x=>`${nodeName(x.d)}: ${x.b} A breaker, ${x.c} A battery current`).join(" · "),
+      d:brOK?"Each breaker gives the usual 1.25 × headroom over the inverter’s maximum battery current.":"Each breaker should be at least 1.25 × the inverter’s maximum battery current."});}
+  const V_LOW=cfg.low_battery_v,EFF=cfg.inverter_efficiency,packs=BATP.qty,bms=PRODUCTS[BATP.product].specs.bms_a;
+  const inv=cfg.inverters||[],invW=inv.reduce((a,id)=>a+spec(id,"cont_w_25c"),0),Id=invW/(V_LOW*EFF),perD=Id/packs;
+  out.push({st:perD>bms?"bad":perD>.8*bms?"warn":"ok",t:"Discharge current",mm:`${fmtN(invW)} W ÷ (${V_LOW} V × ${EFF}) ≈ ${fmtN(Id)} A, about ${fmtN(perD)} A per pack`,
+    d:`${inv.length===1?"The inverter":inv.length===2?"Both inverters":`All ${word(inv.length)} inverters`} at full continuous output use about ${Math.round(perD/bms*100)}% of each pack’s ${bms} A BMS rating.`});
+  const ch=(cfg.chargers||[]).map(id=>spec(id,"charge_a")),chg=ch.reduce((a,x)=>a+x,0),perC=chg/packs;
+  out.push({st:perC>bms?"bad":perC>.8*bms?"warn":"ok",t:"Charge current",mm:`${ch.join(" + ")} A = ${chg} A, about ${fmtN(perC)} A per pack`,
+    d:`Even with all ${word(ch.length)} chargers flat out at once, each pack sees about ${Math.round(perC/bms*100)}% of its ${bms} A BMS rating.`});
+  inv.forEach(id=>{const lim=spec(id,"pv_w_max");if(lim==null)return;const w=PV.filter(p=>p.feeds===id).reduce((a,p)=>a+p.qty*PRODUCTS[p.product].specs.pmax_w,0);
+    out.push({st:w>lim?"warn":"ok",t:`Panel power, ${nodeName(id)}`,mm:`${fmtN(w)} W of panels · ${fmtN(lim)} W maximum PV input`,
+      d:w>lim?"Above the inverter’s maximum PV input, so it clips at midday.":`Uses ${Math.round(w/lim*100)}% of the inverter’s maximum PV input.`});});
+  return out;}
+function renderChecks(){
+  const res=PV.map(p=>arrayCheck(p.id));CHECKS=Object.fromEntries(res.map(r=>[r.pvId,r]));
+  $("#arrays").innerHTML=res.map(arrayCard).join("");
+  const sys=sysChecks();
+  $("#syschecks").innerHTML=sys.map(c=>`<li><span class="st ${c.st}" aria-hidden="true">${ico(STICON[c.st],2.6)}</span><span class="t">${c.t}<span class="sr">, ${WORD[c.st]}</span></span><span class="mm">${c.mm}</span><span class="d">${c.d}</span></li>`).join("");
+  const all=[...res.flatMap(r=>r.g.map(x=>x.st)),...sys.map(c=>c.st)],n=k=>all.filter(x=>x===k).length;
+  const sc=`<span class="s-ok"><i></i><b>${n("ok")}</b> within limits</span><span class="s-warn"><i></i><b>${n("warn")}</b> to note</span><span class="s-bad"><i></i><b>${n("bad")}</b> to fix</span>`;
+  if(sc!==lastScore){lastScore=sc;$("#score").innerHTML=sc;}
+  const z=$("#detail .dsz");if(z&&selId)z.outerHTML=sizingLink(selId);}
+const SZ_FOR={};PV.forEach(p=>{SZ_FOR[p.id]=[p.id];(SZ_FOR[p.feeds]=SZ_FOR[p.feeds]||[]).push(p.id);});
+function sizingLink(id){const ids=SZ_FOR[id];if(!ids)return "";
+  const sts=ids.flatMap(k=>CHECKS[k].g.map(x=>x.st)),bad=sts.filter(x=>x==="bad").length,warn=sts.filter(x=>x==="warn").length;
+  const st=bad?"bad":warn?"warn":"ok",txt=[bad&&`${bad} to fix`,warn&&`${warn} to note`].filter(Boolean).join(", ")||"all within limits";
+  const first=ids.find(k=>CHECKS[k].g.some(x=>x.st===st))||ids[0];
+  return `<a class="dsz s-${st}" href="#chk-${first}">${ico(STICON[st],2.6)}<span>Sizing checks: <b>${txt}</b></span><span class="go" aria-hidden="true">›</span></a>`;}
+$("#t-cold").addEventListener("input",e=>{COLD=+e.target.value;$("#t-out").textContent=COLD+" °C";renderChecks();});
+
+/* ---------- detail panel ---------- */
+let selId=null;
+function showDetail(id,light=true,quiet=false){
+  selId=id;
+  dg.querySelectorAll(".node").forEach(g=>{if(g.dataset.id===id){g.classList.add("sel");g.setAttribute("aria-current","true");}else{g.classList.remove("sel");g.removeAttribute("aria-current");}});
+  markSel(id);
+  const n=nodeById(id),box=$("#detail");
+  if(!n.part){const inf=INFO[id];
+    box.innerHTML=`<p class="eyebrow">Selected</p><div class="d-photo tint ${inf.cat}">${cicon(inf.icon,1.6)}</div><h3 style="font-size:1.2rem">${inf.t}</h3><p class="note">${inf.d}</p>${kv(inf.rows)}${wiredHTML(id)}`;
+    lightCard(null);if(!quiet)$("#live").textContent=`Showing ${inf.t}`;return;}
+  const part=partById(n.part),p=PRODUCTS[part.product],c=n.cat||CAT[p.icon];
+  box.innerHTML=`<p class="eyebrow">Selected part</p><div class="d-photo tint ${c}">${cicon(p.icon,1.6)}${part.qty>1?`<span class="qty">× ${part.qty}</span>`:""}</div>
+   <div><h3 style="font-size:1.2rem">${p.name}</h3>${ABOUT[part.product]?`<p class="note" style="margin-top:8px;color:var(--ink)">${ABOUT[part.product]}</p>`:""}</div>
+   ${part.box?`<div class="d-acts"><a class="btn" href="#${part.box}">See the wiring inside ${ico("arrow-right",2)}</a></div>`:""}
+   ${BATTERY&&part.id===CHECKCFG.battery?`<div class="d-acts"><a class="btn" href="#battery">See the battery wiring ${ico("arrow-right",2)}</a></div>`:""}
+   ${sizingLink(id)}
+   ${kv(specRows(p,part))}
+   ${wiredHTML(id)}
+   ${p.note?`<p class="note">${p.note}</p>`:""}${part.note?`<p class="note">${part.note}</p>`:""}
+   ${advice(p)}
+   ${linkList(p)}`;
+  lightCard(light?n.part:null);if(!quiet)$("#live").textContent=`Showing ${p.name}`;}
+function lightCard(pid){document.querySelectorAll(".part").forEach(c=>c.classList.toggle("lit",!!pid&&c.dataset.parts.split(",").includes(pid)));}
+function select(id,how="diagram"){
+  showDetail(id,how!=="init",how==="init");
+  const sm=reduce?"auto":"smooth";
+  if(how==="outside"){revealNode(id);document.getElementById("schematic").scrollIntoView({behavior:sm,block:"start"});}
+  else if(how==="chip"){revealNode(id);if(innerWidth<1060)$("#detail").scrollIntoView({behavior:sm,block:"start"});}
+  else if(how==="diagram"&&innerWidth<1060)$("#detail").scrollIntoView({behavior:sm,block:"nearest"});}
+function activate(id,how="diagram"){const n=nodeById(id);if(n&&n.open){go(n.open);return;}if(n)select(id,how);}
+dg.addEventListener("click",e=>{const n=e.target.closest(".node");if(n)activate(n.dataset.id);});
+dg.addEventListener("keydown",e=>{const n=e.target.closest(".node");if(n&&(e.key==="Enter"||e.key===" ")){e.preventDefault();activate(n.dataset.id);}});
+$("#detail").addEventListener("click",e=>{const b=e.target.closest("[data-go]");if(b)activate(b.dataset.go,"chip");});
+
+/* ---------- parts cards ---------- */
+function cardHTML(grp){
+  const parts=grp.map(partById),p=PRODUCTS[parts[0].product],qs=parts.map(x=>x.qty),qty=qs.includes(null)?null:qs.reduce((a,x)=>a+x,0);
+  const node=NODES.find(n=>n.part===grp[0]),c=(node&&node.cat)||CAT[p.icon],alt={node:parts[0].show_on,box:parts[0].opens};
+  const shown=Object.entries(p.specs).filter(([,v])=>v!==null).slice(0,3).map(([k,v])=>`<div><dt>${(LABELS[k]||[k])[0]}</dt><dd>${fmtSpec(k,v)}</dd></div>`).join("");
+  const where=grp.length>1?"Used for: "+grp.map(id=>SHORT[id]||id).join(", "):(parts[0].note||"");
+  const L=p.links||{},first=(L.buy||[])[0];
+  const link=first?`<a href="${first.u}" target="_blank" rel="noopener">${first.aff?"Buy":"Store"} ↗</a>${first.aff?'<span class="aff">Affiliate</span>':""}`:L.datasheet?`<a href="${L.datasheet}" target="_blank" rel="noopener">Datasheet ↗</a>`:"";
+  const box=parts[0].box||alt.box,nid=node?node.id:(alt.node||"");
+  return `<article class="part" data-parts="${grp.join(",")}">
+    <div class="pp tint ${c}">${cicon(p.icon,1.7)}${qty?`<span class="qty">× ${qty}</span>`:""}</div>
+    <div class="pb"><h4><button type="button" class="pbtn"${nid?` data-node="${nid}"`:""}${box?` data-box="${box}"`:""}>${p.name}<span class="sr">${box?", open the wiring inside":", show on the schematic"}</span></button></h4>
+     ${shown?`<dl class="pk">${shown}</dl>`:""}${where?`<div class="ps">${where}</div>`:""}
+     ${parts[0].box?`<div class="go">Open the wiring inside ›</div>`:""}
+     ${link?`<div class="pr">${link}</div>`:""}</div></article>`;}
+function renderParts(){
+  $("#parts").innerHTML=GROUPS.map(g=>`<div class="pgroup"><h3>${g.t} <small>${g.cards.length} ${g.cards.length===1?"item":"items"}</small></h3><div class="parts">${g.cards.map(cardHTML).join("")}</div></div>`).join("");}
+$("#parts").addEventListener("click",e=>{const b=e.target.closest(".pbtn");if(!b)return;if(b.dataset.box){go(b.dataset.box);return;}if(b.dataset.node)select(b.dataset.node,"outside");});
+
+/* ---------- combiner views ---------- */
+function comp(x,y,w,h,icon,cat,label,sub){
+  const th=h-(sub?40:26);
+  return `<g class="comp"><rect class="cb" x="${x}" y="${y}" width="${w}" height="${h}" rx="10"/><rect class="ph" x="${x+6}" y="${y+6}" width="${w-12}" height="${th-6}" rx="7" style="fill:var(--${cat}-t)"/>
+   <svg class="ci ${cat}" x="${x+(w-30)/2}" y="${y+6+(th-6-30)/2}" width="30" height="30" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${CI[icon]}</svg>
+   <text class="val" x="${x+w/2}" y="${y+th+14}" text-anchor="middle">${label}</text>${sub?`<text class="valm" x="${x+w/2}" y="${y+th+30}" text-anchor="middle">${sub}</text>`:""}</g>`;}
+const hop=(x)=>`H${x-8} a8 8 0 0 1 16 0`;
+function strTile(x,y,w,s,label){return `<g class="comp"><rect class="cb" x="${x}" y="${y}" width="${w}" height="88" rx="12"/><rect x="${x+8}" y="${y+8}" width="72" height="72" rx="9" style="fill:var(--solar-t)"/>
+  <svg class="ci solar" x="${x+20}" y="${y+20}" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${CI.pv}</svg>
+  <text style="font:650 16px var(--f-b);fill:var(--ink)" x="${x+94}" y="${y+38}">${label}</text><text class="valm" x="${x+94}" y="${y+58}">${s}</text></g>`;}
+function earthSym(x,y,lbl,anchor){return earth(x,y)+(lbl?`<text class="lbl" x="${anchor==="end"?x-26:x+26}" y="${y+12}" text-anchor="${anchor||"start"}">${lbl}</text>`:"");}
+function drawPar3(cb){
+  const C=COMBINERS[cb],pt=partById(C.part),pvId=C.arrays[0],s=strInfo(pvId),pp=PRODUCTS[s.pr];
+  const sb=pspec(C.prot.p,C.prot.k),ob=spec(C.part,"output_breaker_a");
+  let g="",pos="",neg="";
+  const cx=[160,450,740];
+  cx.forEach((c,i)=>{g+=strTile(c-130,20,260,`${s.n} × ${pp.specs.pmax_w} W · ${s.v.toFixed(1)} V`,`String ${i+1}`);
+    pos+=`<path class="pos flowp" d="M${c-40} 108 V200"/><path class="pos flowp" d="M${c-40} 290 V320"/>`;
+    neg+=`<path class="neg" d="M${c+40} 108 V372"/>`;
+    g+=comp(c-80,200,80,90,"mcb","solar",`${sb} A`,"1P");});
+  g+=`<rect class="bar" x="90" y="314" width="700" height="12" rx="4"/><text class="lbl" x="800" y="324">+ busbar</text>`;
+  neg+=`<path class="neg" d="M200 372 ${hop(440)} H780"/><path class="neg" d="M480 372 V420"/>`;
+  g+=`<text class="lbl" x="800" y="376">− joined</text>`;
+  pos+=`<path class="pos flowp" d="M440 326 V420"/>`;
+  const mb=comp(400,420,120,96,"mcb","solar",`${ob} A`,"2P main");
+  pos+=`<path class="pos flowp" d="M440 516 V610"/>`;neg+=`<path class="neg" d="M480 516 V610"/>`;
+  pos+=`<path class="pos" d="M440 540 ${hop(480)} H660 V520"/>`;neg+=`<path class="neg" d="M480 556 H700 V520"/>`;
+  const spd=comp(610,430,150,90,"spd","solar",esc(PRODUCTS[C.spd.p].name.split(" ")[0]),`${pspec(C.spd.p,C.spd.k)} V DC`);
+  const pe=`<path class="pe" d="M760 475 H840 V612"/>`+earthSym(840,612,"")+`<text class="lbl" x="880" y="664" text-anchor="end">Earth: local ref, then main bar</text>`;
+  const enc=`<rect class="encl" x="20" y="150" width="860" height="420" rx="18"/><text class="lbl" x="40" y="558">${C.title} enclosure</text>`;
+  const out=`<g class="comp"><rect class="cb" x="300" y="610" width="260" height="64" rx="12"/><svg class="ci solar" x="314" y="622" width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${CI.mppt}</svg><text style="font:650 15px var(--f-b);fill:var(--ink)" x="366" y="640">${nodeName(partById(pvId).feeds)}</text><text class="valm" x="366" y="658">PV in · + and −</text></g>`;
+  const tags=`<text class="lbl" x="452" y="600">+</text><text class="lbl" x="490" y="600">−</text>`;
+  return `<svg viewBox="0 0 900 690" role="img" aria-label="Wiring inside ${C.title}">${enc}${neg}${pos}${pe}${g}${mb}${spd}${out}${tags}</svg>`;}
+function drawPair(id){
+  const C=COMBINERS[id],fuse=pspec(C.prot.p,C.prot.k),mcb=spec(C.part,"mcb_2p_a"),spdv=pspec(C.spd.p,C.spd.k),n=C.channels.length,W=450*n;
+  let g="",pos="",neg="",pe="";
+  C.channels.forEach((ch,i)=>{const c=225+450*i,s=strInfo(ch.pv);
+    g+=strTile(c-170,20,340,`${s.n} × ${PRODUCTS[s.pr].specs.pmax_w} W · ${s.v.toFixed(1)} V`,SHORT[ch.pv]||nodeName(ch.pv));
+    pos+=`<path class="pos flowp" d="M${c-40} 108 V190"/><path class="pos flowp" d="M${c-40} 270 V320"/><path class="pos flowp" d="M${c-40} 404 V600"/>`;
+    neg+=`<path class="neg" d="M${c+40} 108 V190"/><path class="neg" d="M${c+40} 270 V320"/><path class="neg" d="M${c+40} 404 V600"/>`;
+    g+=comp(c-70,190,60,80,"fuse","solar",`${fuse} A`)+comp(c+10,190,60,80,"fuse","solar",`${fuse} A`);
+    g+=comp(c-70,320,140,84,"mcb","solar",mcb?`${mcb} A 2P`:"2P breaker");
+    pos+=`<path class="pos" d="M${c-40} 444 ${hop(c+40)} H${c+125} V430"/>`;neg+=`<path class="neg" d="M${c+40} 460 H${c+105}"/>`;
+    g+=comp(c+75,430,110,80,"spd","solar",`${spdv} V`);
+    pe+=`<path class="pe" d="M${c+130} 510 V622"/>`+earthSym(c+130,622,"");
+    g+=`<g class="comp"><rect class="cb" x="${c-120}" y="600" width="210" height="60" rx="12"/><svg class="ci hub" x="${c-108}" y="610" width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${CI.inverter}</svg><text style="font:650 14px var(--f-b);fill:var(--ink)" x="${c-58}" y="627">${esc(ch.to.split(" · ")[0])}</text><text class="valm" x="${c-58}" y="645">${esc(ch.to.split(" · ")[1]||"")}</text></g>`;
+    g+=`<text class="lbl" x="${c-34}" y="590">+</text><text class="lbl" x="${c+46}" y="590">−</text>`;});
+  let enc=`<rect class="encl" x="20" y="150" width="${W-40}" height="420" rx="18"/><text class="lbl" x="40" y="176">${C.title} enclosure${n>1?` · ${["","one","two","three","four"][n]||n} separate channels`:""}</text>`;
+  for(let i=1;i<n;i++)enc+=`<path d="M${450*i} 196 V550" stroke="var(--line2)" stroke-dasharray="3 6"/>`;
+  const note=`<text class="lbl" x="${W-20}" y="685" text-anchor="end">Earth to local earth ref, then main earth bar</text>`;
+  return `<svg viewBox="0 0 ${W} 700" role="img" aria-label="Wiring inside ${C.title}">${enc}${neg}${pos}${pe}${g}${note}</svg>`;}
+function combSizing(id){
+  const C=COMBINERS[id],multi=C.arrays.length>1,rows=[],vds=[];
+  C.arrays.forEach(pv=>{const r=arrayCheck(pv),pre=multi?nodeName(pv)+" ":"";
+    r.g.filter(x=>x.key==="prot"||x.key==="spd").forEach(x=>rows.push({...x,label:multi?pre+x.label.charAt(0).toLowerCase()+x.label.slice(1):x.label}));
+    r.v.filter(x=>x.k==="prot"||x.k==="spd").forEach(x=>vds.push(x));});
+  return `<div class="csz"><p class="eyebrow">Sizing check</p><ul class="gauges">${rows.map(gaugeHTML).join("")}</ul>${vds.map(vdHTML).join("")}<a href="#chk-${C.arrays[0]}">See every sizing check ›</a></div>`;}
+function renderComb(id){
+  const C=COMBINERS[id],box=$("#v-comb");
+  box.innerHTML=`
+  <section aria-labelledby="ch1">
+    <p class="crumb"><a href="#schematic">Schematic</a> &nbsp;/&nbsp; ${C.title}</p>
+    ${Object.keys(COMBINERS).length<2?"":`<nav class="boxtabs" aria-label="PV boxes">${Object.entries(COMBINERS).map(([k,v])=>`<a href="#${k}"${k===id?' aria-current="page"':""}>${v.title} <span class="muted" style="font-weight:500">· ${v.short}</span></a>`).join("")}</nav>`}
+    <h1 id="ch1" tabindex="-1" style="margin-top:22px">${C.title}</h1>
+    <p class="lead">${C.lead}</p>
+  </section>
+  <section class="flowbox cv" aria-label="Wiring inside ${C.title}">
+    <div class="flowbar"><span class="eyebrow">Inside the box</span>
+      <div class="legend"><span><i style="background:var(--solar)"></i>+ conductor</span><span><i class="neg"></i>− conductor</span><span><i class="pe"></i>Earth</span></div></div>
+    <div class="cgrid">
+      <div><div class="canvas">${C.kind==="pair"?drawPair(id):drawPar3(id)}</div></div>
+      <aside class="cside">
+        <div><p class="eyebrow">How it’s wired</p><ol class="steps">${C.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
+        ${combSizing(id)}
+        <div><p class="eyebrow">In this box</p><ul class="inbox">${C.inside.map(it=>{const q=PRODUCTS[it.p],c=CAT[q.icon]||"solar";
+          const sp=[...Object.entries(q.specs).filter(([,v])=>v!==null).map(([k,v])=>`${(LABELS[k]||[k])[0]} ${fmtSpec(k,v)}`),it.on].join(" · ");
+          return `<li><span class="ti tint ${c}">${cicon(q.icon,1.8)}</span><div class="ib"><span class="nm">${it.qty} × ${q.name}</span>${ABOUT[it.p]?`<span class="ab">${ABOUT[it.p]}</span>`:""}<span class="sp">${sp}</span>${(q.links.buy||[]).length||(q.links.alts||[]).length?linkList(q):""}</div></li>`;}).join("")}</ul></div>
+      </aside>
+    </div>
+  </section>`;}
+const flowOn=()=>document.querySelectorAll("#v-comb .flowp").forEach(p=>{p.classList.add("flow","on","solar");p.classList.remove("pos");p.insertAdjacentHTML("beforebegin",`<path class="wire" d="${p.getAttribute("d")}"/>`);});
+
+/* ---------- battery page: packs, cables, busbar and BMS settings ---------- */
+function drawBattery(){
+  const B=BATTERY,n=B.packs.length,X=290,W=320,H=78,Y0=50,ST=100,yc=i=>Y0+i*ST+H/2,idx=p=>B.packs.indexOf(p);
+  const top=Y0-10,bot=Y0+(n-1)*ST+H+10;
+  let w="",g="",t="";
+  /* pack-to-pack links: brackets on each side */
+  B.links.forEach(l=>{const a=yc(idx(l.a)),b=yc(idx(l.b)),m=(a+b)/2;
+    w+=`<path class="bpos" d="M${X+W} ${a} H${X+W+30} V${b} H${X+W}"/><path class="bneg" d="M${X} ${a} H${X-30} V${b} H${X}"/>`;
+    const lab=[l.size,l.len].filter(Boolean).join(" · ");
+    if(lab)t+=`<text class="valm" x="${X+W+40}" y="${m+4}">${esc(lab)}</text><text class="valm" x="${X-40}" y="${m+4}" text-anchor="end">${esc(lab)}</text>`;});
+  /* runs to the busbars */
+  const PX=800,NX=88;
+  B.runs.forEach(r=>{const y=yc(idx(r.pack)),lab=[r.size,r.len].filter(Boolean).join(" · ");
+    if(r.pole==="+"){w+=`<path class="bpos" d="M${X+W} ${y} H${PX}"/>`;if(lab)t+=`<text class="valm" x="${(X+W+30+PX)/2+20}" y="${y-8}" text-anchor="middle">${esc(lab)}</text>`;}
+    else{w+=`<path class="bneg" d="M${X} ${y} H${NX+22}"/>`;if(lab)t+=`<text class="valm" x="${(X-30+NX+22)/2-20}" y="${y-8}" text-anchor="middle">${esc(lab)}</text>`;}});
+  /* busbars, shunt and outputs */
+  g+=`<rect class="pbar" x="${PX}" y="${top}" width="22" height="${bot-top}" rx="4"/><text class="lbl" x="${PX+11}" y="${top-12}" text-anchor="middle">+ busbar</text>`;
+  g+=`<rect class="nbar" x="${NX}" y="${top}" width="22" height="${bot-top}" rx="4"/><text class="lbl" x="${NX+11}" y="${top-12}" text-anchor="middle">Battery −</text>`;
+  const sy=bot+40;
+  w+=`<path class="bneg" d="M${NX+11} ${bot} V${sy+96}"/><path class="bpos" d="M${PX+11} ${bot} V${sy+96}"/>`;
+  const to=CHECKCFG.inverters.length>1?"both inverters":"the inverter";
+  g+=`<rect class="nbar" x="${NX-40}" y="${sy+96}" width="360" height="14" rx="4"/><text class="lbl" x="${NX-40}" y="${sy+134}">− to ${to}</text>`;
+  g+=`<rect class="pbar" x="${PX-200}" y="${sy+96}" width="222" height="14" rx="4"/><text class="lbl" x="${PX+22}" y="${sy+134}" text-anchor="end">+ to ${to}, through the breaker${CHECKCFG.inverters.length>1?"s":""}</text>`;
+  /* packs */
+  B.packs.forEach((p,i)=>{const y=Y0+i*ST;
+    g+=`<g class="ci batt"><rect x="${X}" y="${y}" width="${W}" height="${H}" rx="8" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="1.6"/>
+      <rect x="${X+W-112}" y="${y+16}" width="64" height="20" rx="3" fill="currentColor" fill-opacity=".38"/>
+      <circle cx="${X}" cy="${y+H/2}" r="7" fill="var(--surface)" stroke="var(--muted)" stroke-width="2"/><circle cx="${X+W}" cy="${y+H/2}" r="7" fill="var(--surface)" stroke="currentColor" stroke-width="2"/></g>
+      <text x="${X+22}" y="${y+34}" style="font:700 17px var(--f-d);fill:var(--ink)">Pack ${p}</text><text class="valm" x="${X+22}" y="${y+56}">Deriy · 14.7 kWh · LiFePO4</text>
+      <text x="${X+14}" y="${y+H/2+5}" style="font:700 14px var(--f-b);fill:var(--muted)">−</text><text x="${X+W-24}" y="${y+H/2+5}" style="font:700 14px var(--f-b);fill:var(--batt)">+</text>`;});
+  const H2=sy+150;
+  return `<svg viewBox="0 0 900 ${H2}" role="img" aria-label="How the four battery packs are wired to the busbar">${w}${g}${t}</svg>`;}
+function renderBattery(){
+  const B=BATTERY,box=$("#v-batt"),bm=B.bms,c=bm.cells;
+  const pv=v=>(v*c).toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2});
+  const cables=[...B.links.map(l=>[`Pack ${l.a} to pack ${l.b}, + and −`,[l.size,l.len].filter(Boolean).join(" · ")]),
+    ...B.runs.map(r=>[`Pack ${r.pack} ${r.pole==="+"?"+":"−"} to the ${r.pole==="+"?"+ busbar":"battery − bar"}`,[r.size,r.len].filter(Boolean).join(" · ")])];
+  box.innerHTML=`
+  <section aria-labelledby="bh1">
+    <p class="crumb"><a href="#schematic">Schematic</a> &nbsp;/&nbsp; ${esc(B.title)}</p>
+    <h1 id="bh1" tabindex="-1">${esc(B.title)}</h1>
+    <p class="lead">${B.lead}</p>
+  </section>
+  <section class="flowbox cv" aria-label="Battery wiring">
+    <div class="flowbar"><span class="eyebrow">Pack wiring</span>
+      <div class="legend"><span><i class="bp"></i>+ conductor</span><span><i class="neg"></i>− conductor</span></div></div>
+    <div class="cgrid">
+      <div><div class="canvas">${drawBattery()}</div></div>
+      <aside class="cside">
+        <div><p class="eyebrow">How it’s wired</p><ol class="steps">${B.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
+        ${B.balance?`<div><p class="eyebrow">Current share</p><div class="bal"><span class="v">${B.balance.min_a}–${B.balance.max_a} A</span><span class="muted">per pack at about ${B.balance.total_a} A</span></div><p class="note" style="margin-top:8px">${B.balance.text}</p></div>`:""}
+        <div><p class="eyebrow">Cables</p><ul class="cbl">${cables.map(([a,b])=>`<li><span>${a}</span><span>${esc(b)}</span></li>`).join("")}</ul>${B.runs_note?`<p class="note" style="margin-top:8px">${B.runs_note}</p>`:""}</div>
+      </aside>
+    </div>
+  </section>
+  <section class="btwo">
+    <div class="bpanel"><div><p class="eyebrow">Battery management</p><h2 style="margin-top:8px">${esc(bm.name)} settings</h2></div>
+      ${bm.role.length?`<ul class="role">${bm.role.map(r=>`<li>${r}</li>`).join("")}</ul>`:""}
+      <table class="bset"><thead><tr><th>Setting</th><th class="n">Per cell</th><th class="n">Per pack (${c}S)</th></tr></thead><tbody>
+      ${bm.volts.map(v=>`<tr><td>${esc(v.label)}</td><td class="n">${v.v.toFixed(2)} V</td><td class="n">${pv(v.v)} V</td></tr>`).join("")}
+      ${bm.currents.map(a=>`<tr><td>${esc(a.label)}</td><td class="n"></td><td class="n">${a.a} A</td></tr>`).join("")}
+      </tbody></table></div>
+    ${BUSBAR_IMG?`<figure class="bshot"><img src="${BUSBAR_IMG}" alt="The home-built busbar box: two copper bars with a Victron SmartShunt bolted between the battery-minus and load-minus bars" loading="lazy"><figcaption><b>${esc(B.busbar.title)}.</b> ${esc(B.busbar.text)}</figcaption></figure>`:""}
+  </section>`;}
+const BUSBAR_IMG="__BUSBAR_IMG__";
+
+
+/* ---------- routing: #combiner-* opens a box, anything else is the main page ---------- */
+let view="main",lastComb=null;
+const NAVMAP=[["schematic","#schematic"],["why","#why"],["checks","#checks"],["parts-sec","#parts-h"]];
+function setNav(href){document.querySelectorAll(".top nav a").forEach(a=>{if(a.getAttribute("href")===href)a.setAttribute("aria-current","true");else a.removeAttribute("aria-current");});}
+function spy(){if(view!=="main")return;const y=innerHeight*.35;let cur=null;
+  for(const [id,href] of NAVMAP){const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=y)cur=href;}setNav(cur);}
+let spyRaf=0;addEventListener("scroll",()=>{if(!spyRaf)spyRaf=requestAnimationFrame(()=>{spyRaf=0;spy();});},{passive:true});
+/* Sub-pages open by address (#battery, #pv-box-1) and also by direct call, so
+   they work where a preview frame doesn't pass address changes back to the page. */
+let forced=null;
+function go(h){forced=h;try{history.pushState(null,"","#"+h);}catch(_){}route();}
+document.addEventListener("click",e=>{const a=e.target.closest('a[href^="#"]');if(!a||e.defaultPrevented||e.metaKey||e.ctrlKey)return;
+  const h=decodeURIComponent(a.getAttribute("href").slice(1));if(!h)return;
+  if(h==="battery"||COMBINERS[h]||view!=="main"){e.preventDefault();go(h);}});
+function route(){
+  const h=forced!=null?forced:decodeURIComponent(location.hash.slice(1));forced=null;
+  if(h==="battery"&&BATTERY){$("#v-main").hidden=true;$("#v-comb").hidden=true;$("#v-batt").hidden=false;renderBattery();window.scrollTo(0,0);
+    view="batt";$("#bh1").focus({preventScroll:true});setNav("#battery");return;}
+  $("#v-batt").hidden=true;
+  if(COMBINERS[h]){$("#v-main").hidden=true;$("#v-comb").hidden=false;renderComb(h);flowOn();window.scrollTo(0,0);
+    view="comb";lastComb=h;$("#ch1").focus({preventScroll:true});setNav("#"+Object.keys(COMBINERS)[0]);return;}
+  const back=view!=="main";view="main";$("#v-comb").hidden=true;$("#v-main").hidden=false;
+  if(h){const el=document.getElementById(h);
+    if(el)requestAnimationFrame(()=>{el.scrollIntoView({block:"start"});
+      if(back&&h==="schematic"&&lastComb){const nd=NODES.find(x=>x.open===lastComb),g=nd&&dg.querySelector(`.node[data-id="${nd.id}"]`);if(g)g.focus({preventScroll:true});}
+      spy();});}
+  else{if(back)window.scrollTo(0,0);spy();}}
+addEventListener("hashchange",route);addEventListener("popstate",()=>{forced=null;route();});
+const hdr=$(".top"),setHH=()=>document.documentElement.style.setProperty("--hh",hdr.offsetHeight+"px");
+new ResizeObserver(setHH).observe(hdr);setHH();
+
+renderPage();drawDiagram();setMode("day");renderParts();renderChecks();select(CHECKCFG.inverters[0],"init");
+if(fitW()<780)setZoom(780,false);else zoomUI();
+route();
+</script>
+</body>
+</html>

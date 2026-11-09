@@ -1,0 +1,44 @@
+# The battery page (index.html#battery): how the four packs are wired to the
+# busbar, the cables, the measured balance and the JK BMS settings.
+
+title: Battery bank
+lead: Two Deriy 14.7 kWh LiFePO4 packs in parallel, stacked and numbered 1 and 2 from top to bottom. One pack takes the busbar’s positive run and the other takes the negative run, so both share current evenly. Two more packs fit the same busbar later.
+
+packs: [1, 2]
+
+links:
+  - {between: [1, 2], size: 50 mm², length: 1.2 ft}
+
+runs:
+  - {pack: 1, pole: "+", size: 50 mm², length: 3.5 m}
+  - {pack: 2, pole: "-", size: 50 mm², length: 3.5 m}
+runs_note: Both runs are the same length.
+
+steps:
+  - Packs <b>1 and 2</b> are joined on both poles with 50 mm² cable.
+  - The <b>+ busbar</b> takes its run from the + of pack <b>1</b>.
+  - The <b>− bar</b> takes its run from the − of pack <b>2</b>. Taking + and − from opposite packs makes both packs see the same cable length.
+  - The Deye’s battery cable lands on the same bars through its 250 A breaker. There’s no shunt; the Deye reads state of charge from the JK BMS.
+  - Adding packs 3 and 4 later follows the home bank’s wiring.
+
+busbar:
+  title: Home-built busbar
+  text: Two copper bars in an enclosure, with room for two more packs.
+
+bms:
+  name: JK inverter BMS
+  role:
+    - Talks CAN to the Deye over RJ45, so the inverter charges and discharges to the BMS limits.
+    - State of charge on the Deye screen and Wi-Fi logger comes from the BMS.
+  # Per-cell voltages. The page also shows each one for the 16-cell pack.
+  cells_in_series: 16
+  volts:
+    - {label: Balancing starts at, cell_v: 3.40}
+    - {label: Overvoltage protection (OVP), cell_v: 3.60}
+    - {label: OVP recovery (OVPR), cell_v: 3.40}
+    - {label: Charge voltage (RCV), cell_v: 3.45}
+    - {label: Float voltage (RFV), cell_v: 3.35}
+    - {label: 100% state of charge at, cell_v: 3.49}
+  currents:
+    - {label: Continuous charge current, a: 88}
+    - {label: Continuous discharge current, a: 100}

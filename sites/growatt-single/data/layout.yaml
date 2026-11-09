@@ -1,0 +1,53 @@
+# Where everything sits on the schematic. You only need this file to add, move
+# or re-route something on the drawing; specs and parts live in the other files.
+#
+#   at      for a block: [x, y, width, height], measured from the top-left corner
+#   style   tile (picture on top, the default), side (icon on the left) or stack
+#   path    an SVG path for a wire. "M115 230 V280" starts at x=115, y=230 and runs
+#           down to y=280. H runs sideways to an x, V up or down to a y.
+
+canvas: [1400, 1260]
+
+blocks:
+  - {id: pv-a, part: pv-a, short: PV 1, at: [30, 30, 370, 200], title: PV 1 · 2.95 kWp, subtitle: 5 × Jinko 590 W, icon: pv, photo_height: 120, panels: {count: 5, cols: 5, size: 34}}
+  - {id: pv-b, part: pv-b, short: PV 2, at: [420, 30, 370, 200], title: PV 2 · 2.36 kWp, subtitle: 4 × Jinko 590 W, icon: pv, photo_height: 120, panels: {count: 4, cols: 4, size: 34}}
+  - {id: box-1, part: box-1, short: PV box, at: [30, 280, 760, 84], title: PV box, subtitle: "2 in 2 out · fuses, breaker and SPD on each channel", icon: combiner, style: side, opens: pv-box-1}
+  - {id: inv, part: inv, short: Growatt, at: [30, 420, 760, 300], title: Growatt SPF 6000 ES Plus, subtitle: "6 kW · 48 V battery · 2 MPPT, up to 500 V", icon: inverter, photo_height: 170, ports: [[solar, PV 1-2], [grid, AC IN], [batt, BAT], [load, AC OUT]]}
+  - {id: brk, part: brk, short: Battery breaker, at: [330, 790, 160, 120], title: BENY 250 A, subtitle: Growatt battery, icon: mccb, style: stack}
+  - {id: busbar, part: busbar, at: [30, 960, 760, 70], title: Battery busbar, subtitle: Room for a second pack, icon: busbar, style: side}
+  - {id: bat, part: bat, short: Battery, at: [30, 1080, 760, 160], title: Battery · 14.7 kWh, subtitle: "1 × Deriy 14.7 kWh LiFePO4 · 16S · JK BMS 200 A", icon: battery, photo_height: 80, packs: 1}
+  - {id: grid, at: [1030, 30, 340, 84], title: Grid supply, subtitle: Single phase · kWh meter, icon: meter, style: side}
+  - {id: gridbd, part: gridbd, at: [1030, 150, 340, 84], title: Grid board, subtitle: 2P MCB · T2 SPD, icon: db, category: grid, style: side}
+  - {id: acb-light, part: acb-light, at: [1030, 300, 340, 84], title: Light-load board, subtitle: Chint MCB · T2 SPD · RCBO, icon: db, style: side}
+  - {id: light, at: [1030, 420, 340, 200], title: Light loads, subtitle: On the Growatt AC output, icon: home, photo_height: 120, loads: [lightbulb, fan, tv, refrigerator, router, laptop]}
+  - {id: acb-heavy, part: acb-heavy, at: [1030, 700, 340, 84], title: Heavy-load board, subtitle: Same output · about 4 kW, icon: db, style: side}
+  - {id: heavy, at: [1030, 820, 340, 200], title: Heavy loads, subtitle: One AC · see the budget, icon: home, photo_height: 120, loads: [air-vent, droplets, flame]}
+
+wires:
+  - {id: w-pva, from: pv-a, to: box-1, type: solar, path: M215 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-pvb, from: pv-b, to: box-1, type: solar, path: M605 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-boxa, from: box-1, to: inv, type: solar, path: M215 364 V420, size: 10 mm²}
+  - {id: w-boxb, from: box-1, to: inv, type: solar, path: M605 364 V420, size: 10 mm²}
+  - {id: w-dc, from: inv, to: brk, type: batt, path: M410 720 V790, size: 50 mm², length: 2 m}
+  - {id: w-brk, from: brk, to: busbar, type: batt, path: M410 910 V960, size: 50 mm²}
+  - {id: w-batp, from: busbar, to: bat, type: batt, path: M200 1030 V1080, pole: "+", size: 50 mm², length: 3.5 m}
+  - {id: w-batn, from: busbar, to: bat, type: batt, path: M620 1030 V1080, pole: "-", size: 50 mm², length: 3.5 m}
+  - {id: w-grid, from: grid, to: gridbd, type: grid, path: M1200 114 V150}
+  - {id: w-gridin, from: gridbd, to: inv, type: grid, path: M1030 192 H930 V470 H790}
+  - {id: w-out, from: inv, to: acb-light, type: load, path: M790 560 H990 V342 H1030}
+  - {id: w-light, from: acb-light, to: light, type: load, path: M1200 384 V420}
+  - {id: w-heavyin, from: inv, to: acb-heavy, type: load, path: M990 560 V742 H1030}
+  - {id: w-heavy, from: acb-heavy, to: heavy, type: load, path: M1200 784 V820}
+  - {id: w-earthl, from: acb-light, to: earth, type: none, path: M1370 342 H1392 V370, earth_at: [1392, 374]}
+  - {id: w-earthh, from: acb-heavy, to: earth, type: none, path: M1370 742 H1392 V770, earth_at: [1392, 774]}
+  - {id: d-bms, from: bat, to: inv, type: data, bus: can, cable: RJ45, label: CAN to JK BMS, path: M790 1160 H850 V700 H790}
+
+labels:
+  - {text: MPPT 1, at: [223, 400]}
+  - {text: MPPT 2, at: [613, 400]}
+  - {text: AC IN, at: [800, 462]}
+  - {text: AC OUT, at: [800, 552]}
+  - {text: BAT, at: [418, 780]}
+  - {text: "+", at: [208, 1068]}
+  - {text: −, at: [628, 1068]}
+  - {text: BMS CAN, at: [858, 1151], color: can}

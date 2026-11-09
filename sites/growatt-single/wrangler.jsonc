@@ -1,0 +1,9 @@
+// Cloudflare Workers config: serve the built page in dist/ as static assets.
+// Cloudflare runs `pip install pyyaml && python build.py`, then `npx wrangler deploy`.
+{
+  "name": "anor-growatt",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    "directory": "./dist"
+  }
+}

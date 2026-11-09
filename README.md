@@ -18,6 +18,16 @@ diagrams/        source wiring diagrams (.drawio), opened with draw.io
 
 The files in `diagrams/` open with [draw.io](https://app.diagrams.net/). They are reference drawings of what connects to what; the sites draw their own schematics from their data.
 
+## Alternative designs
+
+Sketches of how the home system could be built today. Each is its own site and Worker.
+
+| Design | Folder | Live |
+| --- | --- | --- |
+| Victron replacement: two Deye 8 kW in parallel | `sites/deye-parallel/` | [deye-parallel.anor.openculture.org.ng](https://deye-parallel.anor.openculture.org.ng) |
+| Budget alternative: one Deye 8 kW, two packs, 10 kWp | `sites/deye-single/` | [deye.anor.openculture.org.ng](https://deye.anor.openculture.org.ng) |
+| Entry alternative: one Growatt SPF 6000, one pack, 5 kWp | `sites/growatt-single/` | [growatt.anor.openculture.org.ng](https://growatt.anor.openculture.org.ng) |
+
 ## Adding a new site
 
 1. Create a folder for it under `sites/`, for example `sites/solar-guide/`, with its own `build.py`, `data/` and `wrangler.jsonc`. Copying `sites/home-solar/` is the quickest start.

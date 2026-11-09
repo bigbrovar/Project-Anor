@@ -1,0 +1,154 @@
+# This design: the parts used and how many, how the panel strings are wired,
+# the Sunny day / Night / Grid on views, the page text and the settings for the
+# battery-side checks. Products are described in products.yaml; positions on
+# the drawing live in layout.yaml.
+
+version: "0.1"
+updated: 2026-11-09   # shown in the footer, with the version
+
+# Text at the top of the page and in the "Why this design" section.
+# Text fields can use <b> for bold.
+page:
+  title: Project Anor · two Deye 8 kW, the Victron replacement
+  description: The direct alternative to the Project Anor Victron system, rebuilt around two Deye SUN-8K hybrid inverters in parallel with 36 Jinko panels on their built-in MPPTs and the same four battery packs.
+  brand: alternative design
+  eyebrow: Victron replacement · 48 V · two Deye 8 kW in parallel
+  h1: Project Anor on two Deyes
+  lead: The direct alternative to today’s Victron setup. Two Deye 8 kW hybrid inverters work as one on the same four-pack battery bank. 36 Jinko 590 W panels feed their six built-in solar trackers, so the separate chargers, their combiner boxes and the battery monitor all go. Light loads run on the joined backup outputs; heavy loads run on the GEN ports as a smart load.
+  inverters_label: Two in parallel
+  glance:
+    - {icon: mppt, cat: solar, title: Six trackers, one panel model, text: "36 Jinko 590 W panels in six strings of 6, one string per built-in Deye tracker, at up to about 330 V. No separate solar chargers."}
+    - {icon: battery, cat: batt, title: The same battery bank, text: "The four Deriy 14.7 kWh packs stay on the same busbar. Each Deye has its own 250 A breaker. The JK BMS talks CAN to the master Deye, which shares the limits with the second unit."}
+    - {icon: home, cat: load, title: 16 kW shared, two outputs, text: "The joined LOAD outputs carry the light loads. The GEN ports, set as a smart load, carry the heavy loads within about 13 kW and switch them off before the battery runs low."}
+  budget:
+    title: About 13 kW for heavy loads
+    lead: "The two Deyes share 16 kW. Allow about 1.5 kW for the light loads and a margin for motor start-up, and roughly 13 kW is left for the GEN ports. The hours are a typical day; wattages are typical figures, so check your own appliances’ labels."
+    budget_w: 13000
+    light_kwh: 8
+    sun_hours: 4
+    derate: 0.7
+    rows:
+      - {load: "Air conditioner, 1.5 HP inverter type", watts: 1100, qty: 5, hours: 6, note: All five can run together.}
+      - {load: "Deep-well pump, 1 HP", watts: 750, qty: 1, hours: 2}
+      - {load: Induction cooker, watts: 2000, qty: 1, hours: 1.5}
+      - {load: Electric oven, watts: 2500, qty: 1, hours: 0.5}
+      - {load: Water heater, watts: 2000, qty: 1, hours: 1.5, note: "One at a time; three at once would pass the budget.", status: part}
+    settings:
+      - "Both GEN ports set to <b>Smart load output</b>, with the same settings on master and slave."
+      - "<b>On grid always on</b>: heavy loads run whenever the grid is up."
+      - "Without grid: <b>on at 90%</b> battery with at least 2 kW of solar, <b>off at 40%</b>, keeping the rest of the 58.8 kWh for the light loads."
+      - "Deye’s manual doesn’t say whether smart load works in a parallel system. Confirm it with Deye or your installer for your firmware. If it doesn’t, give each Deye’s GEN port its own heavy circuits."
+  upgrades:
+    - "<b>Two Deye 12K units</b> in place of the 8Ks: 24 kW, so every heavy load fits at once, and room for up to 38.4 kW of PV."
+    - "<b>A third Deye</b> in parallel: same wiring, another 8 kW and three more trackers."
+    - "<b>More battery</b>: extra packs join the same busbar."
+  notes:
+    title: Why this design
+    lead: The current install grew one piece at a time and carries technical debt. This page sketches what it would look like if it were built in one go today, keeping all the loads on backup.
+    items:
+      - {h: What goes, text: "The Multi RS Solar, both SmartSolar chargers, Combiners C and D, the SmartShunt, the DIY GX and the MultiPlus-II. Two Deyes do the work of all of them."}
+      - {h: Why, text: "Too many low-voltage panel strings needed their own chargers and combiner boxes, and Victron gear costs a lot per kW. Two hybrid inverters with high-voltage trackers are simpler, cheaper and easier to service."}
+      - {h: The trade-off, text: "<b>Same size, different control.</b> 16 kW across two units, close to today’s 16 kVA. Heavy loads now switch off at a set battery level in an outage, instead of draining the bank."}
+      - {h: Panels, text: "Standardised on the Jinko Tiger Neo 590 W. 36 panels (21.2 kWp), 10.6 kWp per Deye, inside each unit’s 12.8 kW PV limit. That’s five more than today’s 31 mixed panels."}
+      - {h: How parallel works, text: "One Deye is set as master and the other as slave. A parallel cable joins their communication ports, so they share load, charging and the grid connection as one system. Their load outputs are wired together."}
+    alt_title: Bigger options in the same family
+    alternatives:
+      - {name: "Deye SUN-12K-SG06LP1-EU-CM3, 12 kW single phase", url: "https://deye.com/product/sun-7-12k-sg06lp1-eu-cm3/", text: "Same body, battery and wiring. One 12 kW unit carries most of what two 8 kW units do, with 250 A battery current and up to 19.2 kW of PV. Two in parallel give 24 kW."}
+      - {name: "Deye SUN-12K-SG04LP3-EU, 12 kW three phase", url: "https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/", text: "For a three-phase supply. Same 48 V battery, 2 MPPTs, and it parallels the same way."}
+  footer: "Links marked Affiliate are AliExpress affiliate links: if you buy through them, Openculture earns a small commission at no extra cost to you. The Deye, ZJBeny and Deriy links are not affiliate links."
+
+# Parts used in this design. `product` is an id from products.yaml.
+parts:
+  - {id: pv-1, product: jinko-tiger-neo-590, qty: 6, series: 6, parallel: 1, layout: 6 in series, feeds: deye-1}
+  - {id: pv-2, product: jinko-tiger-neo-590, qty: 6, series: 6, parallel: 1, layout: 6 in series, feeds: deye-1}
+  - {id: pv-3, product: jinko-tiger-neo-590, qty: 6, series: 6, parallel: 1, layout: 6 in series, feeds: deye-1}
+  - {id: pv-4, product: jinko-tiger-neo-590, qty: 6, series: 6, parallel: 1, layout: 6 in series, feeds: deye-2}
+  - {id: pv-5, product: jinko-tiger-neo-590, qty: 6, series: 6, parallel: 1, layout: 6 in series, feeds: deye-2}
+  - {id: pv-6, product: jinko-tiger-neo-590, qty: 6, series: 6, parallel: 1, layout: 6 in series, feeds: deye-2}
+  - {id: box-1, product: pv-box-3ch, qty: 1}
+  - {id: box-2, product: pv-box-3ch, qty: 1}
+  - {id: deye-1, product: deye-8k-sg06lp1, qty: 1, note: Master. Takes the BMS and CT connections.}
+  - {id: deye-2, product: deye-8k-sg06lp1, qty: 1, note: Slave. Follows the master over the parallel link.}
+  - {id: brk-1, product: beny-bdm-250, qty: 1}
+  - {id: brk-2, product: beny-bdm-250, qty: 1}
+  - {id: busbar, product: busbar-48v, qty: 1}
+  - {id: bat, product: diy-lfp-14k7, qty: 4, layout: 4 in parallel}
+  - {id: spd-ac, product: chint-nxu-ii-275, qty: null, note: Used on the grid board and both load boards., show_on: gridbd}
+  - {id: gridbd, product: grid-board-deye, qty: 1}
+  - {id: acb-light, product: ac-board-light, qty: 1}
+  - {id: acb-heavy, product: ac-board-heavy, qty: 1}
+
+short_names:
+  pv-1: PV 1
+  pv-2: PV 2
+  pv-3: PV 3
+  pv-4: PV 4
+  pv-5: PV 5
+  pv-6: PV 6
+  box-1: Deye 1
+  box-2: Deye 2
+  deye-1: Deye 1
+  deye-2: Deye 2
+  brk-1: Deye 1
+  brk-2: Deye 2
+
+groups:
+  - title: Solar array
+    cards: [[pv-1, pv-2, pv-3, pv-4, pv-5, pv-6], [box-1, box-2]]
+  - title: Inverters
+    cards: [[deye-1, deye-2]]
+  - title: Battery and DC side
+    cards: [[bat], [busbar], [brk-1, brk-2]]
+  - title: Grid and AC side
+    cards: [[gridbd], [acb-light], [acb-heavy], [spd-ac]]
+
+other_blocks:
+  grid:
+    title: Grid supply
+    icon: meter
+    category: grid
+    about: Single-phase utility supply through the kWh meter. Feeds both Deye grid ports only; every load sits behind the Deyes.
+    rows:
+      - [Supply, Single phase]
+      - [Feeds, Both Deye grid ports]
+  light:
+    title: Light loads
+    icon: home
+    category: load
+    about: "On the joined Deye LOAD outputs, so they stay on in an outage: TV, refrigerator, ceiling fans, lights, network switch, routers, power tools, blender and laptops."
+    rows:
+      - [Supplied by, Both Deyes’ LOAD outputs]
+      - [In an outage, Stay on]
+  heavy:
+    title: Heavy loads
+    icon: home
+    category: load
+    about: "On the Deye GEN ports, set as a smart load: five air conditioners, the deep-well pump, an induction cooker, an electric oven and three water heaters, within about 13 kW. See the heavy-load budget."
+    rows:
+      - [Supplied by, Deye GEN ports (smart load)]
+      - [Grid on, Always on]
+      - [Grid off, "On above 90% battery with sun, off at 40%"]
+
+modes:
+  day:
+    caption: <b>Sunny day.</b> Six strings feed the two Deyes’ trackers. Together they run the light loads, charge the shared bank and, once it’s above the smart-load level, run the heavy loads on the GEN ports.
+    flowing: [w-pv1, w-pv2, w-pv3, w-pv4, w-pv5, w-pv6, w-b1a, w-b1b, w-b1c, w-b2a, w-b2b, w-b2c, w-dc1, w-dc2, w-brk1, w-brk2, w-batp, w-batn, w-load1, w-load2, w-light, w-gen1, w-gen2, w-heavy]
+    reversed: []
+  night:
+    caption: <b>Night, grid off.</b> No solar. Both Deyes draw from the 58.8 kWh bank. The heavy loads stay on until the battery reaches the smart-load off level, then go off to save the rest for the light loads.
+    flowing: [w-dc1, w-dc2, w-brk1, w-brk2, w-batp, w-batn, w-load1, w-load2, w-light, w-gen1, w-gen2, w-heavy]
+    reversed: [w-dc1, w-dc2, w-brk1, w-brk2, w-batp, w-batn]
+  grid:
+    caption: <b>Grid on.</b> Grid passes through both Deyes to the light and heavy loads and can recharge the bank, depending on their settings.
+    flowing: [w-grid, w-grid1, w-grid2, w-load1, w-load2, w-light, w-gen1, w-gen2, w-heavy, w-dc1, w-dc2, w-brk1, w-brk2, w-batp, w-batn]
+    reversed: []
+
+checks:
+  battery: bat
+  inverters: [deye-1, deye-2]
+  chargers: [deye-1, deye-2]
+  charger_breakers:
+    brk-1: deye-1
+    brk-2: deye-2
+  low_battery_v: 48
+  inverter_efficiency: 0.94
