@@ -20,9 +20,10 @@ template.html      the page design and code, with no data in it
 install.jpg        the equipment-room photo
 busbar.jpg         the home-built busbar, shown on the battery page
 build.py           checks the data and writes dist/index.html
+wrangler.jsonc     tells Cloudflare to serve dist/ as the site
 ```
 
-`build.py` combines the data, the template and the photo into a single `dist/index.html` with everything inside it. It works opened straight from disk, on Cloudflare Pages or on any other host.
+`build.py` combines the data, the template and the photo into a single `dist/index.html` with everything inside it. It works opened straight from disk, on Cloudflare or on any other host.
 
 ## Making changes
 
@@ -91,23 +92,19 @@ Nothing was built. Fix this problem first:
 
 Lines starting with `Note:` are worth a look but don't stop the build.
 
-## Publishing with Cloudflare Pages
+## Publishing on Cloudflare
 
-Cloudflare Pages watches this repository. Every push to `main` makes Cloudflare run `build.py` and publish the result, usually within a minute or two. If a build fails, the live page stays as it was and the project's **Deployments** list shows why.
+The site runs as a Cloudflare Worker that serves `dist/` as static files; `wrangler.jsonc` holds that setting. Cloudflare watches this repository: every push to `main` makes it run `build.py`, then publish the result, usually within a minute or two. If a build fails, the live page stays as it was and the Worker's **Deployments** list shows why.
 
 One-time setup in the Cloudflare dashboard:
 
-1. Open **Workers & Pages**, click **Create application**, then **Pages** and **Connect to Git**.
-2. Choose **GitHub**, pick this repository, then **Install & Authorize** and **Begin setup**.
-3. Set the build:
-   - Project name: `project-anor`
-   - Production branch: `main`
-   - Framework preset: None
+1. Open **Workers & Pages**, click **Create application**, connect GitHub and pick this repository.
+2. Set:
+   - Project name: `project-anor` (it must match `name` in `wrangler.jsonc`)
    - Build command: `pip install pyyaml && python build.py`
-   - Build output directory: `dist`
-4. Click **Save and Deploy**. The page is at `https://project-anor.pages.dev/`.
-
-To undo a bad publish, open the project's **Deployments**, then the three-dot menu on an earlier production deployment, and choose **Rollback to this deployment**.
+   - Deploy command: `npx wrangler deploy`
+   - Path: `/`
+3. Click **Deploy**. The page is at `https://project-anor.<your-account>.workers.dev/`.
 
 ## License
 
