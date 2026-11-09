@@ -1,0 +1,269 @@
+# Where everything sits on the schematic. You only need this file to add, move
+# or re-route something on the drawing; specs and parts live in the other files.
+#
+# Positions are in drawing units on a canvas of the size below. They aren't
+# pixels: the page scales the whole drawing to fit the screen.
+#   at      for a block: [x, y, width, height], measured from the top-left corner
+#   style   tile (picture on top, the default), side (icon on the left) or stack
+#   path    an SVG path for a wire. "M115 230 V280" starts at x=115, y=230 and runs
+#           down to y=280. H runs sideways to an x, V up or down to a y.
+
+canvas: [1400, 1270]   # width, height
+
+blocks:
+  - id: pv-a
+    part: pv-a
+    short: PV A
+    at: [30, 30, 170, 200]
+    title: PV A · 3.54 kWp
+    subtitle: 6 × 590 W
+    icon: pv
+    photo_height: 120
+    panels: {count: 6, cols: 3, size: 30}
+  - id: pv-b
+    part: pv-b
+    short: PV B
+    at: [215, 30, 170, 200]
+    title: PV B · 4.13 kWp
+    subtitle: 7 × 590 W
+    icon: pv
+    photo_height: 120
+    panels: {count: 7, cols: 4, size: 30}
+  - id: pv-c
+    part: pv-c
+    short: PV C
+    at: [420, 30, 275, 200]
+    title: PV C · Jinko
+    subtitle: 9 × 580 W · 3s3p · 5.22 kWp
+    icon: pv
+    photo_height: 120
+    panels: {count: 9, cols: 3, size: 30}
+  - id: pv-d
+    part: pv-d
+    short: PV D
+    at: [715, 30, 275, 200]
+    title: PV D · Canadian Solar
+    subtitle: 9 × 600 W · 3s3p · 5.40 kWp
+    icon: pv
+    photo_height: 120
+    panels: {count: 9, cols: 3, size: 30}
+  - id: grid
+    at: [1030, 30, 340, 84]
+    title: Grid supply
+    subtitle: Single phase · kWh meter
+    icon: meter
+    style: side
+  - id: gridbd
+    part: gridbd
+    at: [1030, 150, 340, 84]
+    title: Grid board
+    subtitle: 2P MCB · T2 SPD · 2P MCB
+    icon: db
+    category: grid
+    style: side
+  - id: comb-ab
+    part: comb-ab
+    at: [30, 280, 355, 84]
+    title: Feeo PV combiner
+    subtitle: 2 in 2 out · fuses, SPD, breaker
+    icon: combiner
+    style: side
+    opens: combiner-ab
+  - id: comb-c
+    part: comb-c
+    at: [420, 280, 275, 84]
+    title: Combiner C
+    subtitle: 3 strings · 63 A · SPD
+    icon: combiner
+    style: side
+    opens: combiner-c
+  - id: comb-d
+    part: comb-d
+    at: [715, 280, 275, 84]
+    title: Combiner D
+    subtitle: 3 strings · 63 A · SPD
+    icon: combiner
+    style: side
+    opens: combiner-d
+  - id: gx
+    part: gx
+    at: [1150, 290, 220, 84]
+    title: DIY GX
+    subtitle: CM4 · dual CAN
+    icon: gx
+    style: side
+  - id: rs
+    part: rs
+    at: [30, 410, 340, 300]
+    title: Multi RS Solar
+    subtitle: 48/6000/100 · MPPT 450/100
+    icon: inverter
+    photo_height: 170
+    ports: [[solar, PV], [grid, AC in], [batt, BAT], [load, AC out]]
+  - id: mppt-c
+    part: mppt-c
+    short: SmartSolar 250/100
+    at: [420, 410, 275, 84]
+    title: SmartSolar MPPT
+    subtitle: 250/100-Tr VE.Can
+    icon: mppt
+    style: side
+  - id: mppt-d
+    part: mppt-d
+    short: SmartSolar 150/100
+    at: [715, 410, 275, 84]
+    title: SmartSolar MPPT
+    subtitle: 150/100-Tr VE.Can
+    icon: mppt
+    style: side
+  - id: mp
+    part: mp
+    at: [1030, 410, 340, 300]
+    title: MultiPlus-II
+    subtitle: 48/10000/140-100
+    icon: inverter
+    photo_height: 170
+    ports: [[grid, AC in], [batt, BAT], [load, AC out]]
+  - id: brk-rs
+    part: brk-rs
+    short: Multi RS breaker
+    at: [420, 560, 128, 120]
+    title: BENY 250 A
+    subtitle: Multi RS
+    icon: mccb
+    style: stack
+  - id: brk-c
+    part: brk-c
+    short: MPPT C breaker
+    at: [567, 560, 128, 120]
+    title: BENY 125 A
+    subtitle: MPPT C
+    icon: mccb
+    style: stack
+  - id: brk-d
+    part: brk-d
+    short: MPPT D breaker
+    at: [714, 560, 128, 120]
+    title: BENY 125 A
+    subtitle: MPPT D
+    icon: mccb
+    style: stack
+  - id: brk-mp
+    part: brk-mp
+    short: MultiPlus breaker
+    at: [861, 560, 128, 120]
+    title: BENY 250 A
+    subtitle: MultiPlus
+    icon: mccb
+    style: stack
+  - id: busbar
+    part: busbar
+    at: [420, 720, 570, 70]
+    title: Battery busbar
+    subtitle: Copper bars joining everything to the batteries
+    icon: busbar
+    style: side
+  - id: shunt
+    part: shunt
+    at: [595, 820, 220, 70]
+    title: SmartShunt
+    subtitle: 1000 A · negative
+    icon: shunt
+    style: side
+  - id: bat
+    part: bat
+    short: Battery bank
+    at: [420, 920, 570, 330]
+    title: Battery bank · 58.8 kWh
+    subtitle: 4 × Deriy 14.7 kWh LiFePO4, stacked · 16S · JK BMS 200 A
+    icon: battery
+    photo_height: 250
+    packs: 4
+  - id: acb-light
+    part: acb-light
+    at: [30, 760, 340, 84]
+    title: Light-load board
+    subtitle: Chint MCB · T2 SPD · RCBO
+    icon: db
+    style: side
+  - id: acb-heavy
+    part: acb-heavy
+    at: [1030, 760, 340, 84]
+    title: Heavy-load board
+    subtitle: Chint MCB · T2 SPD · RCBO
+    icon: db
+    style: side
+  - id: light
+    at: [30, 880, 340, 200]
+    title: Light loads
+    subtitle: Lights, fans, TV, fridge, network
+    icon: home
+    photo_height: 120
+    loads: [lightbulb, fan, tv, refrigerator, router, laptop]
+  - id: heavy
+    at: [1030, 880, 340, 200]
+    title: Heavy loads
+    subtitle: 5 ACs, pump, cooker, oven, 3 heaters
+    icon: home
+    photo_height: 120
+    loads: [air-vent, droplets, flame, microwave, thermometer]
+
+# Wires between blocks. type: solar, batt, grid or load (power), none (earth)
+# or data. Earth wires draw an earth symbol at earth_at.
+# Optional on power wires: size (cable cross-section, e.g. 50 mm²) and length.
+# Both show when someone hovers the wire or opens a block it connects to.
+wires:
+  - {id: w-pva, from: pv-a, to: comb-ab, type: solar, path: M115 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-pvb, from: pv-b, to: comb-ab, type: solar, path: M300 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-combrs, from: comb-ab, to: rs, type: solar, path: M200 364 V410}
+  - {id: w-pvc, from: pv-c, to: comb-c, type: solar, path: M557 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-combc, from: comb-c, to: mppt-c, type: solar, path: M557 364 V410, size: 25 mm², length: 2 ft}
+  - {id: w-pvd, from: pv-d, to: comb-d, type: solar, path: M852 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-combd, from: comb-d, to: mppt-d, type: solar, path: M852 364 V410, size: 25 mm², length: 2 ft}
+  - {id: w-mpptc, from: mppt-c, to: brk-c, type: batt, path: M557 494 V527 H631 V560, size: 35 mm², length: 2.5 m}
+  - {id: w-mpptd, from: mppt-d, to: brk-d, type: batt, path: M852 494 V527 H778 V560, size: 35 mm², length: 2.5 m}
+  - {id: w-rsdc, from: rs, to: brk-rs, type: batt, path: M370 640 H420, size: 50 mm², length: 2 m}
+  - {id: w-mpdc, from: mp, to: brk-mp, type: batt, path: M1030 640 H989, size: 50 mm², length: 2 m}
+  - {id: w-brkrs, from: brk-rs, to: busbar, type: batt, path: M484 680 V720, length: 3 ft}
+  - {id: w-brkc, from: brk-c, to: busbar, type: batt, path: M631 680 V720, size: 35 mm², length: 2 ft}
+  - {id: w-brkd, from: brk-d, to: busbar, type: batt, path: M778 680 V720, size: 35 mm², length: 2 ft}
+  - {id: w-brkmp, from: brk-mp, to: busbar, type: batt, path: M925 680 V720, length: 3 ft}
+  - {id: w-batp, from: busbar, to: bat, type: batt, path: M470 790 V920, pole: "+", size: 2 × 50 mm², length: "3.5 m each, equal length"}
+  - {id: w-shunt1, from: busbar, to: shunt, type: batt, path: M705 790 V820, pole: "-"}
+  - {id: w-shunt2, from: shunt, to: bat, type: batt, path: M705 890 V920, pole: "-", size: 2 × 50 mm², length: "3.5 m each, equal length"}
+  - {id: w-grid, from: grid, to: gridbd, type: grid, path: M1200 114 V150}
+  - {id: w-gridmp, from: gridbd, to: mp, type: grid, path: M1100 234 V410}
+  - {id: w-gridrs, from: gridbd, to: rs, type: grid, path: M1030 192 H1003 V14 H400 V560 H370}
+  - {id: w-rsout, from: rs, to: acb-light, type: load, path: M200 710 V760}
+  - {id: w-lightout, from: acb-light, to: light, type: load, path: M200 844 V880}
+  - {id: w-mpout, from: mp, to: acb-heavy, type: load, path: M1200 710 V760}
+  - {id: w-heavyout, from: acb-heavy, to: heavy, type: load, path: M1200 844 V880}
+  - {id: w-earthl, from: acb-light, to: earth, type: none, path: M370 802 H392 V830, earth_at: [392, 834]}
+  - {id: w-earthh, from: acb-heavy, to: earth, type: none, path: M1030 802 H1008 V830, earth_at: [1008, 834]}
+  - {id: d-mpptd, from: gx, to: mppt-d, type: data, bus: can, cable: RJ45, label: VE.Can, path: M1150 330 H1010 V452 H990}
+  - {id: d-mpptc, from: mppt-d, to: mppt-c, type: data, bus: can, cable: RJ45, label: VE.Can, path: M715 452 H695}
+  - {id: d-rs, from: mppt-c, to: rs, type: data, bus: can, cable: RJ45, label: VE.Can, path: M420 452 H370}
+  - {id: d-bms, from: gx, to: bat, type: data, bus: can, cable: RJ45, label: CAN to JK BMS, path: M1370 352 H1386 V1165 H990}
+  - {id: d-mp, from: gx, to: mp, type: data, bus: mk3, cable: RJ45, label: MK3 to VE.Bus, path: M1260 374 V410}
+
+# Small text on the drawing. color: can or mk3 for data-cable labels.
+labels:
+  - {text: PV in, at: [208, 396]}
+  - {text: PV in, at: [565, 396]}
+  - {text: PV in, at: [860, 396]}
+  - {text: AC in, at: [406, 550]}
+  - {text: AC in, at: [1108, 398]}
+  - {text: AC out, at: [208, 742]}
+  - {text: AC out, at: [1208, 742]}
+  - {text: "+", at: [478, 862]}
+  - {text: −, at: [713, 810]}
+  - {text: VE.Can, at: [1004, 402], anchor: end, color: can}
+  - {text: BMS CAN, at: [1004, 1156], color: can}
+  - {text: MK3, at: [1268, 400], color: mk3}
+
+# Numbered callouts on install.jpg, linked to blocks. at is [x%, y%] of the photo.
+photo_pins:
+  - {block: rs, at: [76, 29], title: Multi RS Solar, where: Right of the rack, icon: inverter, category: hub}
+  - {block: mp, at: [62, 38], title: MultiPlus-II, where: Left of the rack, icon: inverter, category: hub}
+  - {block: mppt-c, at: [71, 12], title: SmartSolar chargers, where: Top of the rack, icon: mppt, category: solar}
+  - {block: bat, at: [31, 76], title: Battery bank, where: "4 packs, stacked", icon: battery, category: batt}

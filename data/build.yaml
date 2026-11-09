@@ -1,0 +1,189 @@
+# This install: the parts used and how many, how the panel strings are wired,
+# the Sunny day / Night / Grid on views, and settings for the battery-side
+# checks. Products are described in products.yaml; positions on the drawing
+# live in layout.yaml.
+
+version: "0.9"
+updated: 2026-11-09   # shown in the footer, with the version
+
+# Parts used in this install. `product` is an id from products.yaml.
+# A panel array also has series, parallel and feeds (the part its strings
+# connect to); the sizing checks use these. qty can be null if it varies.
+# A part with no block of its own can point its parts-list card somewhere:
+# show_on a block, or opens a combiner's wiring view.
+parts:
+  - id: pv-a
+    product: jinko-tiger-neo-590
+    qty: 6
+    series: 6
+    parallel: 1
+    layout: 6 in series
+    feeds: rs
+  - id: pv-b
+    product: jinko-tiger-neo-590
+    qty: 7
+    series: 7
+    parallel: 1
+    layout: 7 in series
+    feeds: rs
+  - id: pv-c
+    product: jinko-tiger-neo-580
+    qty: 9
+    series: 3
+    parallel: 3
+    layout: 3s3p
+    feeds: mppt-c
+  - id: pv-d
+    product: cs-hiku7-600
+    qty: 9
+    series: 3
+    parallel: 3
+    layout: 3s3p
+    feeds: mppt-d
+  - id: comb-ab
+    product: feeo-combiner-2in2out
+    qty: 1
+  - id: comb-c
+    product: pv-combiner-3s
+    qty: 1
+  - id: comb-d
+    product: pv-combiner-3s-32
+    qty: 1
+  - id: spd-cd
+    product: midnite-mnspd-300-dc
+    qty: 2
+    note: One in each 3-in-1 combiner, after the main breaker.
+    opens: combiner-c
+  - id: rs
+    product: victron-multi-rs-solar
+    qty: 1
+  - id: mp
+    product: victron-multiplus-ii-10k
+    qty: 1
+  - id: mppt-c
+    product: victron-smartsolar-250-100
+    qty: 1
+  - id: mppt-d
+    product: victron-smartsolar-150-100
+    qty: 1
+  - id: brk-rs
+    product: beny-bdm-250
+    qty: 1
+  - id: brk-mp
+    product: beny-bdm-250
+    qty: 1
+  - id: brk-c
+    product: beny-bdm-125
+    qty: 1
+  - id: brk-d
+    product: beny-bdm-125
+    qty: 1
+  - id: busbar
+    product: busbar-48v
+    qty: 1
+  - id: shunt
+    product: victron-smartshunt-1000
+    qty: 1
+  - id: bat
+    product: diy-lfp-14k7
+    qty: 4
+    layout: 4 in parallel
+  - id: gx
+    product: diy-gx-cm4
+    qty: 1
+  - id: spd-ac
+    product: chint-nxu-ii-275
+    qty: null
+    note: Used on the grid board and both load boards.
+    show_on: gridbd
+  - id: gridbd
+    product: grid-board
+    qty: 1
+  - id: acb-light
+    product: ac-board-light
+    qty: 1
+  - id: acb-heavy
+    product: ac-board-heavy
+    qty: 1
+
+# How parts are named in the "Used for:" line on shared parts-list cards.
+short_names:
+  pv-a: PV A
+  pv-b: PV B
+  comb-c: Combiner C
+  comb-d: Combiner D
+  brk-rs: Multi RS
+  brk-mp: MultiPlus
+  brk-c: MPPT C
+  brk-d: MPPT D
+
+# Sections of the parts list. Each card shows one product; put several part ids
+# on one card when they share a product, like [brk-rs, brk-mp].
+groups:
+  - title: Solar array
+    cards: [[pv-a, pv-b], [pv-c], [pv-d], [comb-ab], [comb-c], [comb-d], [spd-cd]]
+  - title: Inverters, chargers and monitoring
+    cards: [[rs], [mp], [mppt-c], [mppt-d], [gx]]
+  - title: Battery and DC side
+    cards: [[bat], [busbar], [shunt], [brk-rs, brk-mp], [brk-c, brk-d]]
+  - title: Grid and AC side
+    cards: [[gridbd], [acb-light], [acb-heavy], [spd-ac]]
+
+# Blocks on the drawing that aren't a product: the grid supply and the loads.
+other_blocks:
+  grid:
+    title: Grid supply
+    icon: meter
+    category: grid
+    about: Single-phase utility supply through the kWh meter. Feeds the AC input of both inverters.
+    rows:
+      - [Supply, Single phase]
+      - [Feeds, Both inverters’ AC in]
+  light:
+    title: Light loads
+    icon: home
+    category: load
+    about: "Everything on the Multi RS output: TV, refrigerator, ceiling fans, lights, network switch, routers, power tools, blender and laptops."
+    rows:
+      - [Inverter, "Multi RS, 6 kVA"]
+      - [Protection, "Chint MCB, T2 SPD, RCBO"]
+  heavy:
+    title: Heavy loads
+    icon: home
+    category: load
+    about: "Everything on the MultiPlus-II output: five air conditioners, the deep-well pump, an induction cooker, an electric oven and three bathroom water heaters."
+    rows:
+      - [Inverter, "MultiPlus-II, 10 kVA"]
+      - [Protection, "Chint MCB, T2 SPD, RCBO"]
+
+# The Sunny day / Night / Grid on buttons. `flowing` lists the wires (ids from
+# layout.yaml) that light up; `reversed` ones animate against their drawn
+# direction. Captions can use <b> for bold.
+modes:
+  day:
+    caption: <b>Sunny day.</b> PV A and B power the Multi RS, which runs the light loads and sends any extra to the batteries. PV C and D charge the batteries through the two solar chargers. The MultiPlus-II runs the heavy loads from those same batteries.
+    flowing: [w-pva, w-pvb, w-combrs, w-pvc, w-combc, w-pvd, w-combd, w-mpptc, w-mpptd, w-brkc,
+      w-brkd, w-rsdc, w-brkrs, w-mpdc, w-brkmp, w-batp, w-shunt1, w-shunt2, w-rsout,
+      w-lightout, w-mpout, w-heavyout]
+    reversed: [w-mpdc, w-brkmp]
+  night:
+    caption: <b>Night.</b> No solar. Both inverters draw from the shared 58.8 kWh bank, each through its own 250 A breaker.
+    flowing: [w-rsdc, w-brkrs, w-mpdc, w-brkmp, w-batp, w-shunt1, w-shunt2, w-rsout,
+      w-lightout, w-mpout, w-heavyout]
+    reversed: [w-rsdc, w-brkrs, w-mpdc, w-brkmp, w-batp, w-shunt1, w-shunt2]
+  grid:
+    caption: <b>Grid on.</b> Grid passes through both inverters to their loads and can recharge the bank. How much each one charges from grid depends on its settings.
+    flowing: [w-grid, w-gridmp, w-gridrs, w-rsout, w-lightout, w-mpout, w-heavyout, w-rsdc,
+      w-brkrs, w-mpdc, w-brkmp, w-batp, w-shunt1, w-shunt2]
+    reversed: []
+
+# Settings for the battery-side checks.
+checks:
+  battery: bat                       # the battery bank part
+  inverters: [rs, mp]                # summed for the discharge check
+  chargers: [rs, mp, mppt-c, mppt-d] # summed for the charge check
+  charger_breakers:                  # breaker part: the charger it protects
+    brk-c: mppt-c
+    brk-d: mppt-d
+  low_battery_v: 48                  # battery voltage when nearly empty
+  inverter_efficiency: 0.94

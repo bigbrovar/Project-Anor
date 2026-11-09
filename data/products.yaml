@@ -1,0 +1,441 @@
+# Every product in the build: panels, inverters, chargers, breakers, boards and
+# the parts inside the combiner boxes. build.yaml and combiners.yaml refer to
+# them by id (the name ending in a colon, like cs-hiku7-600).
+#
+#   name      full product name, shown on cards and in the detail panel
+#   short     optional short name, used in the sizing checks
+#   icon      pv, inverter, mppt, battery, combiner, fuse, mcb, mccb, spd, busbar,
+#             shunt, gx, db, meter, grid or home
+#   about     one line on what it does
+#   specs     key: value pairs. Each key needs a label in spec_labels below.
+#             Use null for a value you don't know yet: it stays hidden on the page
+#             and the build lists it, so you can see what's still missing.
+#   note, advice   optional extra lines in the detail panel
+#   links     datasheet, buy and alternatives. Mark affiliate links with
+#             affiliate: true so the page labels them.
+
+spec_labels:   # spec key: [label shown on the page, unit]
+  pmax_w: [Power, W]
+  voc_v: [Voc, V]
+  isc_a: [Isc, A]
+  imp_a: [Imp, A]
+  voc_coef_pct: [Voc temp. coeff., "%/°C"]
+  max_fuse_a: [Max series fuse, A]
+  inverter_va: [Rated, VA]
+  cont_w_25c: [Continuous at 25 °C, W]
+  peak_w: [Peak, W]
+  battery_v: [Battery, V]
+  ac_transfer_a: [AC transfer switch, A]
+  charge_a: [Max charge, A]
+  pv_voc_max_v: ["PV Voc, absolute max", V]
+  pv_op_max_v: ["PV Voc, operating max", V]
+  mppt_range: [MPPT range, ""]
+  trackers: [Trackers, ""]
+  pv_w_per_tracker: [PV power per tracker, W]
+  pv_op_a: [PV operating current, A]
+  pv_isc_max_a: [PV short-circuit max, A]
+  pv_w_48v: [Nominal PV at 48 V, W]
+  batt_terminal_a: [Battery terminal rating, A]
+  comms: [Comms, ""]
+  current_a: [Frame, A]
+  trip: [Trip, ""]
+  set_a: [Trip set to, A]
+  voltage_vdc: [Voltage, V DC]
+  poles: [Poles, ""]
+  fuse_a: [String fuses, A]
+  fuses: [Fuses, ""]
+  mcb_2p_a: [2P breaker, A]
+  string_breaker_a: ["String breakers, 1P", A]
+  output_breaker_a: ["Output breaker, 2P", A]
+  spd_ucpv_v: [SPD voltage, V DC]
+  breaker_vdc: [Breaker voltage, V DC]
+  spd_name: [Surge protector, ""]
+  spd_v: [Max voltage, V DC]
+  kwh: [Energy, kWh]
+  cells: [Cells, ""]
+  nominal_v: [Nominal, V]
+  ah: [Capacity, Ah]
+  chem: [Chemistry, ""]
+  bms: [BMS, ""]
+  bms_a: [BMS current, A]
+  rating_a: [Rating, A]
+  interface: [Interface, ""]
+  bars: [Bars, ""]
+  compute: [Compute, ""]
+  storage: [Storage, ""]
+  board: [Carrier, ""]
+  can: [CAN, ""]
+  mk3: [VE.Bus, ""]
+  cable: [Cables, ""]
+  main_a: [Main breaker, A]
+  spd: [Surge protector, ""]
+  rs_in_a: [Multi RS AC-in breaker, A]
+  mp_in_a: [MultiPlus AC-in breaker, A]
+  mcb_a: [MCB, A]
+  rcbo: [RCBO, ""]
+  phase: [Supply, ""]
+  meter: [Meter, ""]
+  spd_type: [Class, ""]
+  imax: [Max discharge, ""]
+  uc_v: [Uc, V AC]
+
+products:
+
+  jinko-tiger-neo-590:
+    name: Jinko Tiger Neo N-type 72HL4, 590 W
+    short: Jinko 590 W
+    icon: pv
+    about: Solar panel. Turns sunlight into DC electricity.
+    specs:
+      pmax_w: 590
+      voc_v: 52.62
+      isc_a: 14.13
+      imp_a: 13.5
+      voc_coef_pct: -0.25
+      max_fuse_a: null
+
+  jinko-tiger-neo-580:
+    name: Jinko Tiger Neo N-type 72HL4, 580 W
+    short: Jinko 580 W
+    icon: pv
+    about: Solar panel. Turns sunlight into DC electricity.
+    specs:
+      pmax_w: 580
+      voc_v: 52.62
+      isc_a: 14.01
+      imp_a: 13.38
+      voc_coef_pct: -0.25
+      max_fuse_a: 25
+
+  cs-hiku7-600:
+    name: Canadian Solar HiKu7, 600 W
+    short: Canadian Solar 600 W
+    icon: pv
+    about: Solar panel. Turns sunlight into DC electricity.
+    specs:
+      pmax_w: 600
+      voc_v: 41.3
+      isc_a: 18.47
+      imp_a: 17.2
+      voc_coef_pct: -0.26
+      max_fuse_a: 30
+    note: Chosen for its lower voltage, so 3 in series stays under the 150 V limit of the SmartSolar 150/100.
+    links:
+      datasheet: https://invertsolar.co.za/wp-content/uploads/2024/03/CSI-Datasheet-HiKu7_CS7L-MS_v1-3_EN_580-600-4.pdf
+
+  victron-multi-rs-solar:
+    name: Victron Multi RS Solar 48/6000/100-450/100
+    icon: inverter
+    about: Inverter-charger with two built-in solar chargers. Turns solar and battery power into 230 V AC for the light loads, and charges the batteries from the panels or the grid.
+    specs:
+      inverter_va: 6000
+      cont_w_25c: 4800
+      battery_v: 48
+      ac_transfer_a: 50
+      charge_a: 100
+      trackers: 2
+      pv_voc_max_v: 450
+      mppt_range: 65 to 450 V
+      pv_w_per_tracker: 3000
+      pv_op_a: 12
+      pv_isc_max_a: 16
+      batt_terminal_a: 120
+      comms: VE.Can to GX over RJ45
+    links:
+      datasheet: https://www.victronenergy.com/upload/documents/Datasheet-Multi-RS19-Solar-EN.pdf
+      buy:
+        - name: Where to buy Victron
+          url: https://www.victronenergy.com/where-to-buy
+
+  victron-multiplus-ii-10k:
+    name: Victron MultiPlus-II 48/10000/140-100
+    icon: inverter
+    about: Inverter-charger. Turns battery power into 230 V AC for the heavy loads, passes grid power through when it is on, and can charge the batteries from the grid.
+    specs:
+      inverter_va: 10000
+      cont_w_25c: 8000
+      peak_w: 18000
+      battery_v: 48
+      ac_transfer_a: 100
+      charge_a: 140
+      comms: VE.Bus, MK3 to GX over RJ45
+    links:
+      buy:
+        - name: Where to buy Victron
+          url: https://www.victronenergy.com/where-to-buy
+
+  victron-smartsolar-250-100:
+    name: Victron SmartSolar MPPT 250/100-Tr VE.Can
+    icon: mppt
+    about: Solar charge controller (MPPT). Takes power from its panels and charges the batteries at the right voltage, while tracking the panels’ best operating point.
+    specs:
+      pv_voc_max_v: 250
+      pv_op_max_v: 245
+      charge_a: 100
+      pv_w_48v: 5800
+      pv_isc_max_a: 70
+      comms: VE.Can to GX over RJ45
+    links:
+      datasheet: https://www.victronenergy.com/media/pg/Manual_SmartSolar_MPPT_150-70_up_to_250-100_VE.Can/en/technical-specifications.html
+      buy:
+        - name: Where to buy Victron
+          url: https://www.victronenergy.com/where-to-buy
+
+  victron-smartsolar-150-100:
+    name: Victron SmartSolar MPPT 150/100-Tr VE.Can
+    icon: mppt
+    about: Solar charge controller (MPPT). Takes power from its panels and charges the batteries at the right voltage, while tracking the panels’ best operating point.
+    specs:
+      pv_voc_max_v: 150
+      pv_op_max_v: 145
+      charge_a: 100
+      pv_w_48v: 5800
+      pv_isc_max_a: 70
+      comms: VE.Can to GX over RJ45
+    links:
+      datasheet: https://www.victronenergy.com/media/pg/Manual_SmartSolar_MPPT_150-70_up_to_250-100_VE.Can/en/technical-specifications.html
+      buy:
+        - name: Where to buy Victron
+          url: https://www.victronenergy.com/where-to-buy
+
+  feeo-combiner-2in2out:
+    name: Feeo PV combiner, 2 in 2 out
+    icon: combiner
+    about: Combiner box. Where the panel strings are protected and can be switched off before they reach the inverter.
+    specs:
+      fuses: 4, on + and − of each string
+      fuse_a: 23
+      spd_ucpv_v: 600
+      mcb_2p_a: null
+      breaker_vdc: null
+    note: Two separate channels, one per Multi RS tracker. Each has a fuse on + and −, a 2-pole breaker and a 600 V Feeo surge protector.
+    links:
+      buy:
+        - name: Feeo fuse holder on AliExpress
+          url: https://s.click.aliexpress.com/e/_c41K6QGX
+          affiliate: true
+
+  pv-combiner-3s:
+    name: 3-in-1 PV combiner box
+    icon: combiner
+    about: Combiner box. Joins three panel strings into one, with a breaker on each string and one main switch for the charger.
+    specs:
+      string_breaker_a: 20
+      output_breaker_a: 63
+      spd_name: MidNite MNSPD-300-DC
+      breaker_vdc: null
+    note: FEEO 1-pole 20 A breaker on each string positive, a busbar into the + of a FEEO 2-pole 63 A breaker, negatives into its − pole. MidNite surge protector after the main breaker.
+
+  pv-combiner-3s-32:
+    name: 3-in-1 PV combiner box
+    icon: combiner
+    about: Combiner box. Joins three panel strings into one, with a breaker on each string and one main switch for the charger.
+    specs:
+      string_breaker_a: 32
+      output_breaker_a: 63
+      spd_name: MidNite MNSPD-300-DC
+      breaker_vdc: null
+    note: 1-pole 32 A breaker on each string positive, a busbar into the + of a 2-pole 63 A breaker, negatives into its − pole. MidNite surge protector after the main breaker.
+
+  midnite-mnspd-300-dc:
+    name: MidNite Solar MNSPD-300-DC surge protector
+    icon: spd
+    about: Surge protector. Diverts voltage spikes from lightning or switching to earth before they reach the equipment.
+    specs:
+      spd_v: 300
+    links:
+      alternatives:
+        - name: Nanque NQSP2Z-40, 250 V DC
+          url: https://s.click.aliexpress.com/e/_c3nOW0iF
+          affiliate: true
+
+  beny-bdm-250:
+    name: ZJBeny DC MCCB, 250 A frame, in enclosure
+    icon: mccb
+    about: DC moulded-case breaker. Protects the battery cable from overload and short circuit, and isolates the device from the batteries.
+    specs:
+      current_a: 250
+      trip: Adjustable
+      poles: 2
+      voltage_vdc: 500
+    note: The trip current is adjustable, so the same 250 A unit is used on both inverters and set to suit each one.
+    links:
+      buy:
+        - name: ZJBeny store on Alibaba
+          url: https://zjbeny.en.alibaba.com/search/product?SearchText=mccb
+      alternatives:
+        - name: Nanque 2P MCCB, 200 A
+          url: https://s.click.aliexpress.com/e/_c3VDGhOR
+          affiliate: true
+
+  beny-bdm-125:
+    name: ZJBeny DC MCCB, 125 A, in enclosure
+    icon: mccb
+    about: DC moulded-case breaker. Protects the battery cable from overload and short circuit, and isolates the charger from the batteries.
+    specs:
+      current_a: 125
+      poles: 2
+      voltage_vdc: 500
+    links:
+      buy:
+        - name: ZJBeny store on Alibaba
+          url: https://zjbeny.en.alibaba.com/search/product?SearchText=mccb
+      alternatives:
+        - name: Nanque 2P MCCB, 125 A
+          url: https://s.click.aliexpress.com/e/_c3gETHEn
+          affiliate: true
+
+  busbar-48v:
+    name: Battery busbar pair
+    icon: busbar
+    about: Busbar. Copper bars where every charger, inverter and battery pack connects in one place.
+    specs:
+      bars: Positive and negative
+      rating_a: null
+
+  victron-smartshunt-1000:
+    name: Victron SmartShunt 1000 A
+    icon: shunt
+    about: Battery monitor. Measures every amp going in and out of the batteries to work out the state of charge.
+    specs:
+      rating_a: 1000
+      interface: null
+    note: Sits on the negative side between the battery bank and the busbar.
+    links:
+      buy:
+        - name: Where to buy Victron
+          url: https://www.victronenergy.com/where-to-buy
+
+  diy-lfp-14k7:
+    name: Deriy EVE LiFePO4 battery, 14.7 kWh
+    icon: battery
+    about: LiFePO4 battery pack. Stores energy for night and cloudy days. Its BMS protects the cells from overcharge, overdischarge and too much current.
+    specs:
+      kwh: 14.7
+      cells: 16S
+      nominal_v: 51.2
+      ah: null
+      chem: LiFePO4, EVE cells
+      bms: JK inverter BMS
+      bms_a: 200
+      comms: CAN to GX over RJ45
+    note: Deriy pack built on EVE LiFePO4 cells with a JK inverter BMS.
+    links:
+      buy:
+        - name: Deriy Energy
+          url: https://www.deriyenergy.com/
+
+  diy-gx-cm4:
+    name: DIY GX on Raspberry Pi CM4
+    icon: gx
+    about: GX monitoring hub. Collects data from the inverters, chargers and batteries for monitoring, and allows remote control of the system.
+    specs:
+      compute: Raspberry Pi CM4
+      storage: eMMC
+      board: Pi 4 form-factor carrier
+      can: "Dual CAN: JK BMS, VE.Can"
+      mk3: MK3 to MultiPlus-II
+      cable: RJ45
+    note: One CAN connection reads the battery management system (BMS). The other links the Multi RS and both solar chargers.
+
+  chint-nxu-ii-275:
+    name: Chint NXU-II Type 2 SPD, 2P, 40 kA, 275 V
+    icon: spd
+    about: Surge protector. Diverts voltage spikes from lightning or switching to earth before they reach the equipment.
+    specs:
+      spd_type: Type 2
+      poles: 2
+      imax: 40 kA
+      uc_v: 275
+    advice: The local Chint dealer didn’t stock the 275 V version, so this one came from AliExpress.
+    links:
+      buy:
+        - name: AliExpress
+          url: https://s.click.aliexpress.com/e/_c3GayHMx
+          affiliate: true
+
+  grid-board:
+    name: "Grid board: Chint MCB, SPD, MCB"
+    icon: db
+    about: Grid distribution board. Takes the utility supply through breakers and surge protection, then feeds each inverter’s AC input.
+    specs:
+      phase: Single phase
+      meter: Utility kWh meter
+      main_a: null
+      spd: Chint NXU-II, 275 V
+      rs_in_a: 63
+      mp_in_a: 100
+    note: Meter, 2-pole main breaker, Type 2 SPD, second 2-pole breaker, then one breaker per inverter AC in.
+    advice: Buy Chint breakers and RCBOs from an authorised Chint dealer in Nigeria.
+
+  ac-board-light:
+    name: "Light-load board: Chint MCB, SPD, RCBO"
+    icon: db
+    about: Distribution board. Breakers, surge protection and an RCBO, which cuts power on overload or earth leakage to protect people from shock.
+    specs:
+      mcb_a: null
+      spd: Chint NXU-II, 275 V
+      rcbo: null
+    note: Breakers either side of the cable run, a surge protector at each end, then an RCBO.
+    advice: Buy Chint breakers and RCBOs from an authorised Chint dealer in Nigeria.
+
+  ac-board-heavy:
+    name: "Heavy-load board: Chint MCB, SPD, RCBO"
+    icon: db
+    about: Distribution board. Breakers, surge protection and an RCBO, which cuts power on overload or earth leakage to protect people from shock.
+    specs:
+      mcb_a: null
+      spd: Chint NXU-II, 275 V
+      rcbo: null
+    advice: Buy Chint breakers and RCBOs from an authorised Chint dealer in Nigeria.
+
+  feeo-fuse-23:
+    name: Feeo PV fuse and holder, 23 A
+    icon: fuse
+    about: PV fuse. Blows to protect a string’s cable if too much current flows back into it.
+    specs:
+      fuse_a: 23
+    links:
+      buy:
+        - name: AliExpress
+          url: https://s.click.aliexpress.com/e/_c41K6QGX
+          affiliate: true
+
+  feeo-spd-600:
+    name: Feeo DC surge protector, 600 V
+    icon: spd
+    about: Surge protector. Diverts voltage spikes from lightning or switching to earth before they reach the equipment.
+    specs:
+      spd_v: 600
+
+  feeo-mcb-2p:
+    name: Feeo DC breaker, 2 pole
+    icon: mcb
+    about: DC breaker. Switches the string off and trips on overload.
+    specs:
+      current_a: null
+      voltage_vdc: null
+
+  feeo-mcb-1p-20:
+    name: FEEO DC breaker, 1 pole, 20 A
+    icon: mcb
+    about: DC breaker. Switches one string off and trips on overload.
+    specs:
+      current_a: 20
+      voltage_vdc: null
+
+  mcb-1p-32:
+    name: DC breaker, 1 pole, 32 A
+    icon: mcb
+    about: DC breaker. Switches one string off and trips on overload.
+    specs:
+      current_a: 32
+      voltage_vdc: null
+
+  feeo-mcb-2p-63:
+    name: FEEO DC breaker, 2 pole, 63 A
+    icon: mcb
+    about: DC breaker. Main switch for the combined strings, and trips on overload.
+    specs:
+      current_a: 63
+      voltage_vdc: null

@@ -1,0 +1,75 @@
+# What's inside each combiner box. Each id (like combiner-ab) is also the page
+# address of its wiring view: index.html#combiner-ab
+#
+#   part               the combiner's part id in build.yaml
+#   kind               pair = one channel per array; par3 = three strings joined
+#   arrays             the panel arrays (from build.yaml) that feed this box
+#   string_protection  the fuse or breaker on each string, as a product id.
+#                      The sizing checks test its rating.
+#   surge_protector    the DC surge protector, as a product id with an spd_v spec
+#   inside             the parts listed under "In this box"
+#   steps              "How it's wired", one line per step (<b> for bold)
+
+combiner-ab:
+  title: Feeo PV combiner
+  short: PV A + B
+  part: comb-ab
+  kind: pair
+  arrays: [pv-a, pv-b]
+  string_protection: feeo-fuse-23
+  surge_protector: feeo-spd-600
+  lead: Two separate channels in one box. Each Multi RS tracker gets its own string, its own fuses, breaker and surge protector.
+  channels:
+    - {array: pv-a, to: Multi RS · tracker 1}
+    - {array: pv-b, to: Multi RS · tracker 2}
+  inside:
+    - {product: feeo-fuse-23, qty: 4, where: + and − of each string}
+    - {product: feeo-mcb-2p, qty: 2, where: "one per string, both poles"}
+    - {product: feeo-spd-600, qty: 2, where: "one per string, across + and −"}
+  steps:
+    - Each string’s <b>+ and −</b> go through their own 23 A fuse.
+    - The fused pair goes into a <b>2-pole breaker</b>, so one switch isolates the string.
+    - A <b>600 V Feeo surge protector</b> sits across + and −, with its earth to the local earth reference.
+    - Each channel leaves the box to its own <b>Multi RS tracker</b>.
+
+combiner-c:
+  title: Combiner C
+  short: PV C
+  part: comb-c
+  kind: par3
+  arrays: [pv-c]
+  string_protection: feeo-mcb-1p-20
+  surge_protector: midnite-mnspd-300-dc
+  lead: Three strings of 3 × Jinko 580 W in parallel, into the SmartSolar 250/100.
+  to: SmartSolar 250/100 · PV in
+  inside:
+    - {product: feeo-mcb-1p-20, qty: 3, where: string positives}
+    - {product: feeo-mcb-2p-63, qty: 1, where: "output, + and −"}
+    - {product: midnite-mnspd-300-dc, qty: 1, where: "output, after the main breaker"}
+  steps:
+    - Each string’s <b>+</b> enters the <b>bottom</b> of its own 1-pole 20 A breaker.
+    - The three breaker <b>tops</b> are joined by a busbar run into the <b>+ pole</b> of the 2-pole 63 A breaker.
+    - All three string <b>negatives</b> go straight to the <b>− pole</b> of the same breaker.
+    - The <b>MidNite surge protector</b> sits after the main breaker, across + and −. Its earth goes to the local earth reference, which is tied to the main earth busbar.
+    - The output pair runs to the <b>SmartSolar 250/100</b>.
+
+combiner-d:
+  title: Combiner D
+  short: PV D
+  part: comb-d
+  kind: par3
+  arrays: [pv-d]
+  string_protection: mcb-1p-32
+  surge_protector: midnite-mnspd-300-dc
+  lead: Three strings of 3 × Canadian Solar HiKu7 600 W in parallel, into the SmartSolar 150/100.
+  to: SmartSolar 150/100 · PV in
+  inside:
+    - {product: mcb-1p-32, qty: 3, where: string positives}
+    - {product: feeo-mcb-2p-63, qty: 1, where: "output, + and −"}
+    - {product: midnite-mnspd-300-dc, qty: 1, where: "output, after the main breaker"}
+  steps:
+    - Each string’s <b>+</b> enters the <b>bottom</b> of its own 1-pole 32 A breaker.
+    - The three breaker <b>tops</b> are joined by a busbar run into the <b>+ pole</b> of the 2-pole 63 A breaker.
+    - All three string <b>negatives</b> go straight to the <b>− pole</b> of the same breaker.
+    - The <b>MidNite surge protector</b> sits after the main breaker, across + and −. Its earth goes to the local earth reference, which is tied to the main earth busbar.
+    - The output pair runs to the <b>SmartSolar 150/100</b>.
