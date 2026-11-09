@@ -4,4 +4,6 @@ __pycache__/
 .wrangler/
 node_modules/
 .$*.bkp
+*.bkp
 .DS_Store
+*~
