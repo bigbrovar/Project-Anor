@@ -95,10 +95,41 @@ def entry_id(entry, where, i):
 
 # ---------- products.yaml ----------
 
-PRODUCT_FIELDS = {"name", "short", "icon", "about", "specs", "note", "advice", "links"}
+PRODUCT_FIELDS = {"name", "short", "icon", "about", "specs", "note", "advice", "links", "brand", "why"}
+
+
+def text_lines(value, where, field):
+    """A line of text or a list of lines, returned as a list of strings."""
+    if value is None:
+        return []
+    if isinstance(value, str):
+        return [value]
+    if isinstance(value, list) and value and all(isinstance(v, str) for v in value):
+        return list(value)
+    problem(where, f"`{field}` should be a line of text or a list of lines. Put quotes around any line with a colon in it")
+    return []
+
+
+def read_brands(doc):
+    brands = {}
+    entries = doc.get("brands") or {}
+    if not isinstance(entries, dict):
+        problem("products.yaml", "`brands` should list brand ids, each with a why")
+        return brands
+    for bid, b in entries.items():
+        where = f"products.yaml brands.{bid}"
+        if not isinstance(b, dict):
+            problem(where, "needs a why")
+            continue
+        check_fields(where, b, {"why"})
+        brands[bid] = text_lines(b.get("why"), where, "why")
+        if not brands[bid]:
+            problem(where, "needs a why")
+    return brands
 
 
 def read_products(doc):
+    brands, used_brands, no_why = read_brands(doc), set(), []
     labels = {}
     for key, val in (doc.get("spec_labels") or {}).items():
         if isinstance(val, list) and 1 <= len(val) <= 2 and val[0]:
@@ -135,7 +166,12 @@ def read_products(doc):
         if not isinstance(links, dict):
             problem(where, "links should have datasheet, buy and alternatives")
             links = {}
-        out = {"datasheet": links.get("datasheet") or None, "buy": [], "alts": []}
+        out = {"datasheet": links.get("datasheet") or None, "buy": [], "alts": [], "read": []}
+        for i, r in enumerate(as_list(links.get("read"), where, "links.read"), 1):
+            if isinstance(r, dict) and r.get("title") and r.get("url"):
+                out["read"].append({"t": str(r["title"]), "u": str(r["url"])})
+            else:
+                problem(where, f"read link {i} needs a title and a url")
         for i, b in enumerate(as_list(links.get("buy"), where, "links.buy"), 1):
             if isinstance(b, dict) and b.get("name") and b.get("url"):
                 out["buy"].append({"s": str(b["name"]), "u": str(b["url"]), "aff": bool(b.get("affiliate"))})
@@ -154,10 +190,25 @@ def read_products(doc):
         for field in ("short", "note", "advice"):
             if p.get(field):
                 product[field] = str(p[field])
+        why = []
+        if p.get("brand") is not None:
+            if p["brand"] in brands:
+                why += brands[p["brand"]]
+                used_brands.add(p["brand"])
+            else:
+                problem(where, f"brand `{p['brand']}` isn't in brands")
+        why += text_lines(p.get("why"), where, "why")
+        if why:
+            product["why"] = why
+        else:
+            no_why.append(pid)
         products[pid] = product
         if p.get("about"):
             about[pid] = str(p["about"])
-    return labels, products, about, blanks
+    for bid in brands:
+        if bid not in used_brands:
+            note(f"products.yaml brands.{bid}", "isn't used by any product")
+    return labels, products, about, blanks, no_why
 
 
 # ---------- build.yaml ----------
@@ -363,6 +414,46 @@ def read_combiners(doc, products, parts):
             combo["to"] = str(c.get("to", ""))
         combiners[str(cid)] = combo
     return combiners
+
+
+# ---------- boards.yaml ----------
+
+BOARD_FIELDS = {"title", "part", "line", "lead", "feed", "chain", "outputs", "to", "steps"}
+DEVICE_TYPES = {"mcb", "rcbo", "spd", "run"}
+
+
+def read_boards(doc, parts):
+    """The AC boards: the devices on the rail, in the order the supply passes through them."""
+    boards = {}
+    for bid, b in (doc or {}).items():
+        where = f"boards.yaml {bid}"
+        if not isinstance(b, dict):
+            problem(where, "should have fields like part, feed and chain")
+            continue
+        check_fields(where, b, BOARD_FIELDS)
+        part = b.get("part")
+        if part in parts:
+            parts[part]["board"] = bid  # the part's detail panel links to this wiring view
+        else:
+            problem(where, f"part `{part}` isn't in build.yaml")
+        if b.get("line") not in ("grid", "load"):
+            problem(where, "line should be grid (supply side) or load (inverter output side)")
+
+        def device(d, what, i):
+            if not isinstance(d, dict) or d.get("type") not in DEVICE_TYPES:
+                problem(where, f"{what}, entry {i}: needs type mcb, rcbo, spd or run")
+                return None
+            return {k: str(v) for k, v in d.items() if k in ("type", "label", "sub", "to", "to_sub")}
+        chain = [x for x in (device(d, "chain", i) for i, d in enumerate(as_list(b.get("chain"), where, "chain"), 1)) if x]
+        outs = [x for x in (device(d, "outputs", i) for i, d in enumerate(as_list(b.get("outputs"), where, "outputs"), 1)) if x]
+        if not chain or chain[0]["type"] not in ("mcb", "rcbo"):
+            problem(where, "chain should start with a breaker")
+        feed = b.get("feed")
+        boards[str(bid)] = {"part": part, "title": str(b.get("title", bid)), "line": b.get("line"), "lead": str(b.get("lead", "")),
+                            "feed": [str(x) for x in (feed if isinstance(feed, list) else [feed or ""])][:2],
+                            "chain": chain, "outs": outs, "to": str(b.get("to", "")),
+                            "steps": [str(x) for x in as_list(b.get("steps"), where, "steps")]}
+    return boards
 
 
 # ---------- layout.yaml ----------
@@ -599,10 +690,12 @@ def read_page(doc, combiners):
         "items": [{"h": str(x.get("h", "")), "text": str(x.get("text", ""))} for x in as_list(notes.get("items"), where, "notes.items") if isinstance(x, dict)],
         "alternatives": [{"name": str(x.get("name", "")), "url": str(x.get("url", "")), "text": str(x.get("text", ""))}
                          for x in as_list(notes.get("alternatives"), where, "notes.alternatives") if isinstance(x, dict)]}}
+    footer = pg.get("footer", "")  # one line, or a list of lines
+    footer = "</span><span>".join(str(x) for x in footer) if isinstance(footer, list) else str(footer)
     fills = {"__TITLE__": esc(pg.get("title", "")), "__DESC__": esc(pg.get("description", "")),
              "__BRAND__": esc(pg.get("brand", "")), "__EYEBROW__": esc(pg.get("eyebrow", "")),
              "__H1__": esc(pg.get("h1", "")), "__LEAD__": str(pg.get("lead", "")),
-             "__INVLABEL__": esc(pg.get("inverters_label", "")), "__FOOTER__": str(pg.get("footer", "")),
+             "__INVLABEL__": esc(pg.get("inverters_label", "")), "__FOOTER__": footer,
              "__FIRSTBOX__": next(iter(combiners), "schematic")}
     return {"data": data, "fills": fills}
 
@@ -613,9 +706,10 @@ def main():
     product_doc, build_doc, combiner_doc, layout_doc = (
         load(name) for name in ("products.yaml", "build.yaml", "combiners.yaml", "layout.yaml"))
 
-    labels, products, about, blanks = read_products(product_doc)
+    labels, products, about, blanks, no_why = read_products(product_doc)
     part_list, parts = read_parts(build_doc, products)
     combiners = read_combiners(combiner_doc, products, parts)
+    boards = read_boards(load("boards.yaml") if (DATA / "boards.yaml").exists() else None, parts)
     other_blocks = read_other_blocks(build_doc)
     canvas, nodes, node_ids, wires, wire_ids, diagram_labels, pins = read_layout(
         layout_doc, parts, combiners, other_blocks)
@@ -649,6 +743,7 @@ def main():
             print(f"  {msg}", file=sys.stderr)
         sys.exit(1)
 
+    combiner_photo = ROOT / "combiner.png"
     template_path, busbar_photo = ROOT / "template.html", ROOT / "busbar.jpg"
     if not template_path.exists():
         sys.exit("template.html is missing.")
@@ -658,13 +753,15 @@ def main():
     data = {"LABELS": labels, "PRODUCTS": products, "ABOUT": about, "PARTS": part_list, "GROUPS": groups,
             "SHORT": short_names, "COMBINERS": combiners, "WIRING": wires, "NODES": nodes, "INFO": other_blocks,
             "MODES": modes, "SPOTS": pins, "LABS": diagram_labels, "CANVAS": canvas, "CHECKCFG": checks,
-            "BATTERY": battery, "PAGE": page["data"]}
+            "BATTERY": battery, "BOARDS": boards, "PAGE": page["data"]}
     script = "\n".join(f"const {name}={json.dumps(value, ensure_ascii=False, separators=(',', ':'))};"
                        for name, value in data.items()).replace("</", "<\\/")
     fills = {"__VERSION__": version, "__UPDATED__": str(updated),
              "__CANVAS_W__": str(canvas["w"]), "__CANVAS_H__": str(canvas["h"]),
              "__BUSBAR_IMG__": ("data:image/jpeg;base64," + base64.b64encode(busbar_photo.read_bytes()).decode("ascii"))
                                if busbar_photo.exists() else "",
+             "__COMBINER_IMG__": ("data:image/png;base64," + base64.b64encode(combiner_photo.read_bytes()).decode("ascii"))
+                                 if combiner_photo.exists() else "",
              "/*__DATA__*/": script}
     for key in fills:
         if html.count(key) != 1:
@@ -683,6 +780,10 @@ def main():
         print(f"{len(blanks)} specs are blank and will be hidden on the page:")
         for blank in blanks:
             print(f"  {blank}")
+    if no_why:
+        print(f"{len(no_why)} products have no why yet:")
+        for pid in no_why:
+            print(f"  {pid}")
     print(f"Wrote {OUT.relative_to(ROOT)} ({round(OUT.stat().st_size / 1024)} KB)")
 
 

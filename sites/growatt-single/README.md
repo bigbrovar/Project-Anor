@@ -1,6 +1,6 @@
 # Project Anor on one Growatt
 
-Part of [Project Anor](../../README.md). An alternative design for the home solar system, rebuilt around one Deye SUN-8K-SG06LP1-EU-CM3 hybrid inverter: 21 Jinko 590 W panels on its three built-in MPPTs, the same four Deriy packs, light loads on backup and heavy loads on the grid side.
+Part of [Project Anor](../../README.md). The entry-level alternative to the home solar system, built around one Growatt SPF 6000 ES Plus off-grid inverter: 8 Jinko 650 W panels (5.2 kWp; 590 to 650 W, depending on availability) on its two built-in MPPTs, one Deriy 14.7 kWh pack, and light loads plus one air conditioner on its single output.
 
 Built the same way as `sites/home-solar/`: the YAML files in `data/` hold everything, `template.html` holds the design, and `build.py` checks the data and writes `dist/index.html`.
 
@@ -8,7 +8,8 @@ Built the same way as `sites/home-solar/`: the YAML files in `data/` hold everyt
 
 ```
 data/
-  products.yaml    every product: specs, links and a one-line description
+  products.yaml    every product and maker: specs, links, a one-line
+                   description and why it was picked
   build.yaml       parts, panel strings, the page text, the three energy-flow
                    views and the battery-side check settings
   combiners.yaml   what's inside the PV box and how it's wired
@@ -36,7 +37,7 @@ Its own Worker, set up once:
 - Preview command: `npx wrangler versions upload`
 - Path: `sites/growatt-single`
 - Build watch paths: `sites/growatt-single/*`
-- Custom domain: `growatt.anor.openculture.org.ng`
+- Custom domain: `medium.anor.openculture.org.ng`
 
 ## License
 

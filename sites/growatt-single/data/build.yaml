@@ -4,20 +4,20 @@
 # live in layout.yaml.
 
 version: "0.1"
-updated: 2026-11-09   # shown in the footer, with the version
+updated: 2026-11-10   # shown in the footer, with the version
 
 # Text at the top of the page and in the "Why this design" section.
 # Text fields can use <b> for bold.
 page:
   title: Project Anor · one Growatt SPF 6000, entry level
-  description: An entry-level alternative to the Project Anor home solar system, built around one Growatt SPF 6000 ES Plus off-grid inverter, 9 Jinko panels on its two built-in trackers and one Deriy battery pack.
+  description: An entry-level alternative to the Project Anor home solar system, built around one Growatt SPF 6000 ES Plus off-grid inverter, 8 Jinko panels on its two built-in trackers and one Deriy battery pack.
   brand: alternative design
   eyebrow: Entry alternative · 48 V · one Growatt SPF 6000 ES Plus
   h1: Project Anor on one Growatt
-  lead: The smallest of the alternatives. One Growatt SPF 6000 ES Plus runs the house from 9 Jinko 590 W panels (5.3 kWp) on its two built-in solar trackers and one Deriy 14.7 kWh pack. Grid is a backup charger and bypass. Light loads and one air conditioner share its 6 kW output.
+  lead: The smallest of the alternatives. One Growatt SPF 6000 ES Plus runs the house from 8 Jinko 650 W panels (5.2 kWp) on its two built-in solar trackers and one Deriy 14.7 kWh pack. Grid is a backup charger and bypass. Light loads and one air conditioner share its 6 kW output.
   inverters_label: One inverter
   glance:
-    - {icon: mppt, cat: solar, title: Two trackers, one panel model, text: "9 Jinko 590 W panels in strings of 5 and 4, one string per built-in Growatt tracker, at up to about 275 V. No separate solar chargers."}
+    - {icon: mppt, cat: solar, title: Two trackers, one panel model, text: "8 Jinko panels, 590 to 650 W, in two strings of 4, one string per built-in Growatt tracker, at up to about 220 V. No separate solar chargers."}
     - {icon: battery, cat: batt, title: One battery pack, text: "One Deriy 14.7 kWh pack through a 250 A breaker, with room on the busbar for a second. The JK BMS talks CAN to the Growatt, so no SmartShunt or GX."}
     - {icon: home, cat: load, title: One output for everything, text: "The Growatt has a single AC output. Light loads and a limited set of heavy loads share it, so the heavy-load budget matters more here than on the Deye designs."}
   budget:
@@ -41,27 +41,27 @@ page:
       - These are starting points. Raise the back-to-grid level if the light loads run short before morning.
   upgrades:
     - "<b>A second battery pack</b> on the same busbar: 29.4 kWh."
-    - "<b>More panels</b>: up to 8 per string, about 7.5 kWp in all, under the Growatt’s 8 kW PV limit."
+    - "<b>More panels</b>: up to 12, 6 per string, 7.8 kWp with 650 W panels, under the Growatt’s 8 kW PV limit."
     - "<b>A second SPF 6000 ES Plus</b> in parallel: 12 kW and two more trackers. The Growatt parallels up to 6 units."
-    - "<b>Or move to the <a href=\"https://deye.anor.openculture.org.ng\">one-Deye design</a></b>: grid-tied with a CT, three trackers, and a separate smart-load port for heavy loads."
+    - "<b>Or move to the <a href=\"https://biglittle.anor.openculture.org.ng\">one-Deye design</a></b>: grid-tied with a CT, three trackers, and a separate smart-load port for heavy loads."
   notes:
     title: Why this design
     lead: The current install grew one piece at a time and carries technical debt. This page sketches the cheapest way in, using the same panels and battery packs.
     items:
       - {h: What goes, text: "The Multi RS Solar, both SmartSolar chargers, Combiners C and D, the SmartShunt, the DIY GX and the MultiPlus-II. One Growatt does the basic work of all of them."}
-      - {h: Why, text: "It’s the lowest cost per kW of the three alternatives, with high-voltage trackers that take the same Jinko strings as the Deye designs."}
+      - {h: Why, text: "It’s the lowest cost per kW of the three alternatives, with high-voltage trackers that take the same Jinko panels as the Deye designs."}
       - {h: The trade-off, text: "<b>It powers the least.</b> 6 kW on one output and one battery pack. It’s an off-grid inverter: grid charges and bypasses, but solar can’t offset grid-side loads and there’s no export."}
-      - {h: Panels, text: "Standardised on the Jinko Tiger Neo 590 W. 9 panels make 5.3 kWp."}
-    alt_title: Other options
+      - {h: Panels, text: "Standardised on the Jinko Tiger Neo, 650 W where available and 590 W or more otherwise. 8 panels make 5.2 kWp at 650 W, or 4.7 kWp at 590 W."}
+    alt_title: Close alternatives
     alternatives:
-      - {name: "Deye SUN-8K-SG06LP1-EU-CM3, 8 kW single phase", url: "https://deye.com/product/sun-7-12k-sg06lp1-eu-cm3/", text: "The next step up: 8 kW, three trackers, a CT for grid offset and a smart-load port for heavy loads. See the one-Deye design."}
-      - {name: "Deye SUN-12K-SG06LP1-EU-CM3, 12 kW single phase", url: "https://deye.com/product/sun-7-12k-sg06lp1-eu-cm3/", text: "Same family at 12 kW, with up to 19.2 kW of PV."}
-      - {name: "Deye SUN-12K-SG04LP3-EU, 12 kW three phase", url: "https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/", text: "For a three-phase supply. Same 48 V battery, 2 MPPTs."}
-  footer: "Links marked Affiliate are AliExpress affiliate links: if you buy through them, Openculture earns a small commission at no extra cost to you. The Growatt, Fouani, Deye, ZJBeny and Deriy links are not affiliate links."
+      - {name: "SRNE HESP 6 kW (HESP4860S100-H), at HM Solar", url: "https://hmsolarltd.com/products/series-hesp/", text: "Close match: 6 kW, two trackers taking up to 500 V, BMS communication, time-slot charging, and up to 6 in parallel, single or three phase."}
+  footer:
+    - "Links marked Affiliate are AliExpress affiliate links: if you buy through them, Openculture earns a small commission at no extra cost to you. The Growatt, Fouani, HM Solar, ZJBeny and Deriy links are not affiliate links."
+    - "I consult for Deriy on technical matters: after-sales repairs, documentation and product improvement. My role has nothing to do with sales or marketing."
 
 parts:
-  - {id: pv-a, product: jinko-tiger-neo-590, qty: 5, series: 5, parallel: 1, layout: 5 in series, feeds: inv}
-  - {id: pv-b, product: jinko-tiger-neo-590, qty: 4, series: 4, parallel: 1, layout: 4 in series, feeds: inv}
+  - {id: pv-a, product: jinko-tiger-neo-650, qty: 4, series: 4, parallel: 1, layout: 4 in series, feeds: inv}
+  - {id: pv-b, product: jinko-tiger-neo-650, qty: 4, series: 4, parallel: 1, layout: 4 in series, feeds: inv}
   - {id: box-1, product: pv-box-2ch, qty: 1}
   - {id: inv, product: growatt-spf6000-es-plus, qty: 1}
   - {id: brk, product: beny-bdm-250, qty: 1}

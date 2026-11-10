@@ -1,6 +1,6 @@
 # Project Anor on two Deyes
 
-Part of [Project Anor](../../README.md). The direct alternative to the home Victron system: two Deye SUN-8K-SG06LP1-EU-CM3 hybrid inverters in parallel, 36 Jinko 590 W panels on their six built-in MPPTs, the same four Deriy packs, light loads on the joined backup outputs and heavy loads on the GEN ports as a smart load.
+Part of [Project Anor](../../README.md). The direct alternative to the home Victron system: two Deye SUN-8K-SG06LP1-EU-CM3 hybrid inverters in parallel, 32 Jinko 650 W panels (590 to 650 W, depending on availability) on their six built-in MPPTs, the same four Deriy packs, light loads on the joined backup outputs and heavy loads on the GEN ports as a smart load.
 
 Built the same way as `sites/home-solar/`: the YAML files in `data/` hold everything, `template.html` holds the design, and `build.py` checks the data and writes `dist/index.html`.
 
@@ -8,7 +8,8 @@ Built the same way as `sites/home-solar/`: the YAML files in `data/` hold everyt
 
 ```
 data/
-  products.yaml    every product: specs, links and a one-line description
+  products.yaml    every product and maker: specs, links, a one-line
+                   description and why it was picked
   build.yaml       parts, panel strings, the page text, the three energy-flow
                    views and the battery-side check settings
   combiners.yaml   what's inside each PV box and how it's wired
@@ -36,7 +37,7 @@ Its own Worker, set up once:
 - Preview command: `npx wrangler versions upload`
 - Path: `sites/deye-parallel`
 - Build watch paths: `sites/deye-parallel/*`
-- Custom domain: `deye-parallel.anor.openculture.org.ng`
+- Custom domain: `large.anor.openculture.org.ng`
 
 ## License
 

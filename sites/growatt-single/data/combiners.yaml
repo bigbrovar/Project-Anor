@@ -16,18 +16,18 @@ pv-box-1:
   part: box-1
   kind: pair
   arrays: [pv-a, pv-b]
-  string_protection: feeo-fuse-23
+  string_protection: feeo-fuse-25
   surge_protector: feeo-spd-600
   lead: One box with two separate channels, built from the same Feeo parts as the home system. Each string gets its own fuses, breaker and surge protector, then runs to its own Growatt tracker.
   channels:
     - {array: pv-a, to: Growatt · MPPT 1}
     - {array: pv-b, to: Growatt · MPPT 2}
   inside:
-    - {product: feeo-fuse-23, qty: 4, where: + and − of each string}
+    - {product: feeo-fuse-25, qty: 4, where: + and − of each string}
     - {product: feeo-mcb-2p, qty: 2, where: "one per string, both poles"}
     - {product: feeo-spd-600, qty: 2, where: "one per string, across + and −"}
   steps:
-    - Each string’s <b>+ and −</b> go through their own 23 A fuse.
-    - The fused pair goes into a <b>2-pole breaker</b>, so one switch isolates the string.
-    - A <b>600 V Feeo surge protector</b> sits across + and −, with its earth to the local earth reference.
+    - Each string’s <b>+ and −</b> enter the <b>bottom</b> of their own 25 A fuse.
+    - From the fuse <b>tops</b>, the pair loops to the <b>600 V Feeo surge protector</b> and on to the top of the <b>2-pole breaker</b>, so one switch isolates the string.
+    - The surge protector’s <b>earth terminal</b> goes to the earth bar, which runs to the earth rod.
     - Each channel leaves the box to its own <b>Growatt MPPT</b>. The strings are never joined.

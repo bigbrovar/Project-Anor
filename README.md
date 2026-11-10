@@ -24,9 +24,9 @@ Sketches of how the home system could be built today. Each is its own site and W
 
 | Design | Folder | Live |
 | --- | --- | --- |
-| Victron replacement: two Deye 8 kW in parallel | `sites/deye-parallel/` | [deye-parallel.anor.openculture.org.ng](https://deye-parallel.anor.openculture.org.ng) |
-| Budget alternative: one Deye 8 kW, two packs, 10 kWp | `sites/deye-single/` | [deye.anor.openculture.org.ng](https://deye.anor.openculture.org.ng) |
-| Entry alternative: one Growatt SPF 6000, one pack, 5 kWp | `sites/growatt-single/` | [growatt.anor.openculture.org.ng](https://growatt.anor.openculture.org.ng) |
+| Victron replacement: two Deye 8 kW in parallel | `sites/deye-parallel/` | [large.anor.openculture.org.ng](https://large.anor.openculture.org.ng) |
+| Budget alternative: one Deye 8 kW, two packs, 10 kWp | `sites/deye-single/` | [biglittle.anor.openculture.org.ng](https://biglittle.anor.openculture.org.ng) |
+| Entry alternative: one Growatt SPF 6000, one pack, 5 kWp | `sites/growatt-single/` | [medium.anor.openculture.org.ng](https://medium.anor.openculture.org.ng) |
 
 ## Adding a new site
 

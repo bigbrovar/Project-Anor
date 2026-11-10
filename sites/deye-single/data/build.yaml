@@ -4,20 +4,20 @@
 # the drawing live in layout.yaml.
 
 version: "0.1"
-updated: 2026-11-09   # shown in the footer, with the version
+updated: 2026-11-10   # shown in the footer, with the version
 
 # Text at the top of the page and in the "Why this design" section.
 # Text fields can use <b> for bold.
 page:
   title: Project Anor · one Deye 8 kW, budget
-  description: A budget alternative to the Project Anor home solar system, built around one Deye SUN-8K hybrid inverter, 17 Jinko panels on its built-in MPPTs and two Deriy battery packs, with an upgrade path to the full system.
+  description: A budget alternative to the Project Anor home solar system, built around one Deye SUN-8K hybrid inverter, 16 Jinko panels on its built-in MPPTs and two Deriy battery packs, with an upgrade path to the full system.
   brand: alternative design
   eyebrow: Budget alternative · 48 V · one Deye 8 kW
   h1: Project Anor on one Deye
-  lead: A budget take on the home system, built around a single Deye 8 kW hybrid inverter. 17 Jinko 590 W panels (10 kWp) feed its three built-in solar trackers, and two Deriy packs (29.4 kWh) store the energy. Light loads run on the backup output; heavy loads run on the GEN port as a smart load, within a set budget. It grows into the two-Deye design.
+  lead: A budget take on the home system, built around a single Deye 8 kW hybrid inverter. 16 Jinko 650 W panels (10.4 kWp) feed its three built-in solar trackers, and two Deriy packs (29.4 kWh) store the energy. Light loads run on the backup output; heavy loads run on the GEN port as a smart load, within a set budget. It grows into the two-Deye design.
   inverters_label: One inverter
   glance:
-    - {icon: mppt, cat: solar, title: Three trackers, one panel model, text: "17 Jinko 590 W panels in strings of 6, 6 and 5, one string per built-in Deye tracker, at up to about 330 V. No separate solar chargers."}
+    - {icon: mppt, cat: solar, title: Three trackers, one panel model, text: "16 Jinko panels, 590 to 650 W, in strings of 6, 5 and 5, one string per built-in Deye tracker, at up to about 330 V. No separate solar chargers."}
     - {icon: battery, cat: batt, title: Two battery packs, text: "Two Deriy 14.7 kWh packs on one busbar, through one 250 A breaker. The JK BMS talks CAN straight to the Deye, so no SmartShunt or GX. Room for two more packs."}
     - {icon: home, cat: load, title: Light loads always on, heavy loads by budget, text: "Light loads sit on the Deye’s backup output. Heavy loads sit on its GEN port as a smart load, which switches off before the battery runs low so the light loads last the night."}
   budget:
@@ -40,8 +40,8 @@ page:
       - These are starting points. Raise the off level if the light loads run out before morning.
   upgrades:
     - "<b>Two more battery packs</b> (58.8 kWh, the home bank). Same busbar, no other changes."
-    - "<b>Four more panels</b> on the third string: 21 panels, 12.4 kWp, the Deye’s 12.8 kW PV limit."
-    - "<b>A second Deye 8K in parallel</b>: 16 kW and six trackers. That’s the <a href=\"https://deye-parallel.anor.openculture.org.ng\">two-Deye design</a>, the direct replacement for the Victron setup."
+    - "<b>Three more panels</b>: 19 in strings of 7, 6 and 6, 12.35 kWp with 650 W panels, just under the Deye’s 12.8 kW PV limit."
+    - "<b>A second Deye 8K in parallel</b>: 16 kW and six trackers. That’s the <a href=\"https://large.anor.openculture.org.ng\">two-Deye design</a>, the direct replacement for the Victron setup."
     - "<b>Or one Deye 12K</b> in place of the 8K: same body and wiring, 12 kW and 19.2 kW of PV."
   notes:
     title: Why this design
@@ -50,31 +50,33 @@ page:
       - {h: What goes, text: "The Multi RS Solar, both SmartSolar chargers, Combiners C and D, the SmartShunt, the DIY GX and the MultiPlus-II. One Deye does the work of all of them."}
       - {h: Why, text: "Too many low-voltage panel strings needed their own chargers and combiner boxes, and Victron gear costs a lot per kW. One hybrid inverter with high-voltage trackers is simpler, cheaper and has fewer points of failure."}
       - {h: The trade-off, text: "<b>It powers less.</b> 8 kW instead of 16 kVA, and half the battery. Heavy loads run within the heavy-load budget below, and only while the battery is above the smart-load cut-off when the grid is down."}
-      - {h: Panels, text: "Standardised on the Jinko Tiger Neo 590 W. 17 panels make 10 kWp, against today’s 31 mixed panels."}
-    alt_title: Bigger options in the same family
+      - {h: Panels, text: "Standardised on the Jinko Tiger Neo, 650 W where available and 590 W or more otherwise. 16 panels make 10.4 kWp at 650 W, or 9.4 kWp at 590 W, against today’s 31 mixed panels."}
+    alt_title: Close alternatives
     alternatives:
-      - {name: "Deye SUN-12K-SG06LP1-EU-CM3, 12 kW single phase", url: "https://deye.com/product/sun-7-12k-sg06lp1-eu-cm3/", text: "Same body, battery and wiring. 12 kW output, 250 A battery current and up to 19.2 kW of PV, enough to bring more of the heavy loads onto backup."}
-      - {name: "Deye SUN-12K-SG04LP3-EU, 12 kW three phase", url: "https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/", text: "For a three-phase supply. Same 48 V battery, 2 MPPTs."}
-  footer: "Links marked Affiliate are AliExpress affiliate links: if you buy through them, Openculture earns a small commission at no extra cost to you. The Deye, ZJBeny and Deriy links are not affiliate links."
+      - {name: "Growatt SPF 6000 ES Plus, 6 kW, at Fouani", url: "https://fouanistore.com/nigeria-en/product/922?growatt-hybrid-inverter-spf-es-series-6kw-48v-6000es", text: "Same 6 kW class with two high-voltage trackers. It’s the inverter in the Growatt design. Off-grid only: no CT, no export and no separate smart-load port."}
+      - {name: "SRNE HESP 6 kW (HESP4860S100-H), at HM Solar", url: "https://hmsolarltd.com/products/series-hesp/", text: "Close match: 6 kW, two trackers taking up to 500 V, BMS communication, time-slot charging, and up to 6 in parallel, single or three phase."}
+  footer:
+    - "Links marked Affiliate are AliExpress affiliate links: if you buy through them, Openculture earns a small commission at no extra cost to you. The Fouani, HM Solar, Deye, ZJBeny and Deriy links are not affiliate links."
+    - "I consult for Deriy on technical matters: after-sales repairs, documentation and product improvement. My role has nothing to do with sales or marketing."
 
 # Parts used in this design. `product` is an id from products.yaml.
 parts:
   - id: pv-a
-    product: jinko-tiger-neo-590
+    product: jinko-tiger-neo-650
     qty: 6
     series: 6
     parallel: 1
     layout: 6 in series
     feeds: deye
   - id: pv-b
-    product: jinko-tiger-neo-590
-    qty: 6
-    series: 6
+    product: jinko-tiger-neo-650
+    qty: 5
+    series: 5
     parallel: 1
-    layout: 6 in series
+    layout: 5 in series
     feeds: deye
   - id: pv-c
-    product: jinko-tiger-neo-590
+    product: jinko-tiger-neo-650
     qty: 5
     series: 5
     parallel: 1

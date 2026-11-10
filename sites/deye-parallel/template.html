@@ -335,6 +335,13 @@ footer .wrap{display:grid;gap:4px}
 .lnk .alt{font-weight:500;color:var(--muted)}
 .advice{font-size:.84rem;color:var(--ink);background:var(--grid-t);border-radius:10px;padding:10px 12px;margin:0;display:flex;gap:8px}
 .advice svg{flex:none;margin-top:3px;color:var(--grid)}
+.why{display:grid;gap:8px}
+.why ul,details.whyd ul{margin:0;padding-left:18px;display:grid;gap:6px;font-size:.84rem;line-height:1.5;color:var(--ink)}
+.why li::marker,details.whyd li::marker{color:var(--batt)}
+.why b,details.whyd b{font-weight:650}
+details.whyd summary{cursor:pointer;width:max-content;max-width:100%;font-size:.8rem;font-weight:600;color:var(--solar)}
+details.whyd ul{margin-top:8px;gap:5px;font-size:.8rem;color:var(--muted)}
+details.whyd li{display:list-item}
 
 /* combiner view */
 .crumb{font-size:.86rem;color:var(--muted);margin:0 0 14px}
@@ -376,6 +383,22 @@ footer .wrap{display:grid;gap:4px}
 .cv svg .valm{font:400 12px var(--f-m);fill:var(--muted)}
 .cv svg .comp rect.cb{fill:var(--surface2);stroke:var(--line2);stroke-width:1.2}
 .cv .canvas svg{min-width:640px}
+.cshot{margin:0;padding:0 20px 20px;display:grid;gap:8px;justify-items:start}
+.cshot img{max-width:min(100%,568px);height:auto;border:1px solid var(--line);border-radius:var(--r);background:#fff}
+.cshot figcaption{font-size:.84rem;color:var(--muted);max-width:70ch}
+.cshot figcaption b{color:var(--ink);font-weight:650}
+.cv svg .dv{fill:var(--surface2);stroke:var(--ink);stroke-width:1.4}
+.cv svg .dvf{fill:var(--bg2);stroke:var(--line2);stroke-width:1}
+.cv svg .scr{fill:var(--surface);stroke:var(--ink);stroke-width:1.2}
+.cv svg .sym{fill:none;stroke:var(--ink);stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
+.cv svg .hd{fill:var(--ink);opacity:.82}
+.cv svg .win{fill:var(--ok)}
+.cv svg .din{fill:var(--bg2);stroke:var(--line2);stroke-width:1}
+.cv svg .nbarx{fill:var(--none-t);stroke:var(--muted);stroke-width:1.5}
+.cv svg .tiny{font:700 8px var(--f-b);fill:var(--ink)}
+.cv svg .ln,.cv svg .ld{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.cv svg .ln{stroke:var(--grid)} .cv svg .ld{stroke:var(--load)}
+.cv svg .jd.jp{fill:var(--solar)} .cv svg .jd.jn{fill:var(--muted)} .cv svg .jd.jg{fill:var(--grid)} .cv svg .jd.jl{fill:var(--load)}
 .legend i.neg{background:var(--muted)}
 .legend i.pe{height:0;border-top:2px dashed var(--faint);border-radius:0}
 
@@ -394,8 +417,8 @@ footer .wrap{display:grid;gap:4px}
   .canvas svg{width:100%!important}
   .flowgrid,.cgrid{grid-template-columns:minmax(0,1fr)}
   .detail,.cside{border:0}
-  details.behind{display:block}
-  details.behind>*{display:block}
+  details.behind,details.whyd{display:block}
+  details.behind>*,details.whyd>*{display:block}
 }
 </style>
 </head>
@@ -522,7 +545,7 @@ footer .wrap{display:grid;gap:4px}
 <div id="v-batt" class="view" hidden></div>
 </main>
 
-<footer><div class="wrap"><span class="m" style="color:var(--ink)">__H1__ · v__VERSION__ · __UPDATED__</span><span>An alternative design for <a href="https://project.anor.openculture.org.ng" target="_blank" rel="noopener">Project Anor</a>, by <a href="https://x.com/bigbrovar" target="_blank" rel="noopener">Bigbrovar</a>. A design sketch, not an installation guide.</span><span>__FOOTER__</span></div></footer>
+<footer><div class="wrap"><span class="m" style="color:var(--ink)">__H1__ · v__VERSION__ · __UPDATED__</span><span>An alternative design for <a href="https://home.anor.openculture.org.ng" target="_blank" rel="noopener">Project Anor</a>, by <a href="https://x.com/bigbrovar" target="_blank" rel="noopener">bigbrovar</a>. A design sketch, not an installation guide.</span><span>__FOOTER__</span></div></footer>
 
 <script>
 "use strict";
@@ -605,7 +628,7 @@ const PANELS=PV.reduce((a,p)=>a+p.qty,0);
 const PV_KWP=PV.reduce((a,p)=>a+p.qty*PRODUCTS[p.product].specs.pmax_w,0)/1000;
 const BATP=partById(CHECKCFG.battery),BAT_KWH=BATP.qty*PRODUCTS[BATP.product].specs.kwh;
 $("#c-pv").textContent=PV_KWP.toFixed(2)+" kWp";$("#c-pvk").textContent=`Solar, ${PANELS} panels`;
-$("#c-bat").textContent=BAT_KWH.toFixed(1)+" kWh";$("#c-batk").textContent=`Battery, ${BATP.qty} packs`;
+$("#c-bat").textContent=BAT_KWH.toFixed(1)+" kWh";$("#c-batk").textContent=`Battery, ${BATP.qty} pack${BATP.qty>1?"s":""}`;
 $("#c-inv").textContent=CHECKCFG.inverters.map(id=>spec(id,"cont_w_25c")/1000).join(" + ")+" kW";
 document.querySelectorAll(".legend [data-bus]").forEach(e=>{if(!WIRING.some(w=>w.bus===e.dataset.bus))e.remove();});
 function renderPage(){
@@ -748,8 +771,13 @@ function linkList(p){
   (L.buy||[]).forEach(b=>out.push(`<a class="lnk" href="${b.u}" target="_blank" rel="noopener"><span class="lk">${ico("external",2)}<span>${esc(b.s)}</span></span>${b.aff?'<span class="aff">Affiliate</span>':""}</a>`));
   if(L.datasheet)out.push(`<a class="lnk" href="${L.datasheet}" target="_blank" rel="noopener"><span class="lk">${ico("external",2)}<span>Datasheet</span></span></a>`);
   (L.alts||[]).forEach(a=>out.push(`<a class="lnk" href="${a.u}" target="_blank" rel="noopener"><span class="lk">${ico("external",2)}<span><span class="alt">Alternative:</span> ${esc(a.n)}</span></span>${a.aff?'<span class="aff">Affiliate</span>':""}</a>`+(a.note?`<p class="note" style="font-size:.8rem">${a.note}</p>`:"")));
+  (L.read||[]).forEach(r=>out.push(`<a class="lnk" href="${r.u}" target="_blank" rel="noopener"><span class="lk">${ico("external",2)}<span><span class="alt">Read more:</span> ${esc(r.t)}</span></span></a>`));
   return out.length?`<div class="links">${out.join("")}</div>`:"";}
 const advice=p=>p.advice?`<p class="advice">${ico("info",2,15)}<span>${p.advice}</span></p>`:"";
+const whyList=p=>`<ul>${p.why.map(w=>`<li>${w}</li>`).join("")}</ul>`;
+const why=p=>p.why?`<div class="why"><p class="eyebrow">Why this one</p>${whyList(p)}</div>`:"";
+const whyFold=p=>p.why?`<details class="whyd"><summary>Why this one</summary>${whyList(p)}</details>`:"";
+const boxWhy=C=>{const pt=PARTS.find(x=>x.id===C.part),bp=pt&&PRODUCTS[pt.product];return bp&&bp.why?`<div class="why"><p class="eyebrow">Why this box</p>${whyList(bp)}</div>`:"";};
 function wireLabel(w){if(w.type==="data")return w.label;
   return {solar:"PV DC",batt:"DC"+(w.pole?" "+(w.pole==="-"?"−":w.pole):""),grid:"Grid AC",load:"AC",none:""}[w.type];}
 function cableText(w){return [w.size,w.len].filter(Boolean).join(" · ");}
@@ -817,11 +845,11 @@ function sysChecks(){
       d:brOK?"Each breaker gives the usual 1.25 × headroom over the inverter’s maximum battery current.":"Each breaker should be at least 1.25 × the inverter’s maximum battery current."});}
   const V_LOW=cfg.low_battery_v,EFF=cfg.inverter_efficiency,packs=BATP.qty,bms=PRODUCTS[BATP.product].specs.bms_a;
   const inv=cfg.inverters||[],invW=inv.reduce((a,id)=>a+spec(id,"cont_w_25c"),0),Id=invW/(V_LOW*EFF),perD=Id/packs;
-  out.push({st:perD>bms?"bad":perD>.8*bms?"warn":"ok",t:"Discharge current",mm:`${fmtN(invW)} W ÷ (${V_LOW} V × ${EFF}) ≈ ${fmtN(Id)} A, about ${fmtN(perD)} A per pack`,
-    d:`${inv.length===1?"The inverter":inv.length===2?"Both inverters":`All ${word(inv.length)} inverters`} at full continuous output use about ${Math.round(perD/bms*100)}% of each pack’s ${bms} A BMS rating.`});
+  out.push({st:perD>bms?"bad":perD>.8*bms?"warn":"ok",t:"Discharge current",mm:`${fmtN(invW)} W ÷ (${V_LOW} V × ${EFF}) ≈ ${fmtN(Id)} A${packs>1?`, about ${fmtN(perD)} A per pack`:""}`,
+    d:`${inv.length===1?"The inverter":inv.length===2?"Both inverters":`All ${word(inv.length)} inverters`} at full continuous output ${inv.length===1?"uses":"use"} about ${Math.round(perD/bms*100)}% of ${packs===1?"the pack’s":"each pack’s"} ${bms} A BMS rating.`});
   const ch=(cfg.chargers||[]).map(id=>spec(id,"charge_a")),chg=ch.reduce((a,x)=>a+x,0),perC=chg/packs;
-  out.push({st:perC>bms?"bad":perC>.8*bms?"warn":"ok",t:"Charge current",mm:`${ch.join(" + ")} A = ${chg} A, about ${fmtN(perC)} A per pack`,
-    d:`Even with all ${word(ch.length)} chargers flat out at once, each pack sees about ${Math.round(perC/bms*100)}% of its ${bms} A BMS rating.`});
+  out.push({st:perC>bms?"bad":perC>.8*bms?"warn":"ok",t:"Charge current",mm:`${ch.length>1?`${ch.join(" + ")} A = `:""}${chg} A${packs>1?`, about ${fmtN(perC)} A per pack`:""}`,
+    d:`${ch.length===1?"With the charger flat out":`Even with ${ch.length===2?"both":`all ${word(ch.length)}`} chargers flat out at once`}, ${packs===1?"the pack":"each pack"} sees about ${Math.round(perC/bms*100)}% of its ${bms} A BMS rating.`});
   inv.forEach(id=>{const lim=spec(id,"pv_w_max");if(lim==null)return;const w=PV.filter(p=>p.feeds===id).reduce((a,p)=>a+p.qty*PRODUCTS[p.product].specs.pmax_w,0);
     out.push({st:w>lim?"warn":"ok",t:`Panel power, ${nodeName(id)}`,mm:`${fmtN(w)} W of panels · ${fmtN(lim)} W maximum PV input`,
       d:w>lim?"Above the inverter’s maximum PV input, so it clips at midday.":`Uses ${Math.round(w/lim*100)}% of the inverter’s maximum PV input.`});});
@@ -856,6 +884,7 @@ function showDetail(id,light=true,quiet=false){
   const part=partById(n.part),p=PRODUCTS[part.product],c=n.cat||CAT[p.icon];
   box.innerHTML=`<p class="eyebrow">Selected part</p><div class="d-photo tint ${c}">${cicon(p.icon,1.6)}${part.qty>1?`<span class="qty">× ${part.qty}</span>`:""}</div>
    <div><h3 style="font-size:1.2rem">${p.name}</h3>${ABOUT[part.product]?`<p class="note" style="margin-top:8px;color:var(--ink)">${ABOUT[part.product]}</p>`:""}</div>
+   ${part.board?`<div class="d-acts"><a class="btn" href="#${part.board}">See the wiring inside ${ico("arrow-right",2)}</a></div>`:""}
    ${part.box?`<div class="d-acts"><a class="btn" href="#${part.box}">See the wiring inside ${ico("arrow-right",2)}</a></div>`:""}
    ${BATTERY&&part.id===CHECKCFG.battery?`<div class="d-acts"><a class="btn" href="#battery">See the battery wiring ${ico("arrow-right",2)}</a></div>`:""}
    ${sizingLink(id)}
@@ -863,6 +892,7 @@ function showDetail(id,light=true,quiet=false){
    ${wiredHTML(id)}
    ${p.note?`<p class="note">${p.note}</p>`:""}${part.note?`<p class="note">${part.note}</p>`:""}
    ${advice(p)}
+   ${why(p)}
    ${linkList(p)}`;
   lightCard(light?n.part:null);if(!quiet)$("#live").textContent=`Showing ${p.name}`;}
 function lightCard(pid){document.querySelectorAll(".part").forEach(c=>c.classList.toggle("lit",!!pid&&c.dataset.parts.split(",").includes(pid)));}
@@ -896,57 +926,148 @@ function renderParts(){
   $("#parts").innerHTML=GROUPS.map(g=>`<div class="pgroup"><h3>${g.t} <small>${g.cards.length} ${g.cards.length===1?"item":"items"}</small></h3><div class="parts">${g.cards.map(cardHTML).join("")}</div></div>`).join("");}
 $("#parts").addEventListener("click",e=>{const b=e.target.closest(".pbtn");if(!b)return;if(b.dataset.box){go(b.dataset.box);return;}if(b.dataset.node)select(b.dataset.node,"outside");});
 
-/* ---------- combiner views ---------- */
+/* ---------- box views: DIN-rail drawings of the combiner boxes and AC boards ---------- */
+/* Each device is drawn as it looks on the rail, with its screw terminals, so the wires can be followed terminal to terminal. */
+const PW=36,DH=96;                      /* pole width and device height */
+const hop=(x)=>`H${x-7} a7 7 0 0 1 14 0`;            /* a wire crossing another without joining it */
+const vhop=(y)=>`V${y-7} a7 7 0 0 1 0 14`;
+const dot=(x,y,c)=>`<circle class="jd ${c}" cx="${x}" cy="${y}" r="4.5"/>`;
+const screw=(cx,cy)=>`<circle class="scr" cx="${cx}" cy="${cy}" r="6"/><path class="sym" d="M${cx-3.5} ${cy+3.5} L${cx+3.5} ${cy-3.5}"/>`;
+const dlabel=(x,y,a,b,anchor="middle")=>`<text class="val" x="${x}" y="${y}" text-anchor="${anchor}">${a}</text>${b?`<text class="valm" x="${x}" y="${y+16}" text-anchor="${anchor}">${b}</text>`:""}`;
+const rail=(x,y,w)=>`<rect class="din" x="${x}" y="${y+DH/2-9}" width="${w}" height="18" rx="3"/>`;
+function body(x,y,poles,bottoms=true){const w=PW*poles;let s=`<rect class="dv" x="${x}" y="${y}" width="${w}" height="${DH}" rx="5"/><rect class="dvf" x="${x+4}" y="${y+22}" width="${w-8}" height="${DH-44}" rx="3"/>`;
+  for(let i=0;i<poles;i++){s+=screw(x+PW*i+PW/2,y+11);if(bottoms)s+=screw(x+PW*i+PW/2,y+DH-11);}return s;}
+/* miniature circuit breaker: a toggle tied across the poles, and the switch symbol on each pole */
+function mcbSym(x,y,poles){const w=PW*poles;let s=body(x,y,poles);
+  for(let i=0;i<poles;i++){const cx=x+PW*i+PW/2;s+=`<path class="sym" d="M${cx} ${y+26} v6 M${cx-3} ${y+29} l6 6 M${cx-3} ${y+35} l6 -6 M${cx} ${y+70} v-6 l-7 -14"/>`;}
+  return s+`<rect class="hd" x="${x+7}" y="${y+41}" width="${w-14}" height="13" rx="3"/>`;}
+/* RCBO: a breaker with a test button */
+function rcboSym(x,y){return mcbSym(x,y,2)+`<rect class="scr" x="${x+PW*2-17}" y="${y+58}" width="12" height="10" rx="2"/><text class="tiny" x="${x+PW*2-11}" y="${y+66.5}" text-anchor="middle">T</text>`;}
+/* fuse holder with the fuse symbol on its face */
+function fuseSym(cx,y){const x=cx-16;return `<rect class="dv" x="${x}" y="${y}" width="32" height="${DH}" rx="5"/><rect class="dvf" x="${x+4}" y="${y+22}" width="24" height="${DH-44}" rx="3"/>${screw(cx,y+11)}${screw(cx,y+DH-11)}
+  <rect class="sym" x="${cx-5}" y="${y+32}" width="10" height="32" rx="1.5"/><path class="sym" d="M${cx} ${y+26} V${y+70}"/>`;}
+/* surge protector: a varistor symbol and status window on each pole, one earth terminal underneath */
+function spdSym(x,y,poles=2){const w=PW*poles;let s=body(x,y,poles,false)+screw(x+w/2,y+DH-11);
+  for(let i=0;i<poles;i++){const cx=x+PW*i+PW/2;s+=`<rect class="win" x="${cx-6}" y="${y+27}" width="12" height="7" rx="1.5"/><rect class="sym" x="${cx-5}" y="${y+42}" width="10" height="22" rx="1.5"/><path class="sym" d="M${cx-10} ${y+62} L${cx+8} ${y+44} h4"/>`;}
+  return s;}
 function comp(x,y,w,h,icon,cat,label,sub){
   const th=h-(sub?40:26);
   return `<g class="comp"><rect class="cb" x="${x}" y="${y}" width="${w}" height="${h}" rx="10"/><rect class="ph" x="${x+6}" y="${y+6}" width="${w-12}" height="${th-6}" rx="7" style="fill:var(--${cat}-t)"/>
    <svg class="ci ${cat}" x="${x+(w-30)/2}" y="${y+6+(th-6-30)/2}" width="30" height="30" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">${CI[icon]}</svg>
    <text class="val" x="${x+w/2}" y="${y+th+14}" text-anchor="middle">${label}</text>${sub?`<text class="valm" x="${x+w/2}" y="${y+th+30}" text-anchor="middle">${sub}</text>`:""}</g>`;}
-const hop=(x)=>`H${x-8} a8 8 0 0 1 16 0`;
 function strTile(x,y,w,s,label){return `<g class="comp"><rect class="cb" x="${x}" y="${y}" width="${w}" height="88" rx="12"/><rect x="${x+8}" y="${y+8}" width="72" height="72" rx="9" style="fill:var(--solar-t)"/>
   <svg class="ci solar" x="${x+20}" y="${y+20}" width="48" height="48" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${CI.pv}</svg>
   <text style="font:650 16px var(--f-b);fill:var(--ink)" x="${x+94}" y="${y+38}">${label}</text><text class="valm" x="${x+94}" y="${y+58}">${s}</text></g>`;}
 function earthSym(x,y,lbl,anchor){return earth(x,y)+(lbl?`<text class="lbl" x="${anchor==="end"?x-26:x+26}" y="${y+12}" text-anchor="${anchor||"start"}">${lbl}</text>`:"");}
+const outBox=(x,y,w,a,b)=>`<g class="comp"><rect class="cb" x="${x}" y="${y}" width="${w}" height="52" rx="10"/><text style="font:650 13.5px var(--f-b);fill:var(--ink)" x="${x+w/2}" y="${y+22}" text-anchor="middle">${a}</text><text class="valm" x="${x+w/2}" y="${y+40}" text-anchor="middle">${b||""}</text></g>`;
+
+/* three strings joined: a 1-pole breaker on each positive, a comb busbar, a 2-pole main breaker, then the surge protector */
 function drawPar3(cb){
-  const C=COMBINERS[cb],pt=partById(C.part),pvId=C.arrays[0],s=strInfo(pvId),pp=PRODUCTS[s.pr];
+  const C=COMBINERS[cb],pvId=C.arrays[0],s=strInfo(pvId),pp=PRODUCTS[s.pr];
   const sb=pspec(C.prot.p,C.prot.k),ob=spec(C.part,"output_breaker_a");
-  let g="",pos="",neg="";
-  const cx=[160,450,740];
-  cx.forEach((c,i)=>{g+=strTile(c-130,20,260,`${s.n} × ${pp.specs.pmax_w} W · ${s.v.toFixed(1)} V`,`String ${i+1}`);
-    pos+=`<path class="pos flowp" d="M${c-40} 108 V200"/><path class="pos flowp" d="M${c-40} 290 V320"/>`;
-    neg+=`<path class="neg" d="M${c+40} 108 V372"/>`;
-    g+=comp(c-80,200,80,90,"mcb","solar",`${sb} A`,"1P");});
-  g+=`<rect class="bar" x="90" y="314" width="700" height="12" rx="4"/><text class="lbl" x="800" y="324">+ busbar</text>`;
-  neg+=`<path class="neg" d="M200 372 ${hop(440)} H780"/><path class="neg" d="M480 372 V420"/>`;
-  g+=`<text class="lbl" x="800" y="376">− joined</text>`;
-  pos+=`<path class="pos flowp" d="M440 326 V420"/>`;
-  const mb=comp(400,420,120,96,"mcb","solar",`${ob} A`,"2P main");
-  pos+=`<path class="pos flowp" d="M440 516 V610"/>`;neg+=`<path class="neg" d="M480 516 V610"/>`;
-  pos+=`<path class="pos" d="M440 540 ${hop(480)} H660 V520"/>`;neg+=`<path class="neg" d="M480 556 H700 V520"/>`;
-  const spd=comp(610,430,150,90,"spd","solar",esc(PRODUCTS[C.spd.p].name.split(" ")[0]),`${pspec(C.spd.p,C.spd.k)} V DC`);
-  const pe=`<path class="pe" d="M760 475 H840 V612"/>`+earthSym(840,612,"")+`<text class="lbl" x="880" y="664" text-anchor="end">Earth: local ref, then main bar</text>`;
-  const enc=`<rect class="encl" x="20" y="150" width="860" height="420" rx="18"/><text class="lbl" x="40" y="558">${C.title} enclosure</text>`;
-  const out=`<g class="comp"><rect class="cb" x="300" y="610" width="260" height="64" rx="12"/><svg class="ci solar" x="314" y="622" width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${CI.mppt}</svg><text style="font:650 15px var(--f-b);fill:var(--ink)" x="366" y="640">${nodeName(partById(pvId).feeds)}</text><text class="valm" x="366" y="658">PV in · + and −</text></g>`;
-  const tags=`<text class="lbl" x="452" y="600">+</text><text class="lbl" x="490" y="600">−</text>`;
-  return `<svg viewBox="0 0 900 690" role="img" aria-label="Wiring inside ${C.title}">${enc}${neg}${pos}${pe}${g}${mb}${spd}${out}${tags}</svg>`;}
-function drawPair(id){
-  const C=COMBINERS[id],fuse=pspec(C.prot.p,C.prot.k),mcb=spec(C.part,"mcb_2p_a"),spdv=pspec(C.spd.p,C.spd.k),n=C.channels.length,W=450*n;
   let g="",pos="",neg="",pe="";
-  C.channels.forEach((ch,i)=>{const c=225+450*i,s=strInfo(ch.pv);
-    g+=strTile(c-170,20,340,`${s.n} × ${PRODUCTS[s.pr].specs.pmax_w} W · ${s.v.toFixed(1)} V`,SHORT[ch.pv]||nodeName(ch.pv));
-    pos+=`<path class="pos flowp" d="M${c-40} 108 V190"/><path class="pos flowp" d="M${c-40} 270 V320"/><path class="pos flowp" d="M${c-40} 404 V600"/>`;
-    neg+=`<path class="neg" d="M${c+40} 108 V190"/><path class="neg" d="M${c+40} 270 V320"/><path class="neg" d="M${c+40} 404 V600"/>`;
-    g+=comp(c-70,190,60,80,"fuse","solar",`${fuse} A`)+comp(c+10,190,60,80,"fuse","solar",`${fuse} A`);
-    g+=comp(c-70,320,140,84,"mcb","solar",mcb?`${mcb} A 2P`:"2P breaker");
-    pos+=`<path class="pos" d="M${c-40} 444 ${hop(c+40)} H${c+125} V430"/>`;neg+=`<path class="neg" d="M${c+40} 460 H${c+105}"/>`;
-    g+=comp(c+75,430,110,80,"spd","solar",`${spdv} V`);
-    pe+=`<path class="pe" d="M${c+130} 510 V622"/>`+earthSym(c+130,622,"");
-    g+=`<g class="comp"><rect class="cb" x="${c-120}" y="600" width="210" height="60" rx="12"/><svg class="ci hub" x="${c-108}" y="610" width="40" height="40" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${CI.inverter}</svg><text style="font:650 14px var(--f-b);fill:var(--ink)" x="${c-58}" y="627">${esc(ch.to.split(" · ")[0])}</text><text class="valm" x="${c-58}" y="645">${esc(ch.to.split(" · ")[1]||"")}</text></g>`;
-    g+=`<text class="lbl" x="${c-34}" y="590">+</text><text class="lbl" x="${c+46}" y="590">−</text>`;});
-  let enc=`<rect class="encl" x="20" y="150" width="${W-40}" height="420" rx="18"/><text class="lbl" x="40" y="176">${C.title} enclosure${n>1?` · ${["","one","two","three","four"][n]||n} separate channels`:""}</text>`;
-  for(let i=1;i<n;i++)enc+=`<path d="M${450*i} 196 V550" stroke="var(--line2)" stroke-dasharray="3 6"/>`;
-  const note=`<text class="lbl" x="${W-20}" y="685" text-anchor="end">Earth to local earth ref, then main earth bar</text>`;
-  return `<svg viewBox="0 0 ${W} 700" role="img" aria-label="Wiring inside ${C.title}">${enc}${neg}${pos}${pe}${g}${note}</svg>`;}
+  const cx=[110,230,350],Y=210,MX=540,MP=MX+18,MN=MX+54;
+  g+=rail(70,Y,330)+rail(MX-20,Y,112);
+  cx.forEach((c,i)=>{g+=mcbSym(c-18,Y,1)+dlabel(c+26,Y+44,`${sb} A`,"1P","start");
+    pos+=`<path class="pos flowp" d="M${c} 600 V${Y+DH}"/><path class="pos flowp" d="M${c} ${Y} V178"/>`;
+    neg+=`<path class="neg" d="M${c+44} 600 V420"/>`;
+    g+=`<circle class="scr" cx="${c}" cy="606" r="6"/><circle class="scr" cx="${c+44}" cy="606" r="6"/><text class="lbl" x="${c+22}" y="636" text-anchor="middle">String ${i+1}</text><text class="lbl" x="${c}" y="592" text-anchor="end" dx="-10">+</text><text class="lbl" x="${c+44}" y="592" dx="10">−</text>`;});
+  g+=`<rect class="bar" x="84" y="166" width="292" height="12" rx="4"/><text class="lbl" x="84" y="156">+ comb busbar across the breaker tops</text>`;
+  g+=`<rect class="nbarx" x="140" y="408" width="270" height="12" rx="4"/><text class="lbl" x="140" y="398">− link bar</text>`;
+  pos+=`<path class="pos flowp" d="M376 172 H${MP} V${Y}"/>`;
+  neg+=`<path class="neg" d="M410 414 H${MN+50} V150 H${MN} V${Y}"/>`;
+  g+=mcbSym(MX,Y,2)+dlabel(MX-28,Y+44,`${ob} A`,"2P main","end");
+  pos+=`<path class="pos flowp" d="M${MP} ${Y+DH} V560"/>`;neg+=`<path class="neg" d="M${MN} ${Y+DH} V560"/>`;
+  const SX=730,SY=440;
+  pos+=`<path class="pos" d="M${MP} 372 ${hop(MN)} ${hop(MN+50)} H${SX+54} V${SY}"/>`+dot(MP,372,"jp");
+  neg+=`<path class="neg" d="M${MN} 392 ${hop(MN+50)} H${SX+18} V${SY}"/>`+dot(MN,392,"jn");
+  g+=rail(SX-16,SY,104)+spdSym(SX,SY,2)+dlabel(SX-24,SY+44,esc(PRODUCTS[C.spd.p].name.split(" ")[0])+" SPD",`${pspec(C.spd.p,C.spd.k)} V DC`,"end");
+  pe+=`<path class="pe" d="M${SX+36} ${SY+DH} V612"/>`+earthSym(SX+36,612,"");
+  g+=outBox(MX-64,560,200,esc(nodeName(partById(pvId).feeds)),"PV in · + and −");
+  g+=`<text class="lbl" x="${MP-12}" y="548" text-anchor="end">+</text><text class="lbl" x="${MN+12}" y="548">−</text>`;
+  const top=strTile(30,20,360,`${s.n} × ${pp.specs.pmax_w} W each · ${s.v.toFixed(1)} V`,"3 strings in parallel");
+  const enc=`<rect class="encl" x="20" y="126" width="860" height="446" rx="18"/><text class="lbl" x="866" y="148" text-anchor="end">${C.title} enclosure</text>`;
+  const note=`<text class="lbl" x="880" y="664" text-anchor="end">Earth: local ref, then main bar</text>`;
+  return `<svg viewBox="0 0 900 680" role="img" aria-label="Wiring inside ${C.title}">${enc}${neg}${pos}${pe}${g}${top}${note}</svg>`;}
+
+/* one separate channel per string, laid out as built: two fuse holders, the surge protector, then the 2-pole breaker.
+   Each string enters the bottom of its fuses; the fuse tops loop to the surge protector and on to the breaker. */
+function drawPair(id){
+  const C=COMBINERS[id],fuse=pspec(C.prot.p,C.prot.k),mcb=spec(C.part,"mcb_2p_a"),spdv=pspec(C.spd.p,C.spd.k);
+  const n=C.channels.length,CW=290,x0=(900-n*CW)/2,Y=250,B=Y+DH,EY=452;
+  let g="",pos="",neg="",pe="";
+  C.channels.forEach((ch,i)=>{const ox=x0+i*CW,s=strInfo(ch.pv),iP=ox+10,iN=ox+30,fN=ox+52,fP=ox+88,SX=ox+118,sP=SX+18,sN=SX+54,MX=ox+204,mP=MX+18,mN=MX+54;
+    g+=`<text style="font:650 15px var(--f-b);fill:var(--ink)" x="${ox+44}" y="34">${esc(SHORT[ch.pv]||ch.pv)}</text><text class="valm" x="${ox+44}" y="52">${s.n} × ${PRODUCTS[s.pr].specs.pmax_w} W · ${s.v.toFixed(1)} V</text>`;
+    g+=`<circle class="scr" cx="${iP}" cy="80" r="6"/><circle class="scr" cx="${iN}" cy="80" r="6"/><text class="lbl" x="${iP}" y="66" text-anchor="middle">+</text><text class="lbl" x="${iN}" y="66" text-anchor="middle">−</text>`;
+    /* in at the bottom of the fuses */
+    pos+=`<path class="pos flowp" d="M${iP} 86 V${B+34} H${fP} V${B}"/>`;neg+=`<path class="neg" d="M${iN} 86 V${B+18} H${fN} V${B}"/>`;
+    /* fuse tops loop to the surge protector, then the breaker */
+    pos+=`<path class="pos flowp" d="M${fP} ${Y} V206 H${mP} V${Y}"/><path class="pos" d="M${sP} 206 V${Y}"/>`+dot(sP,206,"jp");
+    neg+=`<path class="neg" d="M${fN} ${Y} V188 H${mN} V${Y}"/><path class="neg" d="M${sN} 188 ${vhop(206)} V${Y}"/>`+dot(sN,188,"jn");
+    /* out of the bottom of the breaker */
+    pos+=`<path class="pos flowp" d="M${mP} ${B} V604"/>`;neg+=`<path class="neg" d="M${mN} ${B} V604"/>`;
+    g+=rail(ox+30,Y,252)+fuseSym(fN,Y)+fuseSym(fP,Y)+spdSym(SX,Y,2)+mcbSym(MX,Y,2);
+    g+=dlabel(ox+70,150,`${fuse} A`,"gPV fuses")+dlabel(SX+36,150,`${spdv} V`,"SPD")+dlabel(MX+36,150,mcb?`${mcb} A`:"2P","DC breaker");
+    g+=`<text class="lbl" x="${fN}" y="${B+12}" text-anchor="end" dx="-20">−</text><text class="lbl" x="${fP+22}" y="${B+12}">+</text><text class="lbl" x="${mP-12}" y="${B+24}" text-anchor="end">+</text><text class="lbl" x="${mN+12}" y="${B+24}">−</text>`;
+    /* the surge protector's earth terminal, down to the earth bar */
+    pe+=`<path class="pe" d="M${SX+36} ${B} V${EY}"/>`+dot(SX+36,EY,"jn")+`<text class="lbl" x="${SX+46}" y="${B+24}">PE</text>`;
+    g+=outBox(ox+175,604,130,esc(ch.to.split(" · ")[0]),esc(ch.to.split(" · ")[1]||""));
+    if(i)g+=`<path d="M${ox-6} 136 V430" stroke="var(--line2)" stroke-dasharray="3 6"/>`;});
+  const ex0=x0+118+36,ex1=x0+n*CW+2;
+  pe+=`<path class="pe" d="M${ex0} ${EY} H${ex1} V512"/>`+earthSym(ex1,512,"")+`<text class="lbl" x="${ex0-14}" y="${EY+4}" text-anchor="end">Earth bar</text><text class="lbl" x="${ex1-24}" y="530" text-anchor="end">to the earth rod</text>`;
+  const enc=`<rect class="encl" x="${x0-8}" y="122" width="${n*CW+30}" height="440" rx="18"/><text class="lbl" x="${x0+8}" y="548">${C.title} enclosure</text>`;
+  return `<svg viewBox="0 0 900 680" role="img" aria-label="Wiring inside ${C.title}">${enc}${neg}${pos}${pe}${g}</svg>`;}
+
+/* AC boards: the supply loops from one device to the next along the rail. L and N run above the row; each device
+   takes them at its top terminals and hands them on from the bottom. Surge protectors and output breakers tap the run. */
+function drawBoard(id){
+  const B=BOARDS[id],lc=B.line==="grid"?"ln":"ld",jc=B.line==="grid"?"jg":"jl";
+  const Y=190,YL=106,YN=130,items=[...B.chain.map(d=>({...d})),...B.outs.map(o=>({...o,out:true}))];
+  let x=196;items.forEach(d=>{d.x=x;d.w=d.type==="run"?70:PW*2;x+=d.w+(d.out?64:70);});
+  const W=Math.max(900,x+10);
+  let g="",L="",N="",pe="";
+  g+=`<text class="lbl" x="34" y="${YL+4}">L</text><text class="lbl" x="34" y="${YN+4}">N</text>${dlabel(30,54,esc(B.feed[0]),esc(B.feed[1]||""),"start")}`;
+  const devs=items.filter(d=>d.type!=="run");
+  g+=rail(devs[0].x-16,Y,devs[devs.length-1].x+PW*2+16-(devs[0].x-16));
+  /* reach: how far the current stretch of the run has been drawn, for L and N */
+  let reach=[48,48];
+  items.forEach((d,i)=>{const dN=d.x+18,dL=d.x+54,next=items.slice(i+1).filter(z=>z.type!=="run");
+    if(d.type==="run"){const m=d.x+35;g+=`<path class="sym" d="M${m-10} ${YL-12} l8 ${YN-YL+24} M${m+2} ${YL-12} l8 ${YN-YL+24}"/>${dlabel(m,54,esc(d.label||"Cable run"),esc(d.sub||""))}`;return;}
+    L+=`<path class="${lc}" d="M${reach[0]} ${YL} H${dL}"/>`;N+=`<path class="neg" d="M${reach[1]} ${YN} H${dN}"/>`;reach=[dL,dN];
+    const on=d.type==="spd"?next.length>0:d.out&&next.length>0;      /* the run carries on past this device */
+    L+=`<path class="${lc}" d="M${dL} ${YL} ${on?vhop(YN):""} V${Y}"/>`+(on?dot(dL,YL,jc):"");N+=`<path class="neg" d="M${dN} ${YN} V${Y}"/>`+(on?dot(dN,YN,"jn"):"");
+    g+=dlabel(d.x+36,54,esc(d.label||""),esc(d.sub||""));
+    if(d.type==="spd"){g+=spdSym(d.x,Y,2);pe+=`<path class="pe" d="M${d.x+36} ${Y+DH} V362"/>`+earth(d.x+36,362);return;}
+    g+=d.type==="rcbo"?rcboSym(d.x,Y):mcbSym(d.x,Y,2);
+    if(d.out||!next.length){            /* the end of a branch: down to what it feeds */
+      L+=`<path class="${lc}" d="M${dL} ${Y+DH} V336"/>`;N+=`<path class="neg" d="M${dN} ${Y+DH} V336"/>`;
+      g+=outBox(d.x+36-64,336,128,esc(d.to||B.to||""),esc(d.to_sub||"L and N"));return;}
+    /* loop from the bottom terminals back up to the run, for the devices that follow */
+    const rL=d.x+PW*2+18,rN=d.x+PW*2+34;
+    L+=`<path class="${lc}" d="M${dL} ${Y+DH} V316 H${rL} V${YL}"/>`;N+=`<path class="neg" d="M${dN} ${Y+DH} V336 H${rN} V${YN}"/>`;
+    reach=[rL,rN];});
+  const enc=`<rect class="encl" x="162" y="24" width="${W-184}" height="372" rx="18"/><text class="lbl" x="178" y="386">${esc(B.title)} enclosure</text>`;
+  return `<svg viewBox="0 0 ${W} 420" role="img" aria-label="Wiring inside ${esc(B.title)}">${enc}${N}${L}${pe}${g}</svg>`;}
+function renderBoard(id){
+  const B=BOARDS[id],box=$("#v-comb"),ids=Object.keys(BOARDS);
+  box.innerHTML=`
+  <section aria-labelledby="ch1">
+    <p class="crumb"><a href="#schematic">Schematic</a> &nbsp;/&nbsp; AC boards &nbsp;/&nbsp; ${esc(B.title)}</p>
+    ${ids.length>1?`<nav class="boxtabs" aria-label="AC boards">${ids.map(k=>`<a href="#${k}"${k===id?' aria-current="page"':""}>${esc(BOARDS[k].title)}</a>`).join("")}</nav>`:""}
+    <h1 id="ch1" tabindex="-1" style="margin-top:22px">${esc(B.title)}</h1>
+    <p class="lead">${B.lead}</p>
+  </section>
+  <section class="flowbox cv" aria-label="Wiring inside ${esc(B.title)}">
+    <div class="flowbar"><span class="eyebrow">Inside the board</span>
+      <div class="legend"><span><i style="background:var(--${B.line==="grid"?"grid":"load"})"></i>Live (L)</span><span><i class="neg"></i>Neutral (N)</span><span><i class="pe"></i>Earth</span></div></div>
+    <div class="cgrid">
+      <div><div class="canvas">${drawBoard(id)}</div></div>
+      <aside class="cside">
+        <div><p class="eyebrow">How it’s wired</p><ol class="steps">${B.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
+        ${boxWhy(B)}
+      </aside>
+    </div>
+  </section>`;}
 function combSizing(id){
   const C=COMBINERS[id],multi=C.arrays.length>1,rows=[],vds=[];
   C.arrays.forEach(pv=>{const r=arrayCheck(pv),pre=multi?nodeName(pv)+" ":"";
@@ -966,13 +1087,15 @@ function renderComb(id){
     <div class="flowbar"><span class="eyebrow">Inside the box</span>
       <div class="legend"><span><i style="background:var(--solar)"></i>+ conductor</span><span><i class="neg"></i>− conductor</span><span><i class="pe"></i>Earth</span></div></div>
     <div class="cgrid">
-      <div><div class="canvas">${C.kind==="pair"?drawPair(id):drawPar3(id)}</div></div>
+      <div><div class="canvas">${C.kind==="pair"?drawPair(id):drawPar3(id)}</div>
+        ${C.kind==="pair"&&COMBINER_IMG?`<figure class="cshot"><img src="${COMBINER_IMG}" alt="Two channels of a PV box built from Feeo parts: in each, two fuse holders, a surge protector and a 2-pole breaker side by side on the rail, with the string wires entering the bottom of the fuses" loading="lazy"><figcaption><b>How it looks with the real parts.</b> Two channels, each with its fuse holders, surge protector and breaker in a row. The earth wire from each surge protector isn’t in this picture; the drawing shows it.</figcaption></figure>`:""}</div>
       <aside class="cside">
         <div><p class="eyebrow">How it’s wired</p><ol class="steps">${C.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
         ${combSizing(id)}
         <div><p class="eyebrow">In this box</p><ul class="inbox">${C.inside.map(it=>{const q=PRODUCTS[it.p],c=CAT[q.icon]||"solar";
           const sp=[...Object.entries(q.specs).filter(([,v])=>v!==null).map(([k,v])=>`${(LABELS[k]||[k])[0]} ${fmtSpec(k,v)}`),it.on].join(" · ");
-          return `<li><span class="ti tint ${c}">${cicon(q.icon,1.8)}</span><div class="ib"><span class="nm">${it.qty} × ${q.name}</span>${ABOUT[it.p]?`<span class="ab">${ABOUT[it.p]}</span>`:""}<span class="sp">${sp}</span>${(q.links.buy||[]).length||(q.links.alts||[]).length?linkList(q):""}</div></li>`;}).join("")}</ul></div>
+          return `<li><span class="ti tint ${c}">${cicon(q.icon,1.8)}</span><div class="ib"><span class="nm">${it.qty} × ${q.name}</span>${ABOUT[it.p]?`<span class="ab">${ABOUT[it.p]}</span>`:""}<span class="sp">${sp}</span>${whyFold(q)}${(q.links.buy||[]).length||(q.links.alts||[]).length?linkList(q):""}</div></li>`;}).join("")}</ul></div>
+        ${boxWhy(C)}
       </aside>
     </div>
   </section>`;}
@@ -1043,6 +1166,7 @@ function renderBattery(){
     ${BUSBAR_IMG?`<figure class="bshot"><img src="${BUSBAR_IMG}" alt="The home-built busbar box: two copper bars with a Victron SmartShunt bolted between the battery-minus and load-minus bars" loading="lazy"><figcaption><b>${esc(B.busbar.title)}.</b> ${esc(B.busbar.text)}</figcaption></figure>`:""}
   </section>`;}
 const BUSBAR_IMG="__BUSBAR_IMG__";
+const COMBINER_IMG="__COMBINER_IMG__";
 
 
 /* ---------- routing: #combiner-* opens a box, anything else is the main page ---------- */
@@ -1058,12 +1182,14 @@ let forced=null;
 function go(h){forced=h;try{history.pushState(null,"","#"+h);}catch(_){}route();}
 document.addEventListener("click",e=>{const a=e.target.closest('a[href^="#"]');if(!a||e.defaultPrevented||e.metaKey||e.ctrlKey)return;
   const h=decodeURIComponent(a.getAttribute("href").slice(1));if(!h)return;
-  if(h==="battery"||COMBINERS[h]||view!=="main"){e.preventDefault();go(h);}});
+  if(h==="battery"||COMBINERS[h]||BOARDS[h]||view!=="main"){e.preventDefault();go(h);}});
 function route(){
   const h=forced!=null?forced:decodeURIComponent(location.hash.slice(1));forced=null;
   if(h==="battery"&&BATTERY){$("#v-main").hidden=true;$("#v-comb").hidden=true;$("#v-batt").hidden=false;renderBattery();window.scrollTo(0,0);
     view="batt";$("#bh1").focus({preventScroll:true});setNav("#battery");return;}
   $("#v-batt").hidden=true;
+  if(BOARDS[h]){$("#v-main").hidden=true;$("#v-comb").hidden=false;renderBoard(h);window.scrollTo(0,0);
+    view="comb";lastComb=null;$("#ch1").focus({preventScroll:true});setNav("#schematic");return;}
   if(COMBINERS[h]){$("#v-main").hidden=true;$("#v-comb").hidden=false;renderComb(h);flowOn();window.scrollTo(0,0);
     view="comb";lastComb=h;$("#ch1").focus({preventScroll:true});setNav("#"+Object.keys(COMBINERS)[0]);return;}
   const back=view!=="main";view="main";$("#v-comb").hidden=true;$("#v-main").hidden=false;

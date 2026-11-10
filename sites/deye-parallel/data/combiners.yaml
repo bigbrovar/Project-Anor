@@ -16,7 +16,7 @@ pv-box-1:
   part: box-1
   kind: pair
   arrays: [pv-1, pv-2, pv-3]
-  string_protection: feeo-fuse-23
+  string_protection: feeo-fuse-25
   surge_protector: feeo-spd-600
   lead: Three separate channels for Deye 1, built from the same Feeo parts as the home system. Each string gets its own fuses, breaker and surge protector, then runs to its own tracker.
   channels:
@@ -24,13 +24,13 @@ pv-box-1:
     - {array: pv-2, to: Deye 1 · MPPT 2}
     - {array: pv-3, to: Deye 1 · MPPT 3}
   inside:
-    - {product: feeo-fuse-23, qty: 6, where: + and − of each string}
+    - {product: feeo-fuse-25, qty: 6, where: + and − of each string}
     - {product: feeo-mcb-2p, qty: 3, where: "one per string, both poles"}
     - {product: feeo-spd-600, qty: 3, where: "one per string, across + and −"}
   steps:
-    - Each string’s <b>+ and −</b> go through their own 23 A fuse.
-    - The fused pair goes into a <b>2-pole breaker</b>, so one switch isolates the string.
-    - A <b>600 V Feeo surge protector</b> sits across + and −, with its earth to the local earth reference.
+    - Each string’s <b>+ and −</b> enter the <b>bottom</b> of their own 25 A fuse.
+    - From the fuse <b>tops</b>, the pair loops to the <b>600 V Feeo surge protector</b> and on to the top of the <b>2-pole breaker</b>, so one switch isolates the string.
+    - The surge protector’s <b>earth terminal</b> goes to the earth bar, which runs to the earth rod.
     - Each channel leaves the box to its own <b>Deye 1 MPPT</b>.
 
 pv-box-2:
@@ -39,7 +39,7 @@ pv-box-2:
   part: box-2
   kind: pair
   arrays: [pv-4, pv-5, pv-6]
-  string_protection: feeo-fuse-23
+  string_protection: feeo-fuse-25
   surge_protector: feeo-spd-600
   lead: The same three-channel box for Deye 2.
   channels:
@@ -47,11 +47,11 @@ pv-box-2:
     - {array: pv-5, to: Deye 2 · MPPT 2}
     - {array: pv-6, to: Deye 2 · MPPT 3}
   inside:
-    - {product: feeo-fuse-23, qty: 6, where: + and − of each string}
+    - {product: feeo-fuse-25, qty: 6, where: + and − of each string}
     - {product: feeo-mcb-2p, qty: 3, where: "one per string, both poles"}
     - {product: feeo-spd-600, qty: 3, where: "one per string, across + and −"}
   steps:
-    - Each string’s <b>+ and −</b> go through their own 23 A fuse.
-    - The fused pair goes into a <b>2-pole breaker</b>, so one switch isolates the string.
-    - A <b>600 V Feeo surge protector</b> sits across + and −, with its earth to the local earth reference.
+    - Each string’s <b>+ and −</b> enter the <b>bottom</b> of their own 25 A fuse.
+    - From the fuse <b>tops</b>, the pair loops to the <b>600 V Feeo surge protector</b> and on to the top of the <b>2-pole breaker</b>, so one switch isolates the string.
+    - The surge protector’s <b>earth terminal</b> goes to the earth bar, which runs to the earth rod.
     - Each channel leaves the box to its own <b>Deye 2 MPPT</b>.

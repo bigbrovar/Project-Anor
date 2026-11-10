@@ -9,8 +9,8 @@
 canvas: [1400, 1260]
 
 blocks:
-  - {id: pv-a, part: pv-a, short: PV 1, at: [30, 30, 370, 200], title: PV 1 · 2.95 kWp, subtitle: 5 × Jinko 590 W, icon: pv, photo_height: 120, panels: {count: 5, cols: 5, size: 34}}
-  - {id: pv-b, part: pv-b, short: PV 2, at: [420, 30, 370, 200], title: PV 2 · 2.36 kWp, subtitle: 4 × Jinko 590 W, icon: pv, photo_height: 120, panels: {count: 4, cols: 4, size: 34}}
+  - {id: pv-a, part: pv-a, short: PV 1, at: [30, 30, 370, 200], title: PV 1 · 2.6 kWp, subtitle: 4 × Jinko 650 W, icon: pv, photo_height: 120, panels: {count: 4, cols: 4, size: 34}}
+  - {id: pv-b, part: pv-b, short: PV 2, at: [420, 30, 370, 200], title: PV 2 · 2.6 kWp, subtitle: 4 × Jinko 650 W, icon: pv, photo_height: 120, panels: {count: 4, cols: 4, size: 34}}
   - {id: box-1, part: box-1, short: PV box, at: [30, 280, 760, 84], title: PV box, subtitle: "2 in 2 out · fuses, breaker and SPD on each channel", icon: combiner, style: side, opens: pv-box-1}
   - {id: inv, part: inv, short: Growatt, at: [30, 420, 760, 300], title: Growatt SPF 6000 ES Plus, subtitle: "6 kW · 48 V battery · 2 MPPT, up to 500 V", icon: inverter, photo_height: 170, ports: [[solar, PV 1-2], [grid, AC IN], [batt, BAT], [load, AC OUT]]}
   - {id: brk, part: brk, short: Battery breaker, at: [330, 790, 160, 120], title: BENY 250 A, subtitle: Growatt battery, icon: mccb, style: stack}

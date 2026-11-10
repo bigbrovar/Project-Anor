@@ -1,0 +1,62 @@
+# The AC boards. Each id (like grid-board) is also the page address of its
+# wiring view: index.html#grid-board
+#
+#   part     the board's part id in build.yaml
+#   line     grid (supply side) or load (inverter output side); sets the wire colour
+#   feed     where the supply comes from, on one or two short lines
+#   chain    the devices on the rail, in the order the supply passes through them:
+#            mcb, rcbo, spd (tapped off the run, earthed) or run (a cable run)
+#   outputs  breakers side by side at the end, each with what it feeds (to)
+#   to       what the last device in the chain feeds, when there are no outputs
+#   steps    "How it's wired", one line per step (<b> for bold)
+
+grid-board:
+  title: Grid board
+  part: gridbd
+  line: grid
+  lead: Where the utility supply is switched and protected before it reaches the Deye’s grid port. The CT clamp sits on the incoming live, with its lead running to the Deye.
+  feed: [From the, kWh meter]
+  chain:
+    - {type: mcb, label: Main breaker, sub: 2P}
+    - {type: spd, label: Chint NXU-II, sub: "Type 2 SPD, 275 V"}
+    - {type: mcb, label: 50 A, sub: 2P}
+  to: Deye GRID port
+  steps:
+    - Live and neutral come from the meter into the <b>top</b> of the 2-pole main breaker.
+    - From its <b>bottom</b> terminals they loop up and along the rail. The <b>surge protector</b> taps both, and its bottom terminal goes to earth.
+    - The loop ends in the <b>top</b> of the 2-pole <b>50 A breaker</b>, whose bottom terminals feed the Deye’s grid port.
+    - The <b>CT clamp</b> goes around the incoming live before the main breaker, arrow pointing to the Deye.
+
+light-board:
+  title: Light-load board
+  part: acb-light
+  line: load
+  lead: The Deye’s LOAD output, switched and protected before it reaches the light circuits.
+  feed: [From the Deye, LOAD output]
+  chain:
+    - {type: mcb, label: Breaker, sub: 2P}
+    - {type: spd, label: Chint NXU-II, sub: "Type 2 SPD, 275 V"}
+    - {type: rcbo, label: RCBO, sub: "2P, 30 mA"}
+  to: Light loads
+  steps:
+    - Live and neutral come from the inverter into the <b>top</b> of the 2-pole breaker.
+    - From the breaker’s <b>bottom</b> terminals they loop up and along the rail. The <b>surge protector</b> taps both, and its bottom terminal goes to earth.
+    - The loop ends in the <b>top</b> of the <b>RCBO</b>, which trips on overload or on 30 mA of earth leakage.
+    - The RCBO’s bottom terminals feed the circuits.
+
+heavy-board:
+  title: Heavy-load board
+  part: acb-heavy
+  line: load
+  lead: The Deye’s GEN port, set as a smart load, switched and protected before it reaches the heavy circuits.
+  feed: [From the Deye, GEN port]
+  chain:
+    - {type: mcb, label: Breaker, sub: 2P}
+    - {type: spd, label: Chint NXU-II, sub: "Type 2 SPD, 275 V"}
+    - {type: rcbo, label: RCBO, sub: "2P, 30 mA"}
+  to: Heavy loads
+  steps:
+    - Live and neutral come from the inverter into the <b>top</b> of the 2-pole breaker.
+    - From the breaker’s <b>bottom</b> terminals they loop up and along the rail. The <b>surge protector</b> taps both, and its bottom terminal goes to earth.
+    - The loop ends in the <b>top</b> of the <b>RCBO</b>, which trips on overload or on 30 mA of earth leakage.
+    - The RCBO’s bottom terminals feed the circuits.

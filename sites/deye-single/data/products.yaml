@@ -1,6 +1,6 @@
 # Every product in the build: panels, inverter, breakers, boards and the parts
 # inside the PV boxes. build.yaml and combiners.yaml refer to them by id (the
-# name ending in a colon, like jinko-tiger-neo-590).
+# name ending in a colon, like jinko-tiger-neo-650).
 #
 #   name      full product name, shown on cards and in the detail panel
 #   short     optional short name, used in the sizing checks
@@ -11,8 +11,13 @@
 #             Use null for a value you don't know yet: it stays hidden on the page
 #             and the build lists it, so you can see what's still missing.
 #   note, advice   optional extra lines in the detail panel
-#   links     datasheet, buy and alternatives. Mark affiliate links with
+#   links     datasheet, buy, alternatives and read (blog posts to read more,
+#             each with a title and url). Mark affiliate links with
 #             affiliate: true so the page labels them.
+#   brand     optional id from brands below. Its lines open the product's
+#             "Why this one" list in the detail panel
+#   why       optional line, or list of lines, on why this product was picked.
+#             Put quotes around a line that has a colon in it.
 
 spec_labels:   # spec key: [label shown on the page, unit]
   pmax_w: [Power, W]
@@ -69,27 +74,89 @@ spec_labels:   # spec key: [label shown on the page, unit]
   uc_v: [Uc, V AC]
   joins: [Joins, ""]
 
+# Why each maker was picked. A product with `brand: feeo` starts its
+# "Why this one" list with these lines, then adds its own `why` lines.
+
+brands:
+
+  deye:
+    why:
+      - "Deye is a tier 2 maker, with very good solar products in the premium-value segment."
+      - "Tiers aren’t an official rating; installers use them as shorthand. Tier 2 means a solid mid-range brand: good designs and reasonable support, for less than tier 1."
+
+  deriy:
+    why:
+      - "Deriy is a solar startup that ships high-quality EVE cells with a JK inverter BMS."
+      - "Good value, but after-sales support is limited to Lagos and Abuja."
+      - "I’ve tested their battery myself and use it in my own system, so it’s easy to recommend."
+      - "<b>Disclosure:</b> I consult for Deriy on technical matters: after-sales repairs, documentation and product improvement. My role has nothing to do with sales or marketing."
+
+  feeo:
+    why:
+      - "Feeo is a reputable Chinese maker of electrical protection for solar, like DC breakers, fuses and surge protectors. The company is ISO 9001 certified."
+
+  zjbeny:
+    why:
+      - "ZJBeny is a reputable Chinese maker of DC protection for solar, from breakers and fuses to isolators and surge protectors."
+
+  chint:
+    why:
+      - "Chint is one of China’s largest makers of low-voltage electrical equipment, founded in 1984 and sold in more than 140 countries and regions."
+      - "One maker for the whole board: breakers, RCBOs and surge protectors that fit the same DIN rail."
+      - "Chint has authorised dealers in Nigeria, so genuine parts can be bought locally."
+
 products:
 
-  jinko-tiger-neo-590:
-    name: Jinko Tiger Neo N-type 72HL4, 590 W
-    short: Jinko 590 W
+  jinko-tiger-neo-650:
+    name: Jinko Tiger Neo 3.0 N-type 66QL6, 650 W
+    short: Jinko 650 W
     icon: pv
     about: Solar panel. Turns sunlight into DC electricity.
     specs:
-      pmax_w: 590
-      voc_v: 52.62
-      isc_a: 14.13
-      imp_a: 13.5
-      voc_coef_pct: -0.25
-      max_fuse_a: null
-    note: One panel model across the whole array, so every string behaves the same.
+      pmax_w: 650
+      voc_v: 50.26
+      isc_a: 15.98
+      imp_a: 15.27
+      voc_coef_pct: -0.24
+      max_fuse_a: 35
+    note: "Availability varies, so any Jinko Tiger Neo from 590 to 650 W fits these strings. The checks use the 650 W panel; the 590 W has a little more voltage and less current, and stays inside every limit too."
+    advice: "Fake and relabelled panels are common. Buy from a distributor listed on the maker’s official website, check the serial number on the label with the maker, compare the label with the official datasheet, and walk away from prices far below other sellers."
+    links:
+      read:
+        - title: "A budget solar inverter system: solar panels"
+          url: https://blog.openculture.org.ng/of-a-budget-off-grid-solar/
+      datasheet: https://jinkosolar.com/en/site/tigerneo_3
+      buy:
+        - name: Jinko panels at Fouani
+          url: https://fouanistore.com/nigeria-en/search?subcategories=Solar+Panels&page=&brand=Jinko
+      alternatives:
+        - name: "LONGi, official site"
+          url: https://www.longi.com/en/
+          note: "Check its official site for distributors in your country. LONGi also has an online checker for module serial numbers."
+        - name: "JA Solar, official site"
+          url: https://www.jasolar.com/
+          note: "Check its official site for distributors in your country."
+        - name: "Trina Solar, official site"
+          url: https://www.trinasolar.com/
+          note: "Check its official site for distributors in your country."
+        - name: "Canadian Solar, official site"
+          url: https://www.canadiansolar.com/
+          note: "Check its official site for distributors in your country."
 
   deye-8k-sg06lp1:
     name: Deye SUN-8K-SG06LP1-EU-CM3, 8 kW, single phase, low-voltage battery
     short: Deye 8K
     icon: inverter
     about: Hybrid inverter with three built-in solar trackers. Runs the house from solar and battery, charges the battery from solar or grid, and keeps the backup output on in an outage.
+    brand: deye
+    why:
+      - "Very reliable, and one of the best Chinese hybrid inverters out there."
+      - "Rated IP65: dust-tight and protected against water jets, so it copes with dust and damp and can be mounted outdoors under cover."
+      - "Three built-in solar trackers taking up to 500 V, so long panel strings go straight in, with no separate solar chargers."
+      - "A CT on the grid supply lets it run the house from solar and battery first, and limit or stop export."
+      - "The GEN port can run heavy loads as a smart load, switched by battery level and solar power, or take a generator."
+      - "Talks CAN or RS485 to the battery’s BMS, with Wi-Fi monitoring and six time-of-use periods for charging and discharging."
+      - "Up to 16 units in parallel, and twice its rated power for 10 seconds to start motors."
     specs:
       cont_w_25c: 8000
       inverter_va: 8800
@@ -109,25 +176,32 @@ products:
       efficiency: 97.6%
     note: "MPPT 1 and 2 can each take two strings and MPPT 3 one (2 + 2 + 1). Here each MPPT carries one string, so the checks use the 27 A limit."
     links:
+      read:
+        - title: "Building an off-grid solar system: my approach"
+          url: https://blog.openculture.org.ng/solar-plan/
       datasheet: https://www.deyeinverter.com/deyeinverter/2026/09/14/BDatasheetSUN-7-12K-SG06LP1-EU-CM320260911en.pdf
       buy:
+        - name: Fouani (Nigeria)
+          url: https://fouanistore.com/nigeria-en/product/1128?deye-hybrid-inverter-8kw-lv-battery-supported-sun-8k-sg06lp1-eu-cm3-single-phase
         - name: Deye product page
           url: https://deye.com/product/sun-7-12k-sg06lp1-eu-cm3/
       alternatives:
-        - name: Deye SUN-12K-SG06LP1-EU-CM3, 12 kW single phase
-          url: https://deye.com/product/sun-7-12k-sg06lp1-eu-cm3/
-          note: Same body and battery voltage, 12 kW output, 250 A battery current and up to 19.2 kW of PV.
-        - name: Deye SUN-12K-SG04LP3-EU, 12 kW three phase
-          url: https://deye.com/product/sun-5-6-8-10-12k-sg04lp3-5-12kw-three-phase-2-mppt-hybrid-inverter-low-voltage-battery/
-          note: Three-phase output on the same 48 V battery, with 2 MPPTs.
+        - name: "Growatt SPF 6000 ES Plus, 6 kW, at Fouani"
+          url: https://fouanistore.com/nigeria-en/product/922?growatt-hybrid-inverter-spf-es-series-6kw-48v-6000es
+          note: "Close match at 6 kW: two trackers taking up to 500 V, 8 kW of PV and up to 6 in parallel. Off-grid only, so no CT or export, and no separate smart-load port."
+        - name: "SRNE HESP 6 kW (HESP4860S100-H), at HM Solar"
+          url: https://hmsolarltd.com/products/series-hesp/
+          note: "Close match: 6 kW, two trackers taking up to 500 V, BMS communication, time-slot charging, and up to 6 in parallel, single or three phase."
 
   pv-box-3ch:
     name: PV box, 3 separate channels, Feeo parts
     icon: combiner
     about: PV box. Where the panel strings are protected and can be switched off before they reach the inverter.
+    brand: feeo
+    why: "Built from Feeo parts: gPV fuses to IEC 60269-6, DC breakers to IEC/EN 60947-2 and surge protectors to EN 50539-11 (now IEC/EN 61643-31)."
     specs:
       fuses: 6, on + and − of each string
-      fuse_a: 23
+      fuse_a: 25
       spd_ucpv_v: 600
       mcb_2p_a: null
       breaker_vdc: null
@@ -138,12 +212,14 @@ products:
           url: https://s.click.aliexpress.com/e/_c41K6QGX
           affiliate: true
 
-  feeo-fuse-23:
-    name: Feeo PV fuse and holder, 23 A
+  feeo-fuse-25:
+    name: Feeo PV fuse and holder, 25 A
     icon: fuse
     about: PV fuse. Blows to protect a string’s cable if too much current flows back into it.
+    brand: feeo
+    why: "A gPV fuse, the class made to protect solar strings, built to IEC 60269-6. CE and TÜV certified."
     specs:
-      fuse_a: 23
+      fuse_a: 25
     links:
       buy:
         - name: AliExpress
@@ -154,6 +230,8 @@ products:
     name: Feeo DC surge protector, 600 V
     icon: spd
     about: Surge protector. Diverts voltage spikes from lightning or switching to earth before they reach the equipment.
+    brand: feeo
+    why: "Built to EN 50539-11, the standard for surge protectors on the DC side of solar systems, since replaced by IEC/EN 61643-31. TÜV certified."
     specs:
       spd_v: 600
 
@@ -161,6 +239,8 @@ products:
     name: Feeo DC breaker, 2 pole
     icon: mcb
     about: DC breaker. Switches the string off and trips on overload.
+    brand: feeo
+    why: "Built to IEC/EN 60947-2, the international standard for low-voltage circuit breakers. CB and TÜV certified."
     specs:
       current_a: null
       voltage_vdc: null
@@ -169,6 +249,8 @@ products:
     name: ZJBeny DC MCCB, 250 A frame, in enclosure
     icon: mccb
     about: DC moulded-case breaker. Protects the battery cable from overload and short circuit, and isolates the inverter from the batteries.
+    brand: zjbeny
+    why: "The BDM series is built to IEC 60947-2, the international standard for low-voltage circuit breakers, and China’s GB/T 14048.2. TÜV certified (TUV-027276-E), rated for 500 V DC and IP65 in its enclosure."
     specs:
       current_a: 250
       trip: Adjustable
@@ -183,6 +265,7 @@ products:
         - name: Nanque 2P MCCB, 200 A
           url: https://s.click.aliexpress.com/e/_c3VDGhOR
           affiliate: true
+          note: "Nanque is a reputable Chinese maker of DC protection for solar."
 
   busbar-48v:
     name: Battery busbar pair
@@ -196,6 +279,7 @@ products:
     name: Deriy EVE LiFePO4 battery, 14.7 kWh
     icon: battery
     about: LiFePO4 battery pack. Stores energy for night and cloudy days. Its BMS protects the cells from overcharge, overdischarge and too much current.
+    brand: deriy
     specs:
       kwh: 14.7
       cells: 16S
@@ -205,16 +289,30 @@ products:
       bms: JK inverter BMS
       bms_a: 200
       comms: CAN to the Deye over RJ45
-    note: Deriy pack built on EVE LiFePO4 cells with a JK inverter BMS. The Deye reads state of charge and charge limits straight from the BMS, so no separate battery monitor is needed.
+    note: The Deye reads state of charge and charge limits straight from the BMS, so no separate battery monitor is needed.
     links:
+      read:
+        - title: "How I built a lithium battery bank"
+          url: https://blog.openculture.org.ng/how-to-build-a-lithium-battery-bank-diy-from-nigeria/
+        - title: "Optimal charge settings for LiFePO4"
+          url: https://blog.openculture.org.ng/optimal-charge-settings-for-lithium-iron-phosphates-lifepo4/
       buy:
         - name: Deriy Energy
           url: https://www.deriyenergy.com/
+      alternatives:
+        - name: "Deye SE-F16, 51.2 V 314 Ah, 16 kWh, at Fouani"
+          url: https://fouanistore.com/nigeria-en/product/1052?deye-low-voltage-se-f16-battery-16-kwh-display-screen-version
+          note: "Slightly more expensive, but a good premium option: 230 A continuous and more than 6,000 cycles. It’s Deye’s own battery, on Deye’s approved list."
+        - name: "Growatt HOPE 16.0LM-A1, 51.2 V, 16 kWh, at Fouani"
+          url: https://fouanistore.com/nigeria-en/product/1180?growatt-low-voltage-lifepo4-battery-16kwh-hope-16-0lm-a1
+          note: "Slightly more expensive, but a good premium option: 15.3 kWh usable, 200 A discharge and 6,000 cycles. It isn’t on Deye’s approved battery list, so check with the seller that it will talk to the Deye."
 
   chint-nxu-ii-275:
     name: Chint NXU-II Type 2 SPD, 2P, 40 kA, 275 V
     icon: spd
     about: Surge protector. Diverts voltage spikes from lightning or switching to earth before they reach the equipment.
+    brand: chint
+    why: "A Type 2 surge protector built to IEC/EN 61643-11, the standard for surge protectors on low-voltage AC supplies. CE and RoHS marked."
     specs:
       spd_type: Type 2
       poles: 2
@@ -231,6 +329,8 @@ products:
     name: "Grid board: Chint MCB, SPD, MCB"
     icon: db
     about: Grid distribution board. Takes the utility supply through breakers and surge protection, then feeds the Deye grid port. Every load sits behind the Deye.
+    brand: chint
+    why: "Chint breakers are built to IEC/EN 60898-1, the standard for breakers in homes and similar buildings. The surge protector is the NXU-II, built to IEC/EN 61643-11."
     specs:
       phase: Single phase
       meter: Utility kWh meter
@@ -245,6 +345,8 @@ products:
     name: "Light-load board: Chint MCB, SPD, RCBO"
     icon: db
     about: Distribution board. Breakers, surge protection and an RCBO, which cuts power on overload or earth leakage to protect people from shock.
+    brand: chint
+    why: "Chint breakers are built to IEC/EN 60898-1 and its RCBOs to IEC/EN 61009-1, the standards for breakers and RCBOs in homes and similar buildings. The surge protector is the NXU-II, built to IEC/EN 61643-11."
     specs:
       mcb_a: null
       spd: Chint NXU-II, 275 V
@@ -255,6 +357,8 @@ products:
     name: "Heavy-load board: Chint MCB, SPD, RCBO"
     icon: db
     about: Distribution board. Breakers, surge protection and an RCBO, which cuts power on overload or earth leakage to protect people from shock.
+    brand: chint
+    why: "Chint breakers are built to IEC/EN 60898-1 and its RCBOs to IEC/EN 61009-1, the standards for breakers and RCBOs in homes and similar buildings. The surge protector is the NXU-II, built to IEC/EN 61643-11."
     specs:
       mcb_a: null
       spd: Chint NXU-II, 275 V
