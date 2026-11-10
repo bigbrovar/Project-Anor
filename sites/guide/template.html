@@ -1,0 +1,518 @@
+<title>Project Anor Solar Guide</title>
+<meta name="description" content="Pick your appliances and budget, and find the Project Anor solar design that fits: four worked systems for Nigerian homes, each with its own dashboard and reference prices.">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: dark control-room canvas; energy-flow colours carry meaning (solar amber, battery teal, grid blue, load violet); planner = picker + sticky verdict; kit = live flow diagram as hero. */
+:root{
+  --bg:#0A0E12; --bg2:#0E1318; --surface:#121920; --surface2:#18212A; --line:#222C36; --line2:#2E3A46;
+  --ink:#EAF0F4; --muted:#8C99A6; --faint:#5D6A76;
+  --solar:#F7B53B; --batt:#2ED3A6; --grid:#5E9DFF; --load:#B38CFF; --bad:#FF6B5E; --warn:#F7B53B; --ok:#2ED3A6;
+  --solar-t:rgba(247,181,59,.13); --batt-t:rgba(46,211,166,.13); --grid-t:rgba(94,157,255,.14); --load-t:rgba(179,140,255,.14); --bad-t:rgba(255,107,94,.14);
+  --on-accent:#1A1300; --paperph:#E9EDF1;
+  --f-d:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --f-b:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-m:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:14px; --r-s:9px;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#F4F6F8; --bg2:#EDF1F4; --surface:#FFFFFF; --surface2:#F3F6F9; --line:#DFE5EB; --line2:#CDD5DE;
+  --ink:#0E1620; --muted:#5A6774; --faint:#8995A1;
+  --solar:#C47F00; --batt:#0B9B76; --grid:#2B6BDB; --load:#7447D6; --bad:#D63A2D; --warn:#B87500; --ok:#0B9B76;
+  --solar-t:rgba(214,145,10,.12); --batt-t:rgba(11,155,118,.11); --grid-t:rgba(43,107,219,.1); --load-t:rgba(116,71,214,.1); --bad-t:rgba(214,58,45,.1);
+  --on-accent:#FFFFFF; --paperph:#F1F4F7; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#F4F6F8; --bg2:#EDF1F4; --surface:#FFFFFF; --surface2:#F3F6F9; --line:#DFE5EB; --line2:#CDD5DE;
+  --ink:#0E1620; --muted:#5A6774; --faint:#8995A1;
+  --solar:#C47F00; --batt:#0B9B76; --grid:#2B6BDB; --load:#7447D6; --bad:#D63A2D; --warn:#B87500; --ok:#0B9B76;
+  --solar-t:rgba(214,145,10,.12); --batt-t:rgba(11,155,118,.11); --grid-t:rgba(43,107,219,.1); --load-t:rgba(116,71,214,.1); --bad-t:rgba(214,58,45,.1);
+  --on-accent:#FFFFFF; --paperph:#F1F4F7; color-scheme:light}
+
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font:15.5px/1.55 var(--f-b);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-d);margin:0;line-height:1.08;text-wrap:balance;letter-spacing:-.02em}
+h1{font-size:clamp(2rem,5vw,3.4rem);font-weight:760}
+h2{font-size:clamp(1.35rem,2.4vw,1.75rem);font-weight:720}
+h3{font-size:1.02rem;font-weight:700;letter-spacing:-.01em}
+.m{font-family:var(--f-m);font-variant-numeric:tabular-nums}
+.eyebrow{font:600 .74rem/1 var(--f-b);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.wrap{max-width:1200px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+button,input{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--solar);outline-offset:2px;border-radius:6px}
+.muted{color:var(--muted)}
+
+/* top */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:20;background:var(--bg)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:10;background:color-mix(in srgb,var(--bg) 82%,transparent);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:16px;padding-block:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-d);font-weight:760;font-size:1.08rem;letter-spacing:-.02em}
+.brand .logo{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--solar);color:var(--on-accent)}
+.brand .logo svg{width:17px;height:17px}
+.brand small{font:500 .82rem var(--f-b);color:var(--muted);letter-spacing:0}
+nav{margin-left:auto;display:flex;gap:2px;flex-wrap:wrap;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:3px}
+nav a{padding:6px 13px;border-radius:999px;text-decoration:none;font-weight:600;font-size:.86rem;color:var(--muted)}
+nav a[aria-current="page"]{background:var(--surface2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+nav a.soon{opacity:.45;cursor:default}
+.sample{font-size:.84rem;color:var(--muted);border-bottom:1px solid var(--line)}
+.sample .wrap{padding-block:8px;display:flex;gap:8px;align-items:center}
+.sample b{color:var(--solar);font-weight:600}
+
+main{padding-block:40px 80px}
+.view{display:grid;gap:40px}
+.view[hidden]{display:none}
+.view>*,.plan>*{min-width:0}
+.lead{color:var(--muted);font-size:1.08rem;max-width:58ch;margin:14px 0 0}
+
+/* planner */
+.hero{display:grid;gap:4px}
+.budget{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:26px}
+.field{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line2);border-radius:var(--r);padding:6px 8px 6px 16px}
+.field:focus-within{border-color:var(--solar);box-shadow:0 0 0 4px var(--solar-t)}
+.field label{font-size:.78rem;color:var(--muted);font-weight:600;margin-right:6px}
+.field span{font-family:var(--f-m);color:var(--muted);font-size:1.3rem}
+.field input{border:0;background:transparent;outline:none;font:500 1.45rem var(--f-m);width:9.5ch;padding:6px 4px}
+.presets{display:flex;gap:6px;flex-wrap:wrap}
+.preset{border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 13px;font-size:.86rem;font-weight:600;color:var(--muted)}
+.preset:hover{color:var(--ink);border-color:var(--line2)}
+.preset.on{color:var(--ink);background:var(--surface2);border-color:var(--line2)}
+
+.plan{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:28px;align-items:start}
+@media (max-width:980px){.plan{grid-template-columns:minmax(0,1fr)}}
+.grp{display:flex;align-items:baseline;justify-content:space-between;margin:26px 0 12px}
+.grp:first-child{margin-top:0}
+.grp span{font-size:.82rem;color:var(--faint)}
+.apps{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:10px}
+.app{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px;display:grid;gap:12px;transition:border-color .2s,background .2s,transform .2s}
+.app:hover{border-color:var(--line2)}
+.app.on{border-color:color-mix(in srgb,var(--solar) 60%,transparent);background:linear-gradient(180deg,var(--solar-t),transparent 70%),var(--surface)}
+.app .top-row{display:flex;gap:12px;align-items:center;cursor:pointer}
+.app input[type=checkbox]{position:absolute;opacity:0;pointer-events:none}
+.ico{width:40px;height:40px;border-radius:11px;display:grid;place-items:center;background:var(--surface2);color:var(--muted);flex:none;transition:.2s}
+.ico svg{width:21px;height:21px}
+.app.on .ico{background:var(--solar);color:var(--on-accent)}
+.app .nm{font-weight:650;line-height:1.25;font-size:.95rem}
+.app .w{font:400 .76rem var(--f-m);color:var(--muted)}
+.tick{margin-left:auto;width:20px;height:20px;border-radius:50%;border:1.5px solid var(--line2);display:grid;place-items:center;flex:none;transition:.2s}
+.app.on .tick{background:var(--solar);border-color:var(--solar);color:var(--on-accent)}
+.tick svg{width:12px;height:12px;opacity:0}
+.app.on .tick svg{opacity:1}
+.app input:focus-visible ~ .top-row .tick{outline:2px solid var(--solar);outline-offset:2px}
+.steps{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.step{display:grid;gap:4px}
+.step>span{font-size:.7rem;color:var(--muted);font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.stp{display:flex;align-items:center;justify-content:space-between;background:var(--bg2);border:1px solid var(--line);border-radius:var(--r-s);padding:2px}
+.stp button{width:28px;height:28px;border:0;border-radius:7px;background:transparent;color:var(--muted);font-size:1.05rem;line-height:1}
+.stp button:hover{background:var(--surface2);color:var(--ink)}
+.stp output{font:500 .9rem var(--f-m)}
+.app .need{font-size:.76rem;color:var(--bad);display:flex;gap:6px;align-items:center}
+.app .fix{font-size:.76rem;color:var(--muted)}
+
+.result{position:sticky;top:calc(env(safe-area-inset-top,0px) + 84px);background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+@media (max-width:980px){.result{position:static}}
+.r-sec{padding:20px;border-top:1px solid var(--line)}
+.r-sec:first-child{border-top:0}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);gap:4px}
+.kpi .v{font:500 1.35rem var(--f-m);letter-spacing:-.02em}
+.kpi .v small{font-size:.75rem;color:var(--muted);margin-left:2px}
+.kpi .k{font-size:.74rem;color:var(--muted)}
+.pick{display:flex;justify-content:space-between;align-items:flex-end;gap:10px;margin-top:10px}
+.pick .t{font:760 2rem/1 var(--f-d);letter-spacing:-.03em}
+.pick .c{font:500 1.05rem var(--f-m)}
+.pick-sub{font:400 .78rem var(--f-m);color:var(--muted);margin-top:6px}
+.bar{position:relative;height:12px;border-radius:99px;background:var(--bg2);border:1px solid var(--line);margin:20px 0 8px}
+.bar b{position:absolute;inset:0 auto 0 0;border-radius:99px;background:var(--batt);transition:width .5s cubic-bezier(.2,.8,.2,1)}
+.bar.over b{background:var(--bad)}
+.bar i{position:absolute;top:-6px;bottom:-6px;width:3px;border-radius:2px;background:var(--ink);transition:left .5s cubic-bezier(.2,.8,.2,1)}
+.bar-l{display:flex;justify-content:space-between;font:400 .74rem var(--f-m);color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:7px;padding:6px 12px;border-radius:999px;font-weight:650;font-size:.86rem;margin-top:16px}
+.pill::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.pill.ok{background:var(--batt-t);color:var(--ok)} .pill.bad{background:var(--bad-t);color:var(--bad)}
+.tips{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px}
+.tips li{font-size:.9rem;display:flex;gap:10px;color:var(--muted)}
+.tips li svg{width:16px;height:16px;flex:none;margin-top:3px;color:var(--solar)}
+.tips strong{color:var(--ink);font-weight:650}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:12px;border:0;background:var(--solar);color:var(--on-accent);text-decoration:none;font-weight:700;font-size:.92rem}
+.btn:hover{filter:brightness(1.06)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.btn[aria-disabled="true"]{opacity:.45;cursor:default;filter:none}
+.btn svg{width:16px;height:16px}
+
+.track{display:grid;grid-template-columns:repeat(6,minmax(170px,1fr));gap:10px;overflow-x:auto;padding-bottom:6px}
+.tier{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:8px;align-content:start;position:relative}
+.tier .lv{display:flex;gap:3px}
+.tier .lv i{width:14px;height:4px;border-radius:2px;background:var(--line2)}
+.tier .lv i.f{background:var(--solar)}
+.tier .tn{font:720 1.1rem var(--f-d);letter-spacing:-.02em}
+.tier .ts{font:400 .74rem/1.5 var(--f-m);color:var(--muted)}
+.tier .tg{font-size:.84rem;color:var(--muted)}
+.tier .tc{font:500 .95rem var(--f-m);margin-top:4px}
+.tier.need{border-color:var(--solar);box-shadow:0 0 0 4px var(--solar-t)}
+.badges{display:flex;gap:5px;flex-wrap:wrap;min-height:22px}
+.bdg{font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;padding:3px 8px;border-radius:999px;background:var(--surface2);color:var(--muted)}
+.bdg.need{background:var(--solar);color:var(--on-accent)} .bdg.fit{background:var(--batt-t);color:var(--ok)} .bdg.ph{background:transparent;box-shadow:inset 0 0 0 1px var(--line2)}
+
+/* kit */
+.kit-hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:24px;align-items:end}
+@media (max-width:820px){.kit-hero{grid-template-columns:minmax(0,1fr)}}
+.crumb{font-size:.86rem;color:var(--muted);margin-bottom:14px}
+.crumb a{color:var(--muted);text-decoration:none}
+.crumb a:hover{color:var(--ink)}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.spec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:120px}
+.spec .v{font:500 1.1rem var(--f-m)}
+.spec .k{font-size:.74rem;color:var(--muted)}
+.spec.price{background:var(--solar-t);border-color:color-mix(in srgb,var(--solar) 40%,transparent)}
+
+.flowbox{background:radial-gradient(1200px 500px at 50% -10%,color-mix(in srgb,var(--solar) 7%,transparent),transparent 60%),var(--surface);border:1px solid var(--line);border-radius:22px;overflow:hidden}
+.flowbar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;padding:14px 18px;border-bottom:1px solid var(--line)}
+.modes{display:flex;gap:4px;background:var(--bg2);border:1px solid var(--line);border-radius:12px;padding:3px}
+.modes button{display:flex;align-items:center;gap:7px;border:0;background:transparent;border-radius:9px;padding:7px 12px;font-weight:650;font-size:.85rem;color:var(--muted)}
+.modes button svg{width:15px;height:15px}
+.modes button[aria-pressed="true"]{background:var(--surface2);color:var(--ink);box-shadow:inset 0 0 0 1px var(--line2)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;margin-left:auto;font-size:.78rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:16px;height:3px;border-radius:2px}
+.flowgrid{display:grid;grid-template-columns:minmax(0,1fr) 320px}
+@media (max-width:1020px){.flowgrid{grid-template-columns:minmax(0,1fr)}}
+.canvas{overflow-x:auto;padding:10px}
+.canvas svg{display:block;width:100%;min-width:760px;height:auto}
+.caption{padding:0 18px 16px;font-size:.88rem;color:var(--muted);display:flex;gap:8px;align-items:center}
+.caption b{color:var(--ink);font-weight:650}
+
+/* svg diagram */
+.wire{fill:none;stroke:var(--line2);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.flow{fill:none;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:2 12;opacity:0;transition:opacity .4s}
+.flow.on{opacity:1;animation:run 1.1s linear infinite}
+.flow.rev{animation-direction:reverse}
+.flow.solar{stroke:var(--solar)} .flow.batt{stroke:var(--batt)} .flow.grid{stroke:var(--grid)} .flow.load{stroke:var(--load)}
+.glow{fill:none;stroke-width:9;stroke-linecap:round;stroke-linejoin:round;opacity:0;transition:opacity .4s}
+.glow.on{opacity:.16}
+.glow.solar{stroke:var(--solar)} .glow.batt{stroke:var(--batt)} .glow.grid{stroke:var(--grid)} .glow.load{stroke:var(--load)}
+@keyframes run{to{stroke-dashoffset:-28}}
+@media (prefers-reduced-motion:reduce){.flow.on{animation:none;stroke-dasharray:none}}
+.node{cursor:pointer}
+.node .card{fill:var(--surface2);stroke:var(--line2);stroke-width:1.2;transition:stroke .2s}
+.node .ph{fill:var(--bg2)}
+.node .ph.solar{fill:var(--solar-t)} .node .ph.batt{fill:var(--batt-t)} .node .ph.grid{fill:var(--grid-t)} .node .ph.load{fill:var(--load-t)} .node .ph.hub{fill:var(--bg2)}
+.ci.solar{color:var(--solar)} .ci.batt{color:var(--batt)} .ci.grid{color:var(--grid)} .ci.load{color:var(--load)} .ci.hub{color:var(--ink)} .ci.none{color:var(--muted)}
+.tint.solar{background:var(--solar-t);color:var(--solar)} .tint.batt{background:var(--batt-t);color:var(--batt)} .tint.grid{background:var(--grid-t);color:var(--grid)} .tint.load{background:var(--load-t);color:var(--load)} .tint.hub,.tint.none{background:var(--bg2);color:var(--ink)}
+.node:hover .card,.node:focus-visible .card{stroke:var(--faint)}
+.node.sel .card{stroke:var(--solar);stroke-width:2}
+.node:focus{outline:none}
+.node .ttl{font:650 15px var(--f-b);fill:var(--ink)}
+.node .sub{font:400 11.5px var(--f-m);fill:var(--muted)}
+.node .ic{color:var(--muted)}
+.node .dotc{fill:var(--bg2)}
+.tagtxt{font:600 10.5px var(--f-b);letter-spacing:.08em;text-transform:uppercase;fill:var(--faint)}
+.earthl{stroke:var(--faint);stroke-width:2.2;stroke-linecap:round}
+
+.detail{border-left:1px solid var(--line);padding:20px;display:grid;gap:14px;align-content:start}
+@media (max-width:1020px){.detail{border-left:0;border-top:1px solid var(--line)}}
+.d-photo{height:150px;border-radius:14px;display:grid;place-items:center;overflow:hidden}
+.d-photo svg{width:84px;height:84px}
+.d-kv{display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:.86rem;margin:0}
+.d-kv dt{color:var(--muted)} .d-kv dd{margin:0;font-family:var(--f-m);font-size:.82rem;text-align:right}
+.d-acts{display:flex;gap:8px;flex-wrap:wrap}
+.d-acts .btn{padding:9px 14px;font-size:.86rem}
+.note{font-size:.84rem;color:var(--muted)}
+.warnline{font-size:.82rem;color:var(--warn);display:flex;gap:6px}
+
+.two{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:28px;align-items:start}
+@media (max-width:980px){.two{grid-template-columns:minmax(0,1fr)}}
+.sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.parts{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
+.part{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:grid;grid-template-rows:auto 1fr;transition:border-color .2s,box-shadow .2s}
+.part.lit{border-color:var(--solar);box-shadow:0 0 0 4px var(--solar-t)}
+.part .pp{height:120px;display:grid;place-items:center;position:relative}
+.part .pp svg{width:62px;height:62px}
+.part .qty{position:absolute;top:10px;left:10px;font:500 .74rem var(--f-m);background:var(--surface);color:var(--ink);padding:3px 8px;border-radius:99px}
+.part .own{position:absolute;top:10px;right:10px;font-size:.68rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;background:var(--solar);color:var(--on-accent);padding:3px 8px;border-radius:99px}
+.part .pb{padding:14px;display:grid;gap:6px;align-content:start}
+.part .pn{font-weight:650;line-height:1.3}
+.part .ps{font:400 .76rem/1.5 var(--f-m);color:var(--muted)}
+.part .pr{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;padding-top:10px;border-top:1px solid var(--line)}
+.part .price{font:500 1rem var(--f-m)}
+.part .links{display:flex;gap:12px;align-items:center;font-size:.84rem;font-weight:600;flex-wrap:wrap}
+.part .links a{text-decoration:none;color:var(--solar)}
+.part .links a:hover{text-decoration:underline}
+.part .links .miss{color:var(--faint);font-weight:500}
+.part .aff{font-size:.66rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--faint)}
+.total{display:flex;justify-content:space-between;align-items:center;margin-top:12px;padding:16px 18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r)}
+.total .m{font-size:1.25rem}
+
+.checks{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);list-style:none;margin:0;padding:6px}
+.checks li{display:grid;grid-template-columns:28px 1fr;gap:2px 10px;padding:12px;border-radius:10px}
+.checks li+li{border-top:1px solid var(--line);border-radius:0}
+.st{width:24px;height:24px;border-radius:8px;display:grid;place-items:center;grid-row:span 3}
+.st svg{width:14px;height:14px}
+.st.ok{background:var(--batt-t);color:var(--ok)} .st.warn{background:var(--solar-t);color:var(--warn)}
+.checks .t{font-weight:650;font-size:.92rem}
+.checks .mm{font:400 .74rem/1.5 var(--f-m);color:var(--muted)}
+.checks .d{font-size:.84rem;color:var(--muted)}
+.score{display:flex;gap:8px;font-size:.84rem;color:var(--muted)}
+.score b{font-family:var(--f-m);color:var(--ink);font-weight:500}
+
+.grow{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+@media (max-width:820px){.grow{grid-template-columns:minmax(0,1fr)}}
+.g{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px;display:grid;gap:10px;align-content:start}
+.g .gi{width:36px;height:36px;border-radius:10px;display:grid;place-items:center}
+.g .gi svg{width:19px;height:19px}
+.g p{margin:0;font-size:.9rem;color:var(--muted)}
+.g .lbl{font-size:.7rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+details.behind{border:1px dashed var(--line2);border-radius:var(--r);padding:14px 18px}
+details.behind summary{cursor:pointer;font-weight:650;font-size:.92rem}
+details.behind pre{overflow-x:auto;background:var(--bg2);border:1px solid var(--line);padding:14px;border-radius:10px;font:12.5px/1.6 var(--f-m);margin:12px 0 0;color:var(--muted)}
+footer{border-top:1px solid var(--line);padding-block:24px;font-size:.84rem;color:var(--muted)}
+
+/* guide additions */
+.view>section{scroll-margin-top:84px}
+.r-foot{margin:0;padding:0 20px 18px;font-size:.78rem;color:var(--faint)}
+.pill.wait{background:var(--solar-t);color:var(--solar)}
+a.tier{text-decoration:none;color:inherit}
+a.tier:hover{border-color:var(--line2)}
+.tier.off{opacity:.72;border-style:dashed}
+.tier .tt{font-size:.78rem;font-weight:600;color:var(--solar)}
+.tier .go{font-size:.8rem;font-weight:650;color:var(--solar);margin-top:2px}
+.tier .badges{display:flex;gap:4px;flex-wrap:wrap;min-height:20px}
+.callout{display:flex;gap:10px;margin:0 0 16px;padding:12px 14px;border-radius:var(--r);background:var(--solar-t);font-size:.9rem;max-width:80ch}
+.callout svg{width:18px;height:18px;flex:none;margin-top:2px;color:var(--solar)}
+.callout b{font-weight:650}
+.pgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,330px),1fr));gap:12px}
+.pcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:16px;display:grid;gap:10px;align-content:start;min-width:0}
+.pcard h3{margin:0;font:720 1.05rem var(--f-d);letter-spacing:-.02em;display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.pcard h3 span{font:500 .95rem var(--f-m)}
+.pcard .ts{font:400 .74rem/1.5 var(--f-m);color:var(--muted)}
+.tscroll{overflow-x:auto}
+.ptable{width:100%;border-collapse:collapse;font-size:.84rem}
+.ptable th{text-align:left;font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 8px 6px 0}
+.ptable td{padding:7px 8px 7px 0;border-top:1px solid var(--line);vertical-align:top}
+.bar[hidden],.bar-l[hidden]{display:none}
+.field input{width:11ch}
+.ptable .n{padding-left:12px;text-align:right;font-family:var(--f-m);font-size:.8rem;white-space:nowrap;padding-right:0}
+.ptable tr.tot td{font-weight:700;border-top:1px solid var(--line2)}
+.ptable small{display:block;color:var(--muted);font-size:.76rem}
+.ptable a{color:var(--solar);font-weight:600;text-decoration:none}
+.ptable a:hover{text-decoration:underline}
+.psub{font:650 1rem var(--f-b);margin:26px 0 8px}
+#psrc{min-width:560px}
+.refcard{display:grid;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:20px;text-decoration:none;color:inherit;max-width:80ch}
+.refcard:hover{border-color:var(--line2)}
+.refcard .tn{font:720 1.2rem var(--f-d);letter-spacing:-.02em}
+.refcard .ts{font:400 .78rem var(--f-m);color:var(--muted)}
+.refcard p{margin:0;color:var(--muted);font-size:.92rem}
+.refcard .go{font-size:.86rem;font-weight:650;color:var(--solar)}
+.reading{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:10px}
+.reading a{display:grid;gap:4px;height:100%;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;text-decoration:none;color:inherit}
+.reading a:hover{border-color:var(--line2)}
+.reading b{font-weight:650;font-size:.95rem}
+.reading span{font-size:.84rem;color:var(--muted)}
+.fgrid{display:grid;gap:4px}
+.fgrid .m{color:var(--ink);font-family:var(--f-m);font-size:.8rem}
+footer a{color:inherit}
+@media (max-width:980px){.track{grid-template-columns:repeat(6,minmax(190px,1fr))}}
+</style>
+
+<header class="top"><div class="wrap">
+  <a class="brand" href="#planner"><span class="logo" data-i="sun"></span>openculture <small>Project Anor</small></a>
+  <nav aria-label="Main">
+    <a href="#planner">Planner</a>
+    <a href="#systems">Systems</a>
+    <a href="#prices">Prices</a>
+    <a href="#reference">Home build</a>
+    <a href="#reading">Read more</a>
+  </nav>
+</div></header>
+
+<main class="wrap">
+<div class="view">
+  <section id="planner" aria-labelledby="h1p">
+    <div class="hero">
+      <p class="eyebrow">Solar planner for Nigerian homes</p>
+      <h1 id="h1p">Pick what you want to power.<br>We’ll point you to the system.</h1>
+      <p class="lead">Four worked designs, from 24 V essentials to a whole house. Each has its own dashboard with the wiring, parts, settings and sizing checks. Tick your appliances and set a budget to see which one fits. The limits are deliberately conservative: a system that isn’t pushed lasts longer.</p>
+      <div class="budget">
+        <div class="field"><label for="budget">Budget</label><span>₦</span><input id="budget" inputmode="numeric" value="5,000,000"></div>
+        <div class="presets" id="presets">
+          <button class="preset" type="button" data-b="3000000">₦3M</button><button class="preset" type="button" data-b="5000000">₦5M</button><button class="preset" type="button" data-b="10000000">₦10M</button><button class="preset" type="button" data-b="20000000">₦20M</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="plan">
+    <div id="groups"></div>
+    <aside class="result" aria-live="polite">
+      <div class="r-sec">
+        <p class="eyebrow">Your load</p>
+        <div class="kpis" style="margin-top:12px">
+          <div class="kpi"><div class="v" id="k-peak">0<small>W</small></div><div class="k">Running at once</div></div>
+          <div class="kpi"><div class="v" id="k-surge">0<small>W</small></div><div class="k">Start-up surge</div></div>
+          <div class="kpi"><div class="v" id="k-kwh">0<small>kWh</small></div><div class="k">Per day</div></div>
+        </div>
+      </div>
+      <div class="r-sec">
+        <p class="eyebrow" id="r-eyebrow">Smallest system that covers it</p>
+        <div class="pick"><span class="t" id="r-tier"></span><span class="c" id="r-cost"></span></div>
+        <div class="pick-sub" id="r-sys"></div>
+        <div class="bar" id="r-bar"><b></b><i></i></div>
+        <div class="bar-l" id="r-barl"><span>Reference price</span><span id="r-bl">Your budget</span></div>
+        <div class="pill" id="r-pill"></div>
+        <ul class="tips" id="r-tips"></ul>
+      </div>
+      <div class="r-sec" style="display:flex;gap:8px;flex-wrap:wrap">
+        <a class="btn" id="r-go" href="#systems" target="_blank" rel="noopener"><span id="r-gol">Open the dashboard</span> <span data-i="arrow-right"></span></a>
+        <button class="btn ghost" id="r-copy" type="button">Copy plan</button>
+      </div>
+      <p class="r-foot">Prices are a reference only. They change often and don’t include the installer’s charge.</p>
+    </aside>
+  </div>
+
+  <section id="systems" aria-labelledby="sys-h">
+    <div class="sec-h"><h2 id="sys-h">The systems</h2><span class="muted" style="font-size:.9rem">Each one opens its own dashboard. No design here takes more than five air conditioners.</span></div>
+    <div class="track" id="track"></div>
+  </section>
+
+  <section id="prices" aria-labelledby="pr-h">
+    <div class="sec-h"><h2 id="pr-h">Reference prices</h2><span class="muted" style="font-size:.9rem">Checked __UPDATED__</span></div>
+    <p class="callout"><span data-i="alert"></span><span><b>A reference, not a quote.</b> These figures come from public price listings in Nigeria. Prices change often, sometimes weekly, and stock varies. They cover the equipment only: the installer’s charge is not included. Get current quotes before you budget.</span></p>
+    <div class="pgrid" id="pgrid"></div>
+    <h3 class="psub">Where each price comes from</h3>
+    <div class="tscroll"><table class="ptable" id="psrc"></table></div>
+  </section>
+
+  <section id="reference" aria-labelledby="ref-h">
+    <div class="sec-h"><h2 id="ref-h">The build behind it</h2></div>
+    <a class="refcard" id="refcard" target="_blank" rel="noopener"></a>
+  </section>
+
+  <section id="reading" aria-labelledby="rd-h">
+    <div class="sec-h"><h2 id="rd-h">Read more</h2><span class="muted" style="font-size:.9rem">From <a href="https://blog.openculture.org.ng" target="_blank" rel="noopener" style="color:inherit">blog.openculture.org.ng</a></span></div>
+    <ul class="reading" id="readlist"></ul>
+  </section>
+</div>
+</main>
+
+<footer><div class="wrap fgrid"><span class="m">Project Anor · __UPDATED__</span><span>By <a href="https://x.com/bigbrovar" target="_blank" rel="noopener">bigbrovar</a>. Design sketches to plan with, not installation guides. Have a qualified installer check any design before you buy.</span><span>Reference prices come from public listings, change often and exclude the installer’s charge. No store on this page pays to be listed.</span><span>I consult for Deriy on technical matters: after-sales repairs, documentation and product improvement. My role has nothing to do with sales or marketing.</span></div></footer>
+
+<script>
+const ICONS={"sun": "<circle cx=\"12\" cy=\"12\" r=\"4\" /> <path d=\"M12 2v2\" /> <path d=\"M12 20v2\" /> <path d=\"m4.93 4.93 1.41 1.41\" /> <path d=\"m17.66 17.66 1.41 1.41\" /> <path d=\"M2 12h2\" /> <path d=\"M20 12h2\" /> <path d=\"m6.34 17.66-1.41 1.41\" /> <path d=\"m19.07 4.93-1.41 1.41\" />", "lightbulb": "<path d=\"M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5\" /> <path d=\"M9 18h6\" /> <path d=\"M10 22h4\" />", "fan": "<path d=\"M10.827 16.379a6.082 6.082 0 0 1-8.618-7.002l5.412 1.45a6.082 6.082 0 0 1 7.002-8.618l-1.45 5.412a6.082 6.082 0 0 1 8.618 7.002l-5.412-1.45a6.082 6.082 0 0 1-7.002 8.618l1.45-5.412Z\" /> <path d=\"M12 12v.01\" />", "tv": "<rect width=\"20\" height=\"15\" x=\"2\" y=\"7\" rx=\"2\" ry=\"2\" /> <polyline points=\"17 2 12 7 7 2\" />", "router": "<rect width=\"20\" height=\"8\" x=\"2\" y=\"14\" rx=\"2\" /> <path d=\"M6.01 18H6\" /> <path d=\"M10.01 18H10\" /> <path d=\"M15 10v4\" /> <path d=\"M17.84 7.17a4 4 0 0 0-5.66 0\" /> <path d=\"M20.66 4.34a8 8 0 0 0-11.31 0\" />", "laptop": "<path d=\"M20 16V7a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v9m16 0H4m16 0 1.28 2.55a1 1 0 0 1-.9 1.45H3.62a1 1 0 0 1-.9-1.45L4 16\" />", "smartphone": "<rect width=\"14\" height=\"20\" x=\"5\" y=\"2\" rx=\"2\" ry=\"2\" /> <path d=\"M12 18h.01\" />", "refrigerator": "<path d=\"M5 6a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6Z\" /> <path d=\"M5 10h14\" /> <path d=\"M15 7v6\" />", "snowflake": "<line x1=\"2\" x2=\"22\" y1=\"12\" y2=\"12\" /> <line x1=\"12\" x2=\"12\" y1=\"2\" y2=\"22\" /> <path d=\"m20 16-4-4 4-4\" /> <path d=\"m4 8 4 4-4 4\" /> <path d=\"m16 4-4 4-4-4\" /> <path d=\"m8 20 4-4 4 4\" />", "microwave": "<rect width=\"20\" height=\"15\" x=\"2\" y=\"4\" rx=\"2\" /> <rect width=\"8\" height=\"7\" x=\"6\" y=\"8\" rx=\"1\" /> <path d=\"M18 8v7\" /> <path d=\"M6 19v2\" /> <path d=\"M18 19v2\" />", "blend": "<circle cx=\"9\" cy=\"9\" r=\"7\" /> <circle cx=\"15\" cy=\"15\" r=\"7\" />", "shirt": "<path d=\"M20.38 3.46 16 2a4 4 0 0 1-8 0L3.62 3.46a2 2 0 0 0-1.34 2.23l.58 3.47a1 1 0 0 0 .99.84H6v10c0 1.1.9 2 2 2h8a2 2 0 0 0 2-2V10h2.15a1 1 0 0 0 .99-.84l.58-3.47a2 2 0 0 0-1.34-2.23z\" />", "washing-machine": "<path d=\"M3 6h3\" /> <path d=\"M17 6h.01\" /> <rect width=\"18\" height=\"20\" x=\"3\" y=\"2\" rx=\"2\" /> <circle cx=\"12\" cy=\"13\" r=\"5\" /> <path d=\"M12 18a2.5 2.5 0 0 0 0-5 2.5 2.5 0 0 1 0-5\" />", "droplets": "<path d=\"M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05z\" /> <path d=\"M12.56 6.6A10.97 10.97 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97\" />", "air-vent": "<path d=\"M6 12H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2\" /> <path d=\"M6 8h12\" /> <path d=\"M18.3 17.7a2.5 2.5 0 0 1-3.16 3.83 2.53 2.53 0 0 1-1.14-2V12\" /> <path d=\"M6.6 15.6A2 2 0 1 0 10 17v-5\" />", "battery-charging": "<path d=\"M15 7h1a2 2 0 0 1 2 2v6a2 2 0 0 1-2 2h-2\" /> <path d=\"M6 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h1\" /> <path d=\"m11 7-3 5h4l-3 5\" /> <line x1=\"22\" x2=\"22\" y1=\"11\" y2=\"13\" />", "battery-medium": "<rect width=\"16\" height=\"10\" x=\"2\" y=\"7\" rx=\"2\" ry=\"2\" /> <line x1=\"22\" x2=\"22\" y1=\"11\" y2=\"13\" /> <line x1=\"6\" x2=\"6\" y1=\"11\" y2=\"13\" /> <line x1=\"10\" x2=\"10\" y1=\"11\" y2=\"13\" />", "zap": "<path d=\"M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z\" />", "shield-check": "<path d=\"M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\" /> <path d=\"m9 12 2 2 4-4\" />", "cpu": "<rect width=\"16\" height=\"16\" x=\"4\" y=\"4\" rx=\"2\" /> <rect width=\"6\" height=\"6\" x=\"9\" y=\"9\" rx=\"1\" /> <path d=\"M15 2v2\" /> <path d=\"M15 20v2\" /> <path d=\"M2 15h2\" /> <path d=\"M2 9h2\" /> <path d=\"M20 15h2\" /> <path d=\"M20 9h2\" /> <path d=\"M9 2v2\" /> <path d=\"M9 20v2\" />", "utility-pole": "<path d=\"M12 2v20\" /> <path d=\"M2 5h20\" /> <path d=\"M3 3v2\" /> <path d=\"M7 3v2\" /> <path d=\"M17 3v2\" /> <path d=\"M21 3v2\" /> <path d=\"m19 5-7 7-7-7\" />", "fuel": "<line x1=\"3\" x2=\"15\" y1=\"22\" y2=\"22\" /> <line x1=\"4\" x2=\"14\" y1=\"9\" y2=\"9\" /> <path d=\"M14 22V4a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v18\" /> <path d=\"M14 13h2a2 2 0 0 1 2 2v2a2 2 0 0 0 2 2a2 2 0 0 0 2-2V9.83a2 2 0 0 0-.59-1.42L18 5\" />", "toggle-right": "<rect width=\"20\" height=\"12\" x=\"2\" y=\"6\" rx=\"6\" ry=\"6\" /> <circle cx=\"16\" cy=\"12\" r=\"2\" />", "layout-grid": "<rect width=\"7\" height=\"7\" x=\"3\" y=\"3\" rx=\"1\" /> <rect width=\"7\" height=\"7\" x=\"14\" y=\"3\" rx=\"1\" /> <rect width=\"7\" height=\"7\" x=\"14\" y=\"14\" rx=\"1\" /> <rect width=\"7\" height=\"7\" x=\"3\" y=\"14\" rx=\"1\" />", "house": "<path d=\"M15 21v-8a1 1 0 0 0-1-1h-4a1 1 0 0 0-1 1v8\" /> <path d=\"M3 10a2 2 0 0 1 .709-1.528l7-5.999a2 2 0 0 1 2.582 0l7 5.999A2 2 0 0 1 21 10v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z\" />", "cable": "<path d=\"M17 21v-2a1 1 0 0 1-1-1v-1a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v1a1 1 0 0 1-1 1\" /> <path d=\"M19 15V6.5a1 1 0 0 0-7 0v11a1 1 0 0 1-7 0V9\" /> <path d=\"M21 21v-2h-4\" /> <path d=\"M3 5h4V3\" /> <path d=\"M7 5a1 1 0 0 1 1 1v1a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6a1 1 0 0 1 1-1V3\" />", "moon": "<path d=\"M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z\" />", "plug-zap": "<path d=\"M6.3 20.3a2.4 2.4 0 0 0 3.4 0L12 18l-6-6-2.3 2.3a2.4 2.4 0 0 0 0 3.4Z\" /> <path d=\"m2 22 3-3\" /> <path d=\"M7.5 13.5 10 11\" /> <path d=\"M10.5 16.5 13 14\" /> <path d=\"m18 3-4 4h6l-4 4\" />", "power": "<path d=\"M12 2v10\" /> <path d=\"M18.4 6.6a9 9 0 1 1-12.77.04\" />", "cloud-sun": "<path d=\"M12 2v2\" /> <path d=\"m4.93 4.93 1.41 1.41\" /> <path d=\"M20 12h2\" /> <path d=\"m19.07 4.93-1.41 1.41\" /> <path d=\"M15.947 12.65a4 4 0 0 0-5.925-4.128\" /> <path d=\"M13 22H7a5 5 0 1 1 4.9-6H13a3 3 0 0 1 0 6Z\" />", "gauge": "<path d=\"m12 14 4-4\" /> <path d=\"M3.34 19a10 10 0 1 1 17.32 0\" />"};
+ICONS["arrow-right"]='<path d="M5 12h14"/><path d="m12 5 7 7-7 7"/>';
+ICONS["check"]='<path d="M20 6 9 17l-5-5"/>';
+ICONS["alert"]='<path d="M12 9v4"/><path d="M12 17h.01"/><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"/>';
+ICONS["external"]='<path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>';
+const ico=(n,sw=1.8)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${sw}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICONS[n]||""}</svg>`;
+document.querySelectorAll("[data-i]").forEach(e=>e.insertAdjacentHTML("beforeend",ico(e.dataset.i)));
+/*__DATA__*/
+const $=s=>document.querySelector(s);
+const naira=n=>"₦"+Math.round(n).toLocaleString("en-NG");
+const short=n=>n>=1e6?"₦"+(+(n/1e6).toFixed(1))+"M":"₦"+Math.round(n/1000)+"k";
+const fmt=n=>Math.round(n).toLocaleString("en-NG");
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const SYS=G.systems,APPS=G.apps,P=G.prices;
+SYS.forEach(s=>{s.partsCost=s.parts.reduce((a,p)=>a+P[p.p].p*p.q,0);s.bos=Math.round(s.partsCost*G.bos/100);s.cost=s.state==="live"?Math.round((s.partsCost+s.bos)/10000)*10000:null;});
+const LIVE=SYS.map((s,i)=>i).filter(i=>SYS[i].state==="live"),FIRST=LIVE[0],LAST=LIVE[LIVE.length-1];
+
+/* ---------- planner ---------- */
+const S={budget:5000000,sel:{}};
+APPS.forEach(a=>S.sel[a.id]={on:a.on,q:a.q,h:a.h});
+function tile(a){const s=S.sel[a.id];
+  return `<div class="app ${s.on?"on":""}" data-id="${a.id}">
+   <input type="checkbox" id="c-${a.id}" ${s.on?"checked":""} aria-label="${esc(a.n)}">
+   <label class="top-row" for="c-${a.id}"><span class="ico">${ico(a.i)}</span><span><span class="nm">${esc(a.n)}</span><br><span class="w">${fmt(a.w)} W${a.s?" · surge "+fmt(a.s)+" W":""}</span></span><span class="tick">${ico("check",3)}</span></label>
+   ${s.on?`<div class="steps"><div class="step"><span>Qty</span><div class="stp"><button type="button" data-k="q" data-d="-1" aria-label="Fewer">−</button><output>${s.q}</output><button type="button" data-k="q" data-d="1" aria-label="More">+</button></div></div>
+     ${a.kd?`<div class="step"><span>Per day</span><div class="fix" style="padding-top:7px">about ${a.kd} kWh</div></div>`:`<div class="step"><span>Hrs / day</span><div class="stp"><button type="button" data-k="h" data-d="-1" aria-label="Fewer hours">−</button><output>${s.h}</output><button type="button" data-k="h" data-d="1" aria-label="More hours">+</button></div></div>`}</div>
+     ${a.min>FIRST?`<div class="need">${ico("alert",2).replace("<svg","<svg width='13' height='13'")}Needs ${esc(SYS[a.min].n)} or bigger</div>`:""}`:""}
+  </div>`;}
+function renderApps(){const gs=[...new Set(APPS.map(a=>a.g))];
+  $("#groups").innerHTML=gs.map(g=>`<div class="grp"><h3>${esc(g)}</h3><span>${APPS.filter(a=>a.g===g&&S.sel[a.id].on).length} selected</span></div><div class="apps">${APPS.filter(a=>a.g===g).map(tile).join("")}</div>`).join("");}
+function calc(){let base=0,ext=0,kwh=0,minT=0,big=0;const on=[],acw=[];
+  APPS.forEach(a=>{const s=S.sel[a.id];if(!s.on)return;on.push(a);if(a.s)ext=Math.max(ext,a.s-a.w);
+    if(a.ac){for(let i=0;i<s.q;i++)acw.push(a.w);if(a.big)big+=s.q;}else base+=a.w*s.q;
+    kwh+=a.kd?a.kd*s.q:a.w*s.q*s.h/1000;if(a.min)minT=Math.max(minT,a.min);});
+  acw.sort((x,y)=>y-x);const all=base+acw.reduce((x,y)=>x+y,0);
+  /* peakFor: a system may fit more air conditioners than it runs at once, so count its biggest few */
+  return{peak:all,surge:all+ext,kwh,minT,acs:acw.length,big,ext,on,peakFor:t=>base+acw.slice(0,t.acAt).reduce((x,y)=>x+y,0)};}
+/* the smallest system that carries the load; -1 when nothing in this guide does */
+function tierFor(r){for(let i=r.minT;i<SYS.length;i++){const t=SYS[i];if(t.state==="scope")break;
+  const pk=r.peakFor(t);if(pk<=t.cont&&pk+r.ext<=t.surge&&r.kwh<=t.kwh&&r.acs<=t.ac&&r.big<=t.ac2)return i;}return -1;}
+function whyUp(r,ti){ /* one line on what pushed the pick up a size */
+  if(ti<=FIRST)return "";const p=SYS[ti-1];
+  const drv=r.on.find(a=>a.min===ti);if(drv&&drv.why)return drv.why;
+  if(r.acs>p.ac)return `${r.acs} air conditioner${r.acs>1?"s":""} is more than ${esc(p.n)} is designed for (${p.ac||"none"}).`;
+  if(r.big>p.ac2)return `${esc(p.n)} isn’t designed for a 2 HP air conditioner.`;
+  if(r.peakFor(p)>p.cont)return `${fmt(r.peakFor(p))} W running at once is more than ${esc(p.n)}’s ${fmt(p.cont)} W.`;
+  if(r.kwh>p.kwh)return `${r.kwh.toFixed(1)} kWh a day is more than ${esc(p.n)}’s panels make on a typical day (about ${p.kwh} kWh).`;
+  if(r.surge>p.surge)return `The start-up surge is more than ${esc(p.n)} can take.`;return "";}
+function update(){
+  const r=calc(),b=S.budget,tips=[];let ti=tierFor(r);
+  const pk=ti<0?r.peak:r.peakFor(SYS[ti]);
+  $("#k-peak").innerHTML=fmt(pk)+"<small>W</small>";$("#k-surge").innerHTML=fmt(pk+r.ext)+"<small>W</small>";$("#k-kwh").innerHTML=r.kwh.toFixed(1)+"<small>kWh</small>";
+  const pill=$("#r-pill"),bar=$("#r-bar"),go=$("#r-go"),gol=$("#r-gol");
+  const scope=ti<0,pending=!scope&&SYS[ti].state==="pending";
+  const show=scope?LAST:pending?FIRST:ti,t=SYS[show];   /* the dashboard the button opens */
+  $("#r-eyebrow").textContent=scope?"Bigger than this guide covers":pending?"A small 12 V system would do":"Smallest system that covers it";
+  if(scope){$("#r-tier").textContent="Out of scope";$("#r-cost").textContent="";$("#r-sys").textContent="More than the largest design here carries.";
+    bar.hidden=true;$("#r-barl").hidden=true;pill.className="pill bad";pill.textContent="Larger systems are outside this guide";
+    tips.push(`The largest design is <strong>${esc(t.n)}</strong> (${esc(t.sys)}), about ${naira(t.cost)}. It carries ${fmt(t.cont)} W at once and about ${t.kwh} kWh a day, with at most ${t.ac} air conditioners, ${t.acAt} running at once and no more than ${t.ac2} of them 2 HP.`);
+    tips.push("Above that, or for three-phase, ask an installer for a custom design.");
+    let best=null;r.on.forEach(a=>{S.sel[a.id].on=false;const t2=tierFor(calc());S.sel[a.id].on=true;if(t2>=0&&!best)best={a,t:t2};});
+    if(best)tips.push(`Drop the <strong>${esc(best.a.n)}</strong> and <strong>${esc(SYS[best.t].n)}</strong> covers the rest.`);
+    gol.textContent="See the "+t.n+" design";}
+  else{bar.hidden=false;$("#r-barl").hidden=false;
+    $("#r-tier").textContent=pending?SYS[ti].n+" · 12 V":t.n;$("#r-cost").textContent=pending?"":"about "+naira(t.cost);$("#r-sys").textContent=pending?"Dashboard pending":t.sys;
+    if(pending){tips.push(`The small 12 V dashboard isn’t published yet. The nearest one that is live is <strong>${esc(t.n)}</strong> (${esc(t.sys)}), about ${naira(t.cost)}.`);}
+    else{const w=whyUp(r,ti);if(w)tips.push(w);
+      if(r.acs>t.acAt)tips.push(`Run no more than <strong>${t.acAt} air conditioners at once</strong> on ${esc(t.n)}.`);}
+    const max=Math.max(t.cost,b)*1.1;bar.classList.toggle("over",t.cost>b);
+    bar.querySelector("b").style.width=(t.cost/max*100)+"%";bar.querySelector("i").style.left=`calc(${b/max*100}% - 1.5px)`;
+    $("#r-bl").textContent="Budget "+short(b);
+    if(t.cost<=b){pill.className=pending?"pill wait":"pill ok";pill.textContent=(pending?t.n+" fits your budget · ":"Within budget · ")+short(b-t.cost)+" to spare";}
+    else{pill.className="pill bad";pill.textContent="Over budget by "+naira(t.cost-b);
+      let best=null;r.on.forEach(a=>{S.sel[a.id].on=false;const t2=tierFor(calc());S.sel[a.id].on=true;if(t2>=FIRST&&t2<show&&(!best||t2<best.t))best={a,t:t2};});
+      if(best){const t2=SYS[best.t];tips.push(`Drop the <strong>${esc(best.a.n)}</strong> and <strong>${esc(t2.n)}</strong> covers the rest for about ${naira(t2.cost)}${t2.cost<=b?", inside your budget.":"."}`);}
+      let af=-1;LIVE.forEach(i=>{if(SYS[i].cost<=b)af=i;});
+      tips.push(af<0?`The smallest live design starts at about <strong>${naira(SYS[FIRST].cost)}</strong>.`:`Your budget reaches <strong>${esc(SYS[af].n)}</strong> (about ${naira(SYS[af].cost)}).`);}
+    gol.textContent=pending?"See "+t.n+" instead":"Open the "+t.n+" dashboard";}
+  go.href=t.url;
+  $("#r-tips").innerHTML=tips.map(x=>`<li>${ico("arrow-right",2.2)}<span>${x}</span></li>`).join("");
+  document.querySelectorAll(".preset").forEach(p=>p.classList.toggle("on",+p.dataset.b===b));
+  const mark=scope?SYS.findIndex(s=>s.state==="scope"):ti;
+  $("#track").innerHTML=SYS.map((s,i)=>{const live=s.state==="live";
+    const inner=`<div class="badges">${i===mark?'<span class="bdg need">You need</span>':""}${live&&s.cost<=b?'<span class="bdg fit">In budget</span>':""}${s.state==="pending"?'<span class="bdg ph">Pending</span>':""}${s.state==="scope"?'<span class="bdg ph">Out of scope</span>':""}</div>
+    <div class="lv">${SYS.map((_,j)=>`<i class="${j<=i?"f":""}"></i>`).join("")}</div><div class="tn">${esc(s.n)}</div><div class="tt">${esc(s.tag)}</div><div class="ts">${esc(s.sys)}</div><div class="tg">${esc(s.good)}</div>
+    <div class="tc">${live?"about "+short(s.cost):s.state==="pending"?"Dashboard pending":"Outside this guide"}</div>${live?'<div class="go">Open dashboard ↗</div>':""}`;
+    return live?`<a class="tier ${i===mark?"need":""}" href="${s.url}" target="_blank" rel="noopener">${inner}</a>`:`<div class="tier off ${i===mark?"need":""}">${inner}</div>`;}).join("");
+}
+document.addEventListener("change",e=>{const el=e.target.closest(".app");if(!el||e.target.type!=="checkbox")return;
+  S.sel[el.dataset.id].on=e.target.checked;renderApps();update();document.getElementById("c-"+el.dataset.id).focus({preventScroll:true});});
+document.addEventListener("click",e=>{const b=e.target.closest(".stp button");if(!b)return;const id=b.closest(".app").dataset.id,s=S.sel[id],k=b.dataset.k,d=+b.dataset.d;
+  if(k==="q")s.q=Math.min(30,Math.max(1,s.q+d));else s.h=Math.min(24,Math.max(0.5,s.h+(s.h<1||(s.h===1&&d<0)?d*.5:d)));
+  b.parentElement.querySelector("output").textContent=s[k];update();});
+$("#budget").addEventListener("input",e=>{S.budget=+e.target.value.replace(/\D/g,"")||0;update();});
+$("#budget").addEventListener("blur",e=>e.target.value=fmt(S.budget));
+document.querySelectorAll(".preset").forEach(p=>p.onclick=()=>{S.budget=+p.dataset.b;$("#budget").value=fmt(S.budget);update();});
+$("#r-copy").onclick=async e=>{const t=e.currentTarget,r=calc(),ti=tierFor(r);
+  const txt=`${ti<0?"Out of scope":SYS[ti].n} · budget ${short(S.budget)} · `+APPS.filter(a=>S.sel[a.id].on).map(a=>`${a.n} ×${S.sel[a.id].q}`).join(", ");
+  try{await navigator.clipboard.writeText(txt);t.textContent="Copied";}catch(_){t.textContent="Couldn’t copy";}
+  setTimeout(()=>t.textContent="Copy plan",1600);};
+/* in-page links scroll without changing the address, so they also work in sandboxed previews */
+document.addEventListener("click",e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const el=document.getElementById(a.getAttribute("href").slice(1));
+  if(el){e.preventDefault();el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});}});
+
+/* ---------- prices and reference ---------- */
+$("#pgrid").innerHTML=SYS.filter(s=>s.state==="live").map(s=>`<div class="pcard"><h3>${esc(s.n)} <span>about ${naira(s.cost)}</span></h3><div class="ts">${esc(s.sys)}</div>
+  <table class="ptable"><thead><tr><th>Part</th><th class="n">Qty</th><th class="n">Each</th><th class="n">Total</th></tr></thead><tbody>
+  ${s.parts.map(p=>`<tr><td>${esc(P[p.p].n)}</td><td class="n">${p.q}</td><td class="n">${naira(P[p.p].p)}</td><td class="n">${naira(P[p.p].p*p.q)}</td></tr>`).join("")}
+  <tr><td colspan="3">Allowance for the rest, ${G.bos}%<small>${esc(G.bosText)}</small></td><td class="n">${naira(s.bos)}</td></tr>
+  <tr class="tot"><td colspan="3">Reference total, before installation</td><td class="n">${naira(s.partsCost+s.bos)}</td></tr></tbody></table></div>`).join("");
+$("#psrc").innerHTML=`<thead><tr><th>Item</th><th class="n">Price used</th><th>Listed at</th><th>Source</th></tr></thead><tbody>${Object.values(P).map(p=>`<tr><td>${esc(p.n)}${p.note?`<small>${esc(p.note)}</small>`:""}</td><td class="n">${naira(p.p)}</td><td>${esc(p.range||naira(p.p))}</td><td>${p.src.map(x=>`<a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)} ↗</a>`).join(" · ")}</td></tr>`).join("")}</tbody>`;
+{const R=G.ref,c=$("#refcard");c.href=R.url;c.innerHTML=`<span class="tn">${esc(R.name)}</span><span class="ts">${esc(R.sys)}</span><p>${esc(R.text)}</p><span class="go">Open the home dashboard ↗</span>`;}
+$("#readlist").innerHTML=G.reading.map(r=>`<li><a href="${r.url}" target="_blank" rel="noopener"><b>${esc(r.title)} ↗</b><span>${esc(r.text)}</span></a></li>`).join("");
+if(!G.reading.length)$("#reading").hidden=true;
+renderApps();update();
+</script>

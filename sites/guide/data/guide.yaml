@@ -1,0 +1,180 @@
+# The Project Anor guide (project.anor.openculture.org.ng): the planner that
+# points visitors to the dashboard that fits their loads and budget.
+#
+#   prices      reference prices, each with the sources it came from
+#   systems     the designs, smallest first. state is live, pending (dashboard
+#               not published yet) or scope (too big for this guide)
+#   appliances  the planner tiles
+#
+# The limits are deliberately conservative. max_ac is the most air conditioners
+# a system should have fitted, ac_at_once how many of them may run together
+# (default: all of them) and max_ac_2hp how many may be as big as 2 HP
+# (default: none). No system here takes more than five.
+
+updated: 2026-11-10   # shown in the footer; also the date the prices were checked
+
+# Reference prices in naira, from public listings. `price` is the figure the
+# totals use; `range` is shown beside it when the sources differ.
+prices:
+  jinko-650:
+    name: Jinko Tiger Neo 650 W panel
+    price: 165000
+    range: "₦156,500 to ₦175,000"
+    sources:
+      - {name: Thrillhouse, url: "https://www.thrillhouse.com.ng/shop/alternative-energy/solar-panels/650w-jinko-solar-panel/"}
+      - {name: Leaf Solar, url: "https://leafsolar.ng/solar-prices-nigeria"}
+  srne-3k3:
+    name: SRNE HF2430S80-H inverter, 3.3 kW
+    price: 425000
+    note: One listing, from May 2026, and out of stock there.
+    sources:
+      - {name: Thrillhouse, url: "https://www.thrillhouse.com.ng/shop/alternative-energy/inverters/hybrid-inverters/srne-3-3kw-24vdc-inverter/"}
+  growatt-6k:
+    name: Growatt SPF 6000 ES Plus inverter, 6 kW
+    price: 555000
+    range: "₦545,000 to ₦568,750"
+    sources:
+      - {name: Thrillhouse, url: "https://www.thrillhouse.com.ng/shop/alternative-energy/inverters/hybrid-inverters/growatt-6kw-48vdc-spf-6000-es-8000w/"}
+      - {name: Leaf Solar, url: "https://leafsolar.ng/solar-prices-nigeria"}
+  deye-8k:
+    name: Deye SUN-8K-SG06LP1-EU-CM3 inverter, 8 kW
+    price: 1575000
+    sources:
+      - {name: Leaf Solar, url: "https://leafsolar.ng/solar-prices-nigeria"}
+  firman-5k:
+    name: FIRMAN 5 kWh battery, 25.6 V
+    price: 1250000
+    note: "Sale price; the list price is ₦1,600,000."
+    sources:
+      - {name: Sumec Firman, url: "https://sumecfirmanstore.com/product/firman-5kwh-lithium-battery-b2520002-200a-25-6v/"}
+  deriy-14:
+    name: "Deriy LiFePO4 battery, 51.2 V 280 Ah"
+    price: 2450000
+    range: "₦2,450,000 to ₦3,150,000"
+    note: Listed as 14.3 kWh by the reseller.
+    sources:
+      - {name: Lithium Battery Depot, url: "https://lithiumbatteries.com.ng/brand/deriy/"}
+
+# What the allowance covers, added to each total as a percentage of the parts above.
+allowance_pct: 15
+allowance_text: Breakers, the PV box, surge protectors, busbar, distribution boards, cable and panel mounting. An estimate, not a quoted price.
+
+systems:
+  - id: small
+    name: Small
+    tag: 12 V starter
+    state: pending
+    sys: "12 V · about 1.5 kW"
+    good: "Lights, fans, TV, laptops"
+    cont_w: 1000
+    surge_w: 3000
+    kwh_day: 4
+    max_ac: 0
+  - id: msmall
+    name: Medium small
+    tag: 24 V essentials
+    state: live
+    url: https://msmall.anor.openculture.org.ng
+    sys: "24 V · 3.3 kW · 5.1 kWh · 3.25 kWp"
+    good: "Essentials and a small fridge. Nothing major."
+    cont_w: 2500
+    surge_w: 6000
+    kwh_day: 9
+    max_ac: 0
+    parts:
+      - {price: srne-3k3, qty: 1}
+      - {price: jinko-650, qty: 5}
+      - {price: firman-5k, qty: 1}
+  - id: medium
+    name: Medium
+    tag: One Growatt
+    state: live
+    url: https://medium.anor.openculture.org.ng
+    sys: "48 V · 6 kW · 14.7 kWh · 5.2 kWp"
+    good: "One air conditioner, the pump and a cooker."
+    cont_w: 5000
+    surge_w: 12000
+    kwh_day: 14.5
+    max_ac: 1
+    parts:
+      - {price: growatt-6k, qty: 1}
+      - {price: jinko-650, qty: 8}
+      - {price: deriy-14, qty: 1}
+  - id: biglittle
+    name: Big little
+    tag: One Deye
+    state: live
+    url: https://biglittle.anor.openculture.org.ng
+    sys: "48 V · 8 kW · 29.4 kWh · 10.4 kWp"
+    good: "Two air conditioners, the pump and a cooker."
+    cont_w: 6500
+    surge_w: 16000
+    kwh_day: 29
+    max_ac: 2
+    parts:
+      - {price: deye-8k, qty: 1}
+      - {price: jinko-650, qty: 16}
+      - {price: deriy-14, qty: 2}
+  - id: large
+    name: Large
+    tag: Two Deyes
+    state: live
+    url: https://large.anor.openculture.org.ng
+    sys: "48 V · 16 kW · 58.8 kWh · 20.8 kWp"
+    good: "Most of a house: up to five air conditioners, four running at once, plus oven and water heater."
+    cont_w: 14500
+    surge_w: 32000
+    kwh_day: 58
+    max_ac: 5
+    ac_at_once: 4
+    max_ac_2hp: 2
+    parts:
+      - {price: deye-8k, qty: 2}
+      - {price: jinko-650, qty: 32}
+      - {price: deriy-14, qty: 4}
+  - id: xl
+    name: Larger
+    tag: Above 16 kW
+    state: scope
+    sys: "Above 16 kW, or three-phase"
+    good: "Big homes, estates and businesses."
+
+# The author's own install: documented as built, not one of the recommendations.
+reference:
+  name: The home build
+  url: https://home.anor.openculture.org.ng
+  sys: "48 V · Victron · 16 kVA · 58.8 kWh · 18.3 kWp"
+  text: "My own system, documented as it was built: every part, cable and setting, with live sizing checks. It grew one piece at a time, so it’s a reference for how things connect, not a shopping list. The Large design is what I’d build in its place today."
+
+# Posts on blog.openculture.org.ng for readers who want more on a topic.
+reading:
+  - {title: "A budget solar inverter system: energy audit", url: "https://blog.openculture.org.ng/of-a-budget-solar-inverter-system-energy-audit/", text: How to add up what your home really uses before you size anything.}
+  - {title: "Building an off-grid solar system: my approach", url: "https://blog.openculture.org.ng/solar-plan/", text: The thinking behind the home build.}
+  - {title: "A budget solar inverter system: solar panels", url: "https://blog.openculture.org.ng/of-a-budget-off-grid-solar/", text: Choosing and sizing panels.}
+  - {title: "How I built a lithium battery bank", url: "https://blog.openculture.org.ng/how-to-build-a-lithium-battery-bank-diy-from-nigeria/", text: "Cells, BMS and assembly, from Nigeria."}
+  - {title: "Optimal charge settings for LiFePO4", url: "https://blog.openculture.org.ng/optimal-charge-settings-for-lithium-iron-phosphates-lifepo4/", text: The charge and float voltages the dashboards use.}
+
+# Planner tiles. watts is the running draw; surge_w the start-up draw of motors
+# and compressors; hours and qty are the starting values. kwh_day replaces
+# hours for things that cycle on and off. selected ticks it to start with. needs is the smallest system (by id)
+# that should run it, with `why` shown when it pushes the pick up.
+appliances:
+  - {group: Everyday, id: bulb, icon: lightbulb, name: LED bulbs, watts: 10, hours: 6, qty: 8, selected: true}
+  - {group: Everyday, id: fan, icon: fan, name: Ceiling fan, watts: 75, hours: 10, qty: 3, selected: true}
+  - {group: Everyday, id: tv, icon: tv, name: "TV, 43 inch", watts: 80, hours: 6, qty: 1, selected: true}
+  - {group: Everyday, id: dec, icon: router, name: Decoder and router, watts: 30, hours: 12, qty: 1, selected: true}
+  - {group: Everyday, id: lap, icon: laptop, name: Laptop, watts: 65, hours: 8, qty: 1, selected: true}
+  - {group: Everyday, id: phone, icon: smartphone, name: Phone charging, watts: 10, hours: 3, qty: 3, selected: true}
+  - {group: Kitchen, id: fridge, icon: refrigerator, name: Fridge, watts: 150, surge_w: 600, kwh_day: 1.2, qty: 1, selected: true}
+  - {group: Kitchen, id: freezer, icon: snowflake, name: Chest freezer, watts: 120, surge_w: 500, kwh_day: 1.0, qty: 1}
+  - {group: Kitchen, id: micro, icon: microwave, name: Microwave, watts: 1200, hours: 0.5, qty: 1, needs: msmall, why: A microwave draws more than a 12 V starter should carry.}
+  - {group: Kitchen, id: blend, icon: blend, name: Blender, watts: 400, surge_w: 800, hours: 0.5, qty: 1}
+  - {group: Kitchen, id: cooker, icon: zap, name: Induction cooker, watts: 2000, hours: 1, qty: 1, needs: medium, why: Cooking needs a 48 V system. On 24 V it would drain the battery and strain the inverter.}
+  - {group: Kitchen, id: oven, icon: microwave, name: Electric oven, watts: 2500, hours: 0.5, qty: 1, needs: large, why: An oven only fits on backup with the two-Deye design. On the smaller ones it stays on the grid.}
+  - {group: Heavy loads, id: iron, icon: shirt, name: Pressing iron, watts: 1000, hours: 0.5, qty: 1, needs: medium, why: Heating elements stay on the grid on the 24 V system.}
+  - {group: Heavy loads, id: wash, icon: washing-machine, name: Washing machine, watts: 500, surge_w: 1200, hours: 1, qty: 1, needs: msmall, why: A washing machine’s motor is too much for a 12 V starter.}
+  - {group: Heavy loads, id: pump, icon: droplets, name: "Pumping machine, 1 HP", watts: 750, surge_w: 2250, hours: 1, qty: 1, needs: medium, why: A 1 HP pump’s start-up surge needs a 48 V system.}
+  - {group: Heavy loads, id: ac1, icon: air-vent, name: "AC, 1 HP inverter", watts: 900, surge_w: 2700, hours: 6, qty: 1, ac: true, needs: medium, why: Air conditioners need a 48 V system. Hours of running would empty a 12 V or 24 V battery long before morning.}
+  - {group: Heavy loads, id: ac15, icon: air-vent, name: "AC, 1.5 HP inverter", watts: 1100, surge_w: 3300, hours: 6, qty: 1, ac: true, needs: medium, why: Air conditioners need a 48 V system. Hours of running would empty a 12 V or 24 V battery long before morning.}
+  - {group: Heavy loads, id: ac2, icon: air-vent, name: "AC, 2 HP inverter", watts: 1500, surge_w: 4500, hours: 6, qty: 1, ac: true, ac_2hp: true, needs: large, why: A 2 HP air conditioner only fits the two-Deye design, and no more than two of them.}
+  - {group: Heavy loads, id: heater, icon: droplets, name: Water heater, watts: 2000, hours: 1.5, qty: 1, needs: large, why: A water heater only fits on backup with the two-Deye design. On the smaller ones it stays on the grid.}
