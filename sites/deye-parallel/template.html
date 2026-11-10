@@ -376,6 +376,21 @@ details.whyd li{display:list-item}
 .cv svg .pos{fill:none;stroke:var(--solar);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .cv svg .neg{fill:none;stroke:var(--muted);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
 .cv svg .pe{fill:none;stroke:var(--faint);stroke-width:2;stroke-dasharray:5 4;stroke-linecap:round;stroke-linejoin:round}
+.cv svg .pvm{fill:var(--solar-t);stroke:var(--solar);stroke-width:1.5}
+.cv svg .pvl{stroke:var(--solar);stroke-width:1;opacity:.35}
+.cv svg .mc4{fill:var(--surface2);stroke:var(--ink);stroke-width:1.5}
+.cv svg .pvn{font:650 12px var(--f-b);fill:var(--solar)}
+.cv svg .tml{font:700 13px var(--f-m);fill:var(--ink)}
+.cv svg .bx{fill:var(--bg2);stroke:var(--line2);stroke-width:1.5}
+.legend i.mc{background:var(--surface2);border:1.5px solid var(--ink);width:9px;height:12px;border-radius:3px}
+.strtab{width:100%;border-collapse:collapse;font-size:.86rem}
+.strtab th,.strtab td{text-align:left;padding:7px 0;border-bottom:1px solid var(--line);vertical-align:top}
+.strtab{table-layout:fixed}
+.strtab th{width:46%}
+.strtab td{font-family:var(--f-m);font-size:.8rem;text-align:right;padding-left:10px;overflow-wrap:anywhere}
+.strtab th{font-weight:500;color:var(--muted)}
+.strtab caption{text-align:left;font-weight:650;padding-bottom:6px}
+.cside .links{display:grid;gap:8px;font-size:.9rem}
 .cv svg .encl{fill:none;stroke:var(--line2);stroke-width:1.5;stroke-dasharray:7 6}
 .cv svg .bar{fill:var(--solar-t);stroke:var(--solar);stroke-width:1.5}
 .cv svg .lbl{font:600 11.5px var(--f-b);letter-spacing:.08em;text-transform:uppercase;fill:var(--faint)}
@@ -431,6 +446,7 @@ details.whyd li{display:list-item}
     <a href="#why">Why</a>
     <a href="#checks">Checks</a>
     <a href="#parts-h">Parts</a>
+    <a href="#panels-__FIRSTBOX__">Panels</a>
     <a href="#__FIRSTBOX__">PV boxes</a>
     <a href="#battery">Battery</a>
   </nav>
@@ -886,6 +902,7 @@ function showDetail(id,light=true,quiet=false){
    <div><h3 style="font-size:1.2rem">${p.name}</h3>${ABOUT[part.product]?`<p class="note" style="margin-top:8px;color:var(--ink)">${ABOUT[part.product]}</p>`:""}</div>
    ${part.board?`<div class="d-acts"><a class="btn" href="#${part.board}">See the wiring inside ${ico("arrow-right",2)}</a></div>`:""}
    ${part.box?`<div class="d-acts"><a class="btn" href="#${part.box}">See the wiring inside ${ico("arrow-right",2)}</a></div>`:""}
+   ${part.series&&combOf(part.id)?`<div class="d-acts"><a class="btn" href="#panels-${combOf(part.id)}">See how the panels are strung ${ico("arrow-right",2)}</a></div>`:""}
    ${BATTERY&&part.id===CHECKCFG.battery?`<div class="d-acts"><a class="btn" href="#battery">See the battery wiring ${ico("arrow-right",2)}</a></div>`:""}
    ${sizingLink(id)}
    ${kv(specRows(p,part))}
@@ -960,6 +977,101 @@ function strTile(x,y,w,s,label){return `<g class="comp"><rect class="cb" x="${x}
   <text style="font:650 16px var(--f-b);fill:var(--ink)" x="${x+94}" y="${y+38}">${label}</text><text class="valm" x="${x+94}" y="${y+58}">${s}</text></g>`;}
 function earthSym(x,y,lbl,anchor){return earth(x,y)+(lbl?`<text class="lbl" x="${anchor==="end"?x-26:x+26}" y="${y+12}" text-anchor="${anchor||"start"}">${lbl}</text>`:"");}
 const outBox=(x,y,w,a,b)=>`<g class="comp"><rect class="cb" x="${x}" y="${y}" width="${w}" height="52" rx="10"/><text style="font:650 13.5px var(--f-b);fill:var(--ink)" x="${x+w/2}" y="${y+22}" text-anchor="middle">${a}</text><text class="valm" x="${x+w/2}" y="${y+40}" text-anchor="middle">${b||""}</text></g>`;
+
+/* ---------- panels: how each string is wired, panel to panel, and how it reaches its PV box ---------- */
+/* One column per string. In a string each panel's + goes to the next panel's − through an MC4 pair (series);
+   the free − at the top and the free + at the bottom are the string's two ends, and both run down to the box. */
+const STRPAGES=Object.fromEntries(Object.keys(COMBINERS).map(k=>["panels-"+k,k]));
+function stringsOf(cb){const C=COMBINERS[cb],out=[];
+  C.arrays.forEach(pv=>{const pt=partById(pv);for(let j=0;j<(pt.parallel||1);j++)out.push({pv,j,n:pt.series,p:pt.parallel||1});});
+  return out;}
+const chTo=(C,pv)=>{const ch=(C.channels||[]).find(c=>c.pv===pv);return (ch?ch.to:C.to||"").replace(/ · PV in$/,"");};
+function drawStrings(cb){
+  const C=COMBINERS[cb],S=stringsOf(cb),k=S.length,joined=C.kind!=="pair";
+  const colW=Math.min(280,860/k),x0=(900-k*colW)/2,PH=58,PW2=56,G=46,PY=104;
+  const maxN=Math.max(...S.map(s=>s.n)),EB=PY+maxN*PH+(maxN-1)*G+34,BY=EB+66,BH=96;
+  let g="",pos="",neg="",pe="";
+  const cxs=S.map((_,i)=>x0+colW*(i+.5));
+  S.forEach((s,i)=>{const cx=cxs[i],pp=PRODUCTS[partById(s.pv).product],si=strInfo(s.pv),rx=cx-80,fx=cx+82;
+    const name=esc(SHORT[s.pv]||nodeName(s.pv))+(s.p>1?` · string ${s.j+1}`:"");
+    g+=`<text style="font:650 15px var(--f-b);fill:var(--ink)" x="${cx}" y="30" text-anchor="middle">${name}</text>
+      <text class="valm" x="${cx}" y="48" text-anchor="middle">${s.n} × ${pp.specs.pmax_w} W · ${si.v.toFixed(1)} V open</text>`;
+    for(let m=0;m<s.n;m++){const y=PY+m*(PH+G);
+      g+=`<rect class="pvm" x="${cx-PW2}" y="${y}" width="${PW2*2}" height="${PH}" rx="4"/>`;
+      for(let c=1;c<6;c++)g+=`<line class="pvl" x1="${cx-PW2+c*PW2/3}" y1="${y+3}" x2="${cx-PW2+c*PW2/3}" y2="${y+PH-3}"/>`;
+      g+=`<line class="pvl" x1="${cx-PW2+3}" y1="${y+PH/2}" x2="${cx+PW2-3}" y2="${y+PH/2}"/>`;
+      g+=`<text class="pvn" x="${cx-PW2-8}" y="${y+PH/2+4}" text-anchor="end">${m+1}</text>`;
+      g+=`<text class="tml" x="${cx+9}" y="${y-5}">−</text><text class="tml" x="${cx+9}" y="${y+PH+14}">+</text>`;
+      /* frame earth: a short bond from each frame to the earth run beside the column */
+      pe+=`<path class="pe" d="M${cx+PW2} ${y+PH/2} H${fx}"/>`;
+      if(m<s.n-1){const a=y+PH,b=y+PH+G,mid=(a+b)/2;
+        pos+=`<path class="pos flowp" d="M${cx} ${a} V${b}"/>`;
+        g+=`<rect class="mc4" x="${cx-6}" y="${mid-9}" width="12" height="18" rx="3"/>`;
+        if(m===0&&i===k-1)g+=`<text class="lbl" x="${cx-14}" y="${mid+4}" text-anchor="end">MC4</text>`;}}
+    const top=PY,bot=PY+s.n*(PH+G)-G;
+    /* the string's two ends: − from the top of panel 1, + from the bottom of the last panel */
+    neg+=`<path class="neg" d="M${cx} ${top} V${top-22} H${rx} V${BY+18}"/>`;
+    pos+=`<path class="pos flowp" d="M${cx} ${bot} V${BY+18}"/>`;
+    g+=`<circle class="scr" cx="${rx}" cy="${BY+24}" r="6"/><circle class="scr" cx="${cx}" cy="${BY+24}" r="6"/>
+      <text class="tml" x="${rx}" y="${BY+50}" text-anchor="middle">−</text><text class="tml" x="${cx}" y="${BY+50}" text-anchor="middle">+</text>`;
+    pe+=`<path class="pe" d="M${fx} ${top+PH/2} V${EB}"/>`;
+    if(!joined)g+=`<text class="valm" x="${(rx+cx)/2}" y="${BY+76}" text-anchor="middle">to ${esc(chTo(C,s.pv))}</text>`;});
+  /* frame earth run: along the bottom of the columns, hopping the string wires, to the earth rod */
+  const e0=cxs[0]+82,e1=x0+k*colW-6;let d=`M${e0} ${EB}`;
+  cxs.slice(1).forEach(cx=>{d+=` ${hop(cx-80)} ${hop(cx)}`;});
+  pe+=`<path class="pe" d="${d} H${e1} V${EB+18}"/>`+earth(e1,EB+18);
+  const bx=x0+8,bw=k*colW-16;
+  g=`<rect class="bx" x="${bx}" y="${BY}" width="${bw}" height="${BH}" rx="12"/>`+g;
+  g+=`<text class="lbl" x="${bx+14}" y="${BY+BH+22}">${esc(C.title)}${joined?` · strings join here, then to ${esc(chTo(C,C.arrays[0]))}`:" · each string has its own channel"}</text>`;
+  if(joined)g+=`<text class="valm" x="${bx+bw/2}" y="${BY+76}" text-anchor="middle">each + through its own breaker · all − on the link bar</text>`;
+  g+=`<text class="lbl" x="${bx+14}" y="${BY+BH+42}">Dashed: every panel frame bonded to the earth rod</text>`;
+  const H=BY+BH+56;
+  return `<svg viewBox="0 0 900 ${H}" role="img" aria-label="How the panels are wired into strings for ${esc(C.title)}">${pe}${neg}${pos}${g}</svg>`;}
+function panelSteps(cb){
+  const C=COMBINERS[cb],S=stringsOf(cb),joined=C.kind!=="pair",n=[...new Set(S.map(s=>s.n))];
+  const st=[`Inside each string, panel 1’s <b>+</b> plugs into panel 2’s <b>−</b>, panel 2’s <b>+</b> into panel 3’s <b>−</b>, and so on. This is <b>series</b>: the voltages add, the current stays that of one panel.`,
+    `The <b>−</b> left free on the first panel and the <b>+</b> left free on the last are the string’s two ends. Both run to the ${esc(C.title)} in PV cable, the + and − of one string kept together.`];
+  st.push(joined?`The ${S.length} strings only meet <b>inside the box</b>: each <b>+</b> through its own breaker onto the comb busbar, every <b>−</b> onto the link bar. This is <b>parallel</b>: the currents add, the voltage stays that of one string.`
+    :`The strings are <b>never joined</b>. Each keeps its own channel in the box and its own tracker, so ${S.length>1?"a shaded or faulty string doesn’t pull the others down":"it is checked and switched on its own"}.`);
+  st.push(`Bond every panel frame to the earth run, and the earth run to the earth rod.`);
+  return st;}
+function stringTable(cb){
+  const C=COMBINERS[cb];
+  return C.arrays.map(pv=>{const s=strInfo(pv),pp=PRODUCTS[s.pr],vmp=pp.specs.pmax_w/s.imp*s.n;
+    const rows=[["Panels in series",`${s.n} × ${pp.specs.pmax_w} W`],["Power",`${fmtN(s.n*pp.specs.pmax_w)} W per string`],
+      ["Open circuit, 25 °C",`${s.v.toFixed(1)} V`],[`Open circuit, ${COLD} °C morning`,`${s.vc.toFixed(1)} V`],["Working voltage",`≈ ${vmp.toFixed(0)} V`],
+      ["Current",`${s.imp.toFixed(1)} A working · ${s.isc.toFixed(1)} A short circuit`]];
+    if(s.p>1)rows.push([`${s.p} strings together`,`${(s.imp*s.p).toFixed(1)} A · ${fmtN(s.w)} W`]);
+    return `<table class="strtab"><caption>${esc(SHORT[pv]||nodeName(pv))}${s.p>1?` · ${s.p} strings`:""}</caption>${rows.map(([a,b])=>`<tr><th scope="row">${a}</th><td>${b}</td></tr>`).join("")}</table>`;}).join("");}
+function renderPanels(cb){
+  const C=COMBINERS[cb],box=$("#v-comb"),S=stringsOf(cb),pv0=C.arrays[0],s0=strInfo(pv0);
+  const nw=n=>["","one","two","three","four","five","six"][n]||String(n),pn=pv=>PRODUCTS[partById(pv).product],one=C.arrays.every(pv=>pn(pv)===pn(pv0)&&(partById(pv).parallel||1)===1);
+  const ns=C.arrays.map(pv=>partById(pv).series),list=ns.length>1?ns.slice(0,-1).join(", ")+" and "+ns[ns.length-1]:String(ns[0]);
+  const groups=one&&C.arrays.length>1?[`${nw(C.arrays.length)} strings of ${pn(pv0).short||pn(pv0).name}, ${list} panels long`]:C.arrays.map(pv=>{const s=strInfo(pv);return `${s.p>1?`${nw(s.p)} strings`:"one string"} of ${s.n} × ${PRODUCTS[s.pr].short||PRODUCTS[s.pr].name}`;});
+  const lead=`${groups.join(", ").replace(/^./,c=>c.toUpperCase())}, into the ${esc(C.title)}. Panels in a string are joined in series; ${C.kind!=="pair"?"the strings join in parallel inside the box.":"each string stays separate all the way to its tracker."}`;
+  box.innerHTML=`
+  <section aria-labelledby="ch1">
+    <p class="crumb"><a href="#schematic">Schematic</a> &nbsp;/&nbsp; Panels &nbsp;/&nbsp; ${esc(C.short||C.title)}</p>
+    ${Object.keys(COMBINERS).length<2?"":`<nav class="boxtabs" aria-label="Panel strings">${Object.entries(COMBINERS).map(([k,v])=>`<a href="#panels-${k}"${k===cb?' aria-current="page"':""}>${v.short||v.title}</a>`).join("")}</nav>`}
+    <h1 id="ch1" tabindex="-1" style="margin-top:22px">How the panels are strung</h1>
+    <p class="lead">${lead}</p>
+  </section>
+  <section class="flowbox cv" aria-label="Panel strings for ${esc(C.title)}">
+    <div class="flowbar"><span class="eyebrow">Panels to the box</span>
+      <div class="legend"><span><i style="background:var(--solar)"></i>+ conductor</span><span><i class="neg"></i>− conductor</span><span><i class="mc"></i>MC4 pair</span><span><i class="pe"></i>Earth</span></div></div>
+    <div class="cgrid">
+      <div><div class="canvas">${drawStrings(cb)}</div></div>
+      <aside class="cside">
+        <div><p class="eyebrow">How they connect</p><ol class="steps">${panelSteps(cb).map(s=>`<li>${s}</li>`).join("")}</ol></div>
+        <div><p class="eyebrow">String numbers</p>${stringTable(cb)}</div>
+        <div><p class="eyebrow">Before you plug in</p><ol class="steps">
+          <li>With the box’s breakers <b>off</b>, measure each string’s open-circuit voltage at its two ends. In good sun expect close to <b>${s0.v.toFixed(0)} V</b>${C.arrays.length>1&&new Set(C.arrays.map(p=>strInfo(p).n)).size>1?" for the "+esc(SHORT[pv0]||nodeName(pv0))+" string (scale by panel count for the others)":""}. About ${s0.voc.toFixed(0)} V less means one panel is out, usually an MC4 not clicked home.</li>
+          <li>Check the polarity: the meter should read positive with its red probe on the string’s <b>+</b>.</li>
+          <li>Use one brand of MC4 on both sides of every joint, crimped with the proper tool, and never pull one apart while the string is carrying current.</li></ol></div>
+        <div class="links"><a href="#${cb}">See the wiring inside the ${esc(C.title)} ›</a><a href="#chk-${pv0}">See the sizing checks for these strings ›</a></div>
+      </aside>
+    </div>
+  </section>`;}
 
 /* three strings joined: a 1-pole breaker on each positive, a comb busbar, a 2-pole main breaker, then the surge protector */
 function drawPar3(cb){
@@ -1082,6 +1194,7 @@ function renderComb(id){
     <nav class="boxtabs" aria-label="Combiner boxes">${Object.entries(COMBINERS).map(([k,v])=>`<a href="#${k}"${k===id?' aria-current="page"':""}>${v.title} <span class="muted" style="font-weight:500">· ${v.short}</span></a>`).join("")}</nav>
     <h1 id="ch1" tabindex="-1" style="margin-top:22px">${C.title}</h1>
     <p class="lead">${C.lead}</p>
+    <p style="margin:12px 0 0"><a href="#panels-${id}">See how the panels feeding this box are strung ›</a></p>
   </section>
   <section class="flowbox cv" aria-label="Wiring inside ${C.title}">
     <div class="flowbar"><span class="eyebrow">Inside the box</span>
@@ -1182,7 +1295,7 @@ let forced=null;
 function go(h){forced=h;try{history.pushState(null,"","#"+h);}catch(_){}route();}
 document.addEventListener("click",e=>{const a=e.target.closest('a[href^="#"]');if(!a||e.defaultPrevented||e.metaKey||e.ctrlKey)return;
   const h=decodeURIComponent(a.getAttribute("href").slice(1));if(!h)return;
-  if(h==="battery"||COMBINERS[h]||BOARDS[h]||view!=="main"){e.preventDefault();go(h);}});
+  if(h==="battery"||COMBINERS[h]||BOARDS[h]||STRPAGES[h]||view!=="main"){e.preventDefault();go(h);}});
 function route(){
   const h=forced!=null?forced:decodeURIComponent(location.hash.slice(1));forced=null;
   if(h==="battery"&&BATTERY){$("#v-main").hidden=true;$("#v-comb").hidden=true;$("#v-batt").hidden=false;renderBattery();window.scrollTo(0,0);
@@ -1190,6 +1303,8 @@ function route(){
   $("#v-batt").hidden=true;
   if(BOARDS[h]){$("#v-main").hidden=true;$("#v-comb").hidden=false;renderBoard(h);window.scrollTo(0,0);
     view="comb";lastComb=null;$("#ch1").focus({preventScroll:true});setNav("#schematic");return;}
+  if(STRPAGES[h]){$("#v-main").hidden=true;$("#v-comb").hidden=false;renderPanels(STRPAGES[h]);flowOn();window.scrollTo(0,0);
+    view="comb";lastComb=null;$("#ch1").focus({preventScroll:true});setNav("#panels-"+Object.keys(COMBINERS)[0]);return;}
   if(COMBINERS[h]){$("#v-main").hidden=true;$("#v-comb").hidden=false;renderComb(h);flowOn();window.scrollTo(0,0);
     view="comb";lastComb=h;$("#ch1").focus({preventScroll:true});setNav("#"+Object.keys(COMBINERS)[0]);return;}
   const back=view!=="main";view="main";$("#v-comb").hidden=true;$("#v-main").hidden=false;
