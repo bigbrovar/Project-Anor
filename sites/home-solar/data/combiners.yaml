@@ -27,9 +27,9 @@ combiner-ab:
     - {product: feeo-mcb-2p, qty: 2, where: "one per string, both poles"}
     - {product: feeo-spd-600, qty: 2, where: "one per string, across + and −"}
   steps:
-    - Each string’s <b>+ and −</b> go through their own 23 A fuse.
-    - The fused pair goes into a <b>2-pole breaker</b>, so one switch isolates the string.
-    - A <b>600 V Feeo surge protector</b> sits across + and −, with its earth to the local earth reference.
+    - Each string’s <b>+ and −</b> enter the <b>bottom</b> of their own 23 A fuse.
+    - From the fuse <b>tops</b>, the pair loops to the <b>600 V Feeo surge protector</b> and on to the top of the <b>2-pole breaker</b>, so one switch isolates the string.
+    - The surge protector’s <b>earth terminal</b> goes to the earth bar, which runs to the earth rod.
     - Each channel leaves the box to its own <b>Multi RS tracker</b>.
 
 combiner-c:

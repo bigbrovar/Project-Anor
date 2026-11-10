@@ -8,7 +8,8 @@ Everything on the page comes from four plain-text data files, so the build can b
 
 ```
 data/
-  products.yaml    every product: specs, links and a one-line description
+  products.yaml    every product and maker: specs, links, a one-line
+                   description and why it was picked
   build.yaml       this install: parts and quantities, panel strings, the
                    Sunny day / Night / Grid on views, battery-side check settings
   combiners.yaml   what's inside each combiner box and how it's wired
@@ -50,6 +51,8 @@ Most edits are a line or two in one YAML file. The sizing checks recalculate fro
 Then update that box's `inside` list and its `steps` text, which still describe the old breaker.
 
 **Add a link.** Under the product's `links`, add a `buy` or `alternatives` entry with a `name` and `url`. Mark affiliate links with `affiliate: true` so the page labels them.
+
+**Say why a part was picked.** Give the product a `why` line, or a list of lines, in `products.yaml`. Lines that apply to all of a maker's products go under `brands` at the top, and each product points at them with `brand:` (for example `brand: feeo`). The detail panel shows them as "Why this one", brand lines first. Every build lists the products that don't have a why yet.
 
 **Change wording.** Product descriptions are in `products.yaml`, combiner text is in `combiners.yaml`, and the Sunny day / Night / Grid on captions are in `build.yaml`. The intro, install and "layout at a glance" text is in `template.html`.
 
@@ -104,7 +107,7 @@ One-time setup in the Cloudflare dashboard:
    - Build command: `pip install pyyaml && python build.py`
    - Deploy command: `npx wrangler deploy`
    - Path (under Advanced settings): `sites/home-solar`
-3. Click **Deploy**. The page is at `https://project-anor.bigbrovar-k3s.workers.dev/`.
+3. Click **Deploy**. The page is at `https://project-anor.bigbrovar-k3s.workers.dev/`, and at `https://home.anor.openculture.org.ng` once its custom domain is set.
 4. In the Worker's **Settings → Build → Build watch paths**, set the include path to `sites/home-solar/*`, so changes elsewhere in the repository don't rebuild this site.
 
 ## License

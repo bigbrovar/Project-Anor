@@ -1,0 +1,66 @@
+# The AC boards. Each id (like grid-board) is also the page address of its
+# wiring view: index.html#grid-board
+#
+#   part     the board's part id in build.yaml
+#   line     grid (supply side) or load (inverter output side); sets the wire colour
+#   feed     where the supply comes from, on one or two short lines
+#   chain    the devices on the rail, in the order the supply passes through them:
+#            mcb, rcbo, spd (tapped off the run, earthed) or run (a cable run)
+#   outputs  breakers side by side at the end, each with what it feeds (to)
+#   to       what the last device in the chain feeds, when there are no outputs
+#   steps    "How it's wired", one line per step (<b> for bold)
+grid-board:
+  title: Grid board
+  part: gridbd
+  line: grid
+  lead: Where the utility supply is switched and protected, then split to each inverter’s AC input.
+  feed: [From the, kWh meter]
+  chain:
+    - {type: mcb, label: Main breaker, sub: 2P}
+    - {type: spd, label: Chint NXU-II, sub: "Type 2 SPD, 275 V"}
+    - {type: mcb, label: Second breaker, sub: 2P}
+  outputs:
+    - {type: mcb, label: 63 A, sub: 2P, to: Multi RS AC in}
+    - {type: mcb, label: 100 A, sub: 2P, to: MultiPlus-II AC in}
+  steps:
+    - Live and neutral come from the meter into the <b>top</b> of the 2-pole main breaker.
+    - From its <b>bottom</b> terminals they loop up and along the rail. The <b>surge protector</b> taps both, and its bottom terminal goes to earth.
+    - The loop ends in the <b>top</b> of the second 2-pole breaker.
+    - From there a second loop feeds one breaker per inverter, <b>63 A</b> for the Multi RS and <b>100 A</b> for the MultiPlus-II.
+
+light-board:
+  title: Light-load board
+  part: acb-light
+  line: load
+  lead: The Multi RS output, protected at both ends of the cable run to the house, then through an RCBO to the light circuits.
+  feed: [From the Multi RS, AC out]
+  chain:
+    - {type: mcb, label: Breaker, sub: 2P}
+    - {type: spd, label: Chint NXU-II, sub: "Type 2 SPD, 275 V"}
+    - {type: run, label: Cable run, sub: to the house}
+    - {type: mcb, label: Breaker, sub: 2P}
+    - {type: spd, label: Chint NXU-II, sub: "Type 2 SPD, 275 V"}
+    - {type: rcbo, label: RCBO, sub: "2P, 30 mA"}
+  to: Light loads
+  steps:
+    - Live and neutral come from the Multi RS into the <b>top</b> of a 2-pole breaker.
+    - From its <b>bottom</b> terminals they loop up and along the rail, where the first <b>surge protector</b> taps both.
+    - After the <b>cable run</b> to the house, a second breaker and a second surge protector repeat the same arrangement.
+    - The last loop ends in the <b>top</b> of the <b>RCBO</b>, whose bottom terminals feed the circuits.
+
+heavy-board:
+  title: Heavy-load board
+  part: acb-heavy
+  line: load
+  lead: The MultiPlus-II output, switched and protected before it reaches the heavy circuits.
+  feed: [From MultiPlus-II, AC out]
+  chain:
+    - {type: mcb, label: Breaker, sub: 2P}
+    - {type: spd, label: Chint NXU-II, sub: "Type 2 SPD, 275 V"}
+    - {type: rcbo, label: RCBO, sub: "2P, 30 mA"}
+  to: Heavy loads
+  steps:
+    - Live and neutral come from the MultiPlus-II into the <b>top</b> of the 2-pole breaker.
+    - From its <b>bottom</b> terminals they loop up and along the rail. The <b>surge protector</b> taps both, and its bottom terminal goes to earth.
+    - The loop ends in the <b>top</b> of the <b>RCBO</b>, which trips on overload or on 30 mA of earth leakage.
+    - The RCBO’s bottom terminals feed the circuits.

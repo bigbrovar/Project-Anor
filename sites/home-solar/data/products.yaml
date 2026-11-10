@@ -11,8 +11,13 @@
 #             Use null for a value you don't know yet: it stays hidden on the page
 #             and the build lists it, so you can see what's still missing.
 #   note, advice   optional extra lines in the detail panel
-#   links     datasheet, buy and alternatives. Mark affiliate links with
+#   links     datasheet, buy, alternatives and read (blog posts to read more,
+#             each with a title and url). Mark affiliate links with
 #             affiliate: true so the page labels them.
+#   brand     optional id from brands below. Its lines open the product's
+#             "Why this one" list in the detail panel
+#   why       optional line, or list of lines, on why this product was picked.
+#             Put quotes around a line that has a colon in it.
 
 spec_labels:   # spec key: [label shown on the page, unit]
   pmax_w: [Power, W]
@@ -79,6 +84,39 @@ spec_labels:   # spec key: [label shown on the page, unit]
   imax: [Max discharge, ""]
   uc_v: [Uc, V AC]
 
+# Why each maker was picked. A product with `brand: feeo` starts its
+# "Why this one" list with these lines, then adds its own `why` lines.
+
+brands:
+
+  victron:
+    why:
+      - "Victron is a tier 1 maker. Tiers aren’t an official rating; installers use them as shorthand. Tier 1 means an established global brand with a long track record, independent certification, extensive testing and support networks in many countries. It’s also the most expensive tier."
+      - "Known for exceptional reliability. That’s why Victron is so popular on boats, where the margin for failure is small and the environment is tough."
+      - "One of the most innovative makers in solar. VRM, its online portal, monitors and manages the whole system from anywhere, and the VictronConnect app updates firmware on the fly from your phone."
+      - "Well regarded for honouring warranties, with a repair and service centre in Lagos."
+
+  deriy:
+    why:
+      - "Deriy is a solar startup that ships high-quality EVE cells with a JK inverter BMS."
+      - "Good value, but after-sales support is limited to Lagos and Abuja."
+      - "I’ve tested their battery myself and use it in my own system, so it’s easy to recommend."
+      - "<b>Disclosure:</b> I consult for Deriy on technical matters: after-sales repairs, documentation and product improvement. My role has nothing to do with sales or marketing."
+
+  feeo:
+    why:
+      - "Feeo is a reputable Chinese maker of electrical protection for solar, like DC breakers, fuses and surge protectors. The company is ISO 9001 certified."
+
+  zjbeny:
+    why:
+      - "ZJBeny is a reputable Chinese maker of DC protection for solar, from breakers and fuses to isolators and surge protectors."
+
+  chint:
+    why:
+      - "Chint is one of China’s largest makers of low-voltage electrical equipment, founded in 1984 and sold in more than 140 countries and regions."
+      - "One maker for the whole board: breakers, RCBOs and surge protectors that fit the same DIN rail."
+      - "Chint has authorised dealers in Nigeria, so genuine parts can be bought locally."
+
 products:
 
   jinko-tiger-neo-590:
@@ -93,6 +131,24 @@ products:
       imp_a: 13.5
       voc_coef_pct: -0.25
       max_fuse_a: null
+    advice: "Fake and relabelled panels are common. Buy from a distributor listed on the maker’s official website, check the serial number on the label with the maker, compare the label with the official datasheet, and walk away from prices far below other sellers."
+    links:
+      read:
+        - title: "A budget solar inverter system: solar panels"
+          url: https://blog.openculture.org.ng/of-a-budget-off-grid-solar/
+      alternatives:
+        - name: "LONGi, official site"
+          url: https://www.longi.com/en/
+          note: "Check its official site for distributors in your country. LONGi also has an online checker for module serial numbers."
+        - name: "JA Solar, official site"
+          url: https://www.jasolar.com/
+          note: "Check its official site for distributors in your country."
+        - name: "Trina Solar, official site"
+          url: https://www.trinasolar.com/
+          note: "Check its official site for distributors in your country."
+        - name: "Canadian Solar, official site"
+          url: https://www.canadiansolar.com/
+          note: "Check its official site for distributors in your country."
 
   jinko-tiger-neo-580:
     name: Jinko Tiger Neo N-type 72HL4, 580 W
@@ -106,6 +162,24 @@ products:
       imp_a: 13.38
       voc_coef_pct: -0.25
       max_fuse_a: 25
+    advice: "Fake and relabelled panels are common. Buy from a distributor listed on the maker’s official website, check the serial number on the label with the maker, compare the label with the official datasheet, and walk away from prices far below other sellers."
+    links:
+      read:
+        - title: "A budget solar inverter system: solar panels"
+          url: https://blog.openculture.org.ng/of-a-budget-off-grid-solar/
+      alternatives:
+        - name: "LONGi, official site"
+          url: https://www.longi.com/en/
+          note: "Check its official site for distributors in your country. LONGi also has an online checker for module serial numbers."
+        - name: "JA Solar, official site"
+          url: https://www.jasolar.com/
+          note: "Check its official site for distributors in your country."
+        - name: "Trina Solar, official site"
+          url: https://www.trinasolar.com/
+          note: "Check its official site for distributors in your country."
+        - name: "Canadian Solar, official site"
+          url: https://www.canadiansolar.com/
+          note: "Check its official site for distributors in your country."
 
   cs-hiku7-600:
     name: Canadian Solar HiKu7, 600 W
@@ -120,13 +194,28 @@ products:
       voc_coef_pct: -0.26
       max_fuse_a: 30
     note: Chosen for its lower voltage, so 3 in series stays under the 150 V limit of the SmartSolar 150/100.
+    advice: "Fake and relabelled panels are common. Buy from a distributor listed on the maker’s official website, check the serial number on the label with the maker, compare the label with the official datasheet, and walk away from prices far below other sellers."
     links:
+      read:
+        - title: "A budget solar inverter system: solar panels"
+          url: https://blog.openculture.org.ng/of-a-budget-off-grid-solar/
       datasheet: https://invertsolar.co.za/wp-content/uploads/2024/03/CSI-Datasheet-HiKu7_CS7L-MS_v1-3_EN_580-600-4.pdf
+      alternatives:
+        - name: "LONGi, official site"
+          url: https://www.longi.com/en/
+          note: "Check its official site for distributors in your country. LONGi also has an online checker for module serial numbers."
+        - name: "JA Solar, official site"
+          url: https://www.jasolar.com/
+          note: "Check its official site for distributors in your country."
+        - name: "Trina Solar, official site"
+          url: https://www.trinasolar.com/
+          note: "Check its official site for distributors in your country."
 
   victron-multi-rs-solar:
     name: Victron Multi RS Solar 48/6000/100-450/100
     icon: inverter
     about: Inverter-charger with two built-in solar chargers. Turns solar and battery power into 230 V AC for the light loads, and charges the batteries from the panels or the grid.
+    brand: victron
     specs:
       inverter_va: 6000
       cont_w_25c: 4800
@@ -142,6 +231,9 @@ products:
       batt_terminal_a: 120
       comms: VE.Can to GX over RJ45
     links:
+      read:
+        - title: "Building an off-grid solar system: my approach"
+          url: https://blog.openculture.org.ng/solar-plan/
       datasheet: https://www.victronenergy.com/upload/documents/Datasheet-Multi-RS19-Solar-EN.pdf
       buy:
         - name: Where to buy Victron
@@ -151,6 +243,7 @@ products:
     name: Victron MultiPlus-II 48/10000/140-100
     icon: inverter
     about: Inverter-charger. Turns battery power into 230 V AC for the heavy loads, passes grid power through when it is on, and can charge the batteries from the grid.
+    brand: victron
     specs:
       inverter_va: 10000
       cont_w_25c: 8000
@@ -160,6 +253,9 @@ products:
       charge_a: 140
       comms: VE.Bus, MK3 to GX over RJ45
     links:
+      read:
+        - title: "Building an off-grid solar system: my approach"
+          url: https://blog.openculture.org.ng/solar-plan/
       buy:
         - name: Where to buy Victron
           url: https://www.victronenergy.com/where-to-buy
@@ -168,6 +264,7 @@ products:
     name: Victron SmartSolar MPPT 250/100-Tr VE.Can
     icon: mppt
     about: Solar charge controller (MPPT). Takes power from its panels and charges the batteries at the right voltage, while tracking the panels’ best operating point.
+    brand: victron
     specs:
       pv_voc_max_v: 250
       pv_op_max_v: 245
@@ -185,6 +282,7 @@ products:
     name: Victron SmartSolar MPPT 150/100-Tr VE.Can
     icon: mppt
     about: Solar charge controller (MPPT). Takes power from its panels and charges the batteries at the right voltage, while tracking the panels’ best operating point.
+    brand: victron
     specs:
       pv_voc_max_v: 150
       pv_op_max_v: 145
@@ -202,6 +300,8 @@ products:
     name: Feeo PV combiner, 2 in 2 out
     icon: combiner
     about: Combiner box. Where the panel strings are protected and can be switched off before they reach the inverter.
+    brand: feeo
+    why: "Built from Feeo parts: gPV fuses to IEC 60269-6, DC breakers to IEC/EN 60947-2 and surge protectors to EN 50539-11 (now IEC/EN 61643-31)."
     specs:
       fuses: 4, on + and − of each string
       fuse_a: 23
@@ -248,11 +348,14 @@ products:
         - name: Nanque NQSP2Z-40, 250 V DC
           url: https://s.click.aliexpress.com/e/_c3nOW0iF
           affiliate: true
+          note: "Nanque is a reputable Chinese maker of DC protection for solar."
 
   beny-bdm-250:
     name: ZJBeny DC MCCB, 250 A frame, in enclosure
     icon: mccb
     about: DC moulded-case breaker. Protects the battery cable from overload and short circuit, and isolates the device from the batteries.
+    brand: zjbeny
+    why: "The BDM series is built to IEC 60947-2, the international standard for low-voltage circuit breakers, and China’s GB/T 14048.2. TÜV certified (TUV-027276-E), rated for 500 V DC and IP65 in its enclosure."
     specs:
       current_a: 250
       trip: Adjustable
@@ -267,11 +370,14 @@ products:
         - name: Nanque 2P MCCB, 200 A
           url: https://s.click.aliexpress.com/e/_c3VDGhOR
           affiliate: true
+          note: "Nanque is a reputable Chinese maker of DC protection for solar."
 
   beny-bdm-125:
     name: ZJBeny DC MCCB, 125 A, in enclosure
     icon: mccb
     about: DC moulded-case breaker. Protects the battery cable from overload and short circuit, and isolates the charger from the batteries.
+    brand: zjbeny
+    why: "The BDM series is built to IEC 60947-2, the international standard for low-voltage circuit breakers, and China’s GB/T 14048.2. TÜV certified (TUV-027275-E), rated for 500 V DC and IP65 in its enclosure."
     specs:
       current_a: 125
       poles: 2
@@ -284,6 +390,7 @@ products:
         - name: Nanque 2P MCCB, 125 A
           url: https://s.click.aliexpress.com/e/_c3gETHEn
           affiliate: true
+          note: "Nanque is a reputable Chinese maker of DC protection for solar."
 
   busbar-48v:
     name: Battery busbar pair
@@ -297,6 +404,7 @@ products:
     name: Victron SmartShunt 1000 A
     icon: shunt
     about: Battery monitor. Measures every amp going in and out of the batteries to work out the state of charge.
+    brand: victron
     specs:
       rating_a: 1000
       interface: null
@@ -310,6 +418,7 @@ products:
     name: Deriy EVE LiFePO4 battery, 14.7 kWh
     icon: battery
     about: LiFePO4 battery pack. Stores energy for night and cloudy days. Its BMS protects the cells from overcharge, overdischarge and too much current.
+    brand: deriy
     specs:
       kwh: 14.7
       cells: 16S
@@ -319,11 +428,22 @@ products:
       bms: JK inverter BMS
       bms_a: 200
       comms: CAN to GX over RJ45
-    note: Deriy pack built on EVE LiFePO4 cells with a JK inverter BMS.
     links:
+      read:
+        - title: "How I built a lithium battery bank"
+          url: https://blog.openculture.org.ng/how-to-build-a-lithium-battery-bank-diy-from-nigeria/
+        - title: "Optimal charge settings for LiFePO4"
+          url: https://blog.openculture.org.ng/optimal-charge-settings-for-lithium-iron-phosphates-lifepo4/
       buy:
         - name: Deriy Energy
           url: https://www.deriyenergy.com/
+      alternatives:
+        - name: "Deye SE-F16, 51.2 V 314 Ah, 16 kWh, at Fouani"
+          url: https://fouanistore.com/nigeria-en/product/1052?deye-low-voltage-se-f16-battery-16-kwh-display-screen-version
+          note: "Slightly more expensive, but a good premium option: 230 A continuous and more than 6,000 cycles. Deye lists Victron as compatible over CAN, but Victron doesn’t list Deye, so check with your Victron dealer first."
+        - name: "Growatt HOPE 16.0LM-A1, 51.2 V, 16 kWh, at Fouani"
+          url: https://fouanistore.com/nigeria-en/product/1180?growatt-low-voltage-lifepo4-battery-16kwh-hope-16-0lm-a1
+          note: "Slightly more expensive, but a good premium option: 15.3 kWh usable, 200 A discharge and 6,000 cycles. Victron doesn’t list it as compatible, so check with your Victron dealer that it will talk to the GX."
 
   diy-gx-cm4:
     name: DIY GX on Raspberry Pi CM4
@@ -342,6 +462,8 @@ products:
     name: Chint NXU-II Type 2 SPD, 2P, 40 kA, 275 V
     icon: spd
     about: Surge protector. Diverts voltage spikes from lightning or switching to earth before they reach the equipment.
+    brand: chint
+    why: "A Type 2 surge protector built to IEC/EN 61643-11, the standard for surge protectors on low-voltage AC supplies. CE and RoHS marked."
     specs:
       spd_type: Type 2
       poles: 2
@@ -358,6 +480,8 @@ products:
     name: "Grid board: Chint MCB, SPD, MCB"
     icon: db
     about: Grid distribution board. Takes the utility supply through breakers and surge protection, then feeds each inverter’s AC input.
+    brand: chint
+    why: "Chint breakers are built to IEC/EN 60898-1, the standard for breakers in homes and similar buildings. The surge protector is the NXU-II, built to IEC/EN 61643-11."
     specs:
       phase: Single phase
       meter: Utility kWh meter
@@ -372,6 +496,8 @@ products:
     name: "Light-load board: Chint MCB, SPD, RCBO"
     icon: db
     about: Distribution board. Breakers, surge protection and an RCBO, which cuts power on overload or earth leakage to protect people from shock.
+    brand: chint
+    why: "Chint breakers are built to IEC/EN 60898-1 and its RCBOs to IEC/EN 61009-1, the standards for breakers and RCBOs in homes and similar buildings. The surge protector is the NXU-II, built to IEC/EN 61643-11."
     specs:
       mcb_a: null
       spd: Chint NXU-II, 275 V
@@ -383,6 +509,8 @@ products:
     name: "Heavy-load board: Chint MCB, SPD, RCBO"
     icon: db
     about: Distribution board. Breakers, surge protection and an RCBO, which cuts power on overload or earth leakage to protect people from shock.
+    brand: chint
+    why: "Chint breakers are built to IEC/EN 60898-1 and its RCBOs to IEC/EN 61009-1, the standards for breakers and RCBOs in homes and similar buildings. The surge protector is the NXU-II, built to IEC/EN 61643-11."
     specs:
       mcb_a: null
       spd: Chint NXU-II, 275 V
@@ -393,6 +521,8 @@ products:
     name: Feeo PV fuse and holder, 23 A
     icon: fuse
     about: PV fuse. Blows to protect a string’s cable if too much current flows back into it.
+    brand: feeo
+    why: "A gPV fuse, the class made to protect solar strings, built to IEC 60269-6. CE and TÜV certified."
     specs:
       fuse_a: 23
     links:
@@ -405,6 +535,8 @@ products:
     name: Feeo DC surge protector, 600 V
     icon: spd
     about: Surge protector. Diverts voltage spikes from lightning or switching to earth before they reach the equipment.
+    brand: feeo
+    why: "Built to EN 50539-11, the standard for surge protectors on the DC side of solar systems, since replaced by IEC/EN 61643-31. TÜV certified."
     specs:
       spd_v: 600
 
@@ -412,6 +544,8 @@ products:
     name: Feeo DC breaker, 2 pole
     icon: mcb
     about: DC breaker. Switches the string off and trips on overload.
+    brand: feeo
+    why: "Built to IEC/EN 60947-2, the international standard for low-voltage circuit breakers. CB and TÜV certified."
     specs:
       current_a: null
       voltage_vdc: null
@@ -420,6 +554,8 @@ products:
     name: FEEO DC breaker, 1 pole, 20 A
     icon: mcb
     about: DC breaker. Switches one string off and trips on overload.
+    brand: feeo
+    why: "Built to IEC/EN 60947-2, the international standard for low-voltage circuit breakers. CB and TÜV certified."
     specs:
       current_a: 20
       voltage_vdc: null
@@ -436,6 +572,8 @@ products:
     name: FEEO DC breaker, 2 pole, 63 A
     icon: mcb
     about: DC breaker. Main switch for the combined strings, and trips on overload.
+    brand: feeo
+    why: "Built to IEC/EN 60947-2, the international standard for low-voltage circuit breakers. CB and TÜV certified."
     specs:
       current_a: 63
       voltage_vdc: null

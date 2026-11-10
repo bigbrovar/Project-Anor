@@ -4,7 +4,7 @@
 # live in layout.yaml.
 
 version: "0.9"
-updated: 2026-11-09   # shown in the footer, with the version
+updated: 2026-11-10   # shown in the footer, with the version
 
 # Parts used in this install. `product` is an id from products.yaml.
 # A panel array also has series, parallel and feeds (the part its strings
