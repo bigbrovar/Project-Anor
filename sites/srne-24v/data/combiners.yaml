@@ -1,0 +1,32 @@
+# What's inside the PV box. The id (pv-box-1) is also the page address of its
+# wiring view: index.html#pv-box-1
+#
+#   part               the box's part id in build.yaml
+#   kind               pair = one separate channel per array (one or more)
+#   arrays             the panel arrays (from build.yaml) that feed this box
+#   string_protection  the fuse or breaker on each string, as a product id.
+#                      The sizing checks test its rating.
+#   surge_protector    the DC surge protector, as a product id with an spd_v spec
+#   inside             the parts listed under "In this box"
+#   steps              "How it's wired", one line per step (<b> for bold)
+
+pv-box-1:
+  title: PV box
+  short: PV string
+  part: box-1
+  kind: pair
+  arrays: [pv-a]
+  string_protection: feeo-fuse-25
+  surge_protector: feeo-spd-600
+  lead: One channel for the SRNE’s single tracker, built from the same Feeo parts as the home system. The string gets fuses on both poles, a breaker and a surge protector.
+  channels:
+    - {array: pv-a, to: SRNE · MPPT}
+  inside:
+    - {product: feeo-fuse-25, qty: 2, where: + and − of the string}
+    - {product: feeo-mcb-2p, qty: 1, where: both poles}
+    - {product: feeo-spd-600, qty: 1, where: across + and −}
+  steps:
+    - The string’s <b>+ and −</b> each enter the <b>bottom</b> of a 25 A fuse.
+    - From the fuse <b>tops</b>, the pair loops to the <b>600 V Feeo surge protector</b> and on to the top of the <b>2-pole breaker</b>, so one switch isolates the string.
+    - The surge protector’s <b>earth terminal</b> goes to the earth bar, which runs to the earth rod.
+    - The channel leaves the box to the <b>SRNE’s MPPT</b>.

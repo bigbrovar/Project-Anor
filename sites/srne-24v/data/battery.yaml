@@ -1,0 +1,43 @@
+# The battery page (index.html#battery): how the pack is wired to the busbar,
+# the cables, and the SRNE's battery settings. The FIRMAN pack doesn't publish
+# BMS communication, so the inverter works from these voltages.
+
+title: Battery
+lead: One FIRMAN 5.12 kWh LiFePO4 pack on the busbar, so a second pack can join later without rewiring the inverter side.
+
+packs: [1]
+
+runs:
+  - {pack: 1, pole: "+", size: 50 mm², length: 2 m}
+  - {pack: 1, pole: "-", size: 50 mm², length: 2 m}
+runs_note: Both runs are the same length.
+
+steps:
+  - The pack’s <b>+</b> runs to the <b>+ busbar</b> and its <b>−</b> to the <b>− bar</b>, on equal-length 50 mm² cable.
+  - The SRNE’s battery cable lands on the same bars through its 250 A breaker, with the trip set to 200 A. There’s no shunt and no BMS link; the SRNE reads the battery by voltage.
+  - A second pack joins with + from one pack and − from the other, on cables of equal length.
+
+busbar:
+  title: Busbar
+  text: Two copper bars in an enclosure, with room for more packs.
+
+# The table on the battery page. Per-cell voltages; the page also shows each
+# one for the 8-cell (24 V) pack.
+bms:
+  name: SRNE battery
+  role:
+    - "The FIRMAN doesn’t publish BMS communication, so the SRNE charges and stops by voltage. Set battery type <b>[08] USE</b> and enter these."
+    - The charge and float voltages are the home system’s JK BMS values per cell, times 8 cells, inside FIRMAN’s 27.6 to 28.8 V charge range. The low-voltage points are starting points; raise them if the battery’s BMS trips first.
+    - Item numbers are from SRNE’s HF series manual. Check them against the manual for your unit.
+  cells_in_series: 8
+  volts:
+    - {label: "Boost charge voltage [09]", cell_v: 3.45}
+    - {label: "Float charge voltage [11]", cell_v: 3.35}
+    - {label: "Back to battery at [05]", cell_v: 3.30}
+    - {label: "Switch to grid at [04]", cell_v: 3.10}
+    - {label: "Low battery alarm [14]", cell_v: 3.05}
+    - {label: "Over-discharge cut-off, after 5 s [12] [13]", cell_v: 3.00}
+    - {label: "Discharge limit, instant cut-off [15]", cell_v: 2.90}
+  currents:
+    - {label: "Max charge current [07]", a: 60}
+    - {label: "Max grid charge current [28]", a: 60}

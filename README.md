@@ -36,6 +36,12 @@ Sketches of how the home system could be built today. Each is its own site and W
 
 Sites don't share code. An improvement made in one folder is copied into another only when that site needs it, so changing one site never breaks another.
 
+## Small systems
+
+| Design | Folder | Live |
+| --- | --- | --- |
+| 24 V essentials: one SRNE HF 3.3 kW | `sites/srne-24v/` | [msmall.anor.openculture.org.ng](https://msmall.anor.openculture.org.ng) |
+
 ## License
 
 Code is under the MIT License (see `LICENSE`). Data, writing and photos are under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/).

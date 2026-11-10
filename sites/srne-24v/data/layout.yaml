@@ -1,0 +1,42 @@
+# Where everything sits on the schematic. You only need this file to add, move
+# or re-route something on the drawing; specs and parts live in the other files.
+#
+#   at      for a block: [x, y, width, height], measured from the top-left corner
+#   style   tile (picture on top, the default), side (icon on the left) or stack
+#   path    an SVG path for a wire. "M115 230 V280" starts at x=115, y=230 and runs
+#           down to y=280. H runs sideways to an x, V up or down to a y.
+
+canvas: [1430, 1260]
+
+blocks:
+  - {id: pv-a, part: pv-a, short: PV, at: [30, 30, 760, 200], title: PV · 3.25 kWp, subtitle: "5 × Jinko 650 W, one string", icon: pv, photo_height: 120, panels: {count: 5, cols: 5, size: 34}}
+  - {id: box-1, part: box-1, short: PV box, at: [30, 280, 760, 84], title: PV box, subtitle: "1 channel · fuses, breaker and SPD", icon: combiner, style: side, opens: pv-box-1}
+  - {id: inv, part: inv, short: SRNE, at: [30, 420, 760, 300], title: SRNE HF2430S80-H, subtitle: "3.3 kW · 24 V battery · 1 MPPT, up to 500 V", icon: inverter, photo_height: 170, ports: [[solar, PV], [grid, AC IN], [batt, BAT], [load, AC OUT]]}
+  - {id: brk, part: brk, short: Battery breaker, at: [330, 790, 160, 120], title: BENY 250 A, subtitle: Set to 200 A, icon: mccb, style: stack}
+  - {id: busbar, part: busbar, at: [30, 960, 760, 70], title: Battery busbar, subtitle: Room for more packs, icon: busbar, style: side}
+  - {id: bat, part: bat, short: Battery, at: [30, 1080, 760, 160], title: Battery · 5.12 kWh, subtitle: "1 × FIRMAN 5.12 kWh LiFePO4 · 8S · 150 A", icon: battery, photo_height: 80, packs: 1}
+  - {id: grid, at: [1030, 30, 340, 84], title: Grid supply, subtitle: Single phase · kWh meter, icon: meter, style: side}
+  - {id: gridbd, part: gridbd, at: [1030, 150, 340, 84], title: Grid board, subtitle: 2P MCB · T2 SPD · 32 A, icon: db, category: grid, style: side}
+  - {id: acb, part: acb, at: [1030, 300, 340, 84], title: Load board, subtitle: Chint MCB · T2 SPD · RCBO, icon: db, style: side}
+  - {id: loads, at: [1030, 420, 340, 200], title: Essential loads, subtitle: "Lights, fans, TV and a small fridge", icon: home, photo_height: 120, loads: [lightbulb, fan, tv, refrigerator, router, laptop]}
+
+wires:
+  - {id: w-pv, from: pv-a, to: box-1, type: solar, path: M410 230 V280, size: "10 mm², UV-rated, shielded", length: about 18 m}
+  - {id: w-box, from: box-1, to: inv, type: solar, path: M410 364 V420, size: 10 mm²}
+  - {id: w-dc, from: inv, to: brk, type: batt, path: M410 720 V790, size: 50 mm², length: 2 m}
+  - {id: w-brk, from: brk, to: busbar, type: batt, path: M410 910 V960, size: 50 mm²}
+  - {id: w-batp, from: busbar, to: bat, type: batt, path: M200 1030 V1080, pole: "+", size: 50 mm², length: 2 m}
+  - {id: w-batn, from: busbar, to: bat, type: batt, path: M620 1030 V1080, pole: "-", size: 50 mm², length: 2 m}
+  - {id: w-grid, from: grid, to: gridbd, type: grid, path: M1200 114 V150}
+  - {id: w-gridin, from: gridbd, to: inv, type: grid, path: M1030 192 H930 V470 H790}
+  - {id: w-out, from: inv, to: acb, type: load, path: M790 560 H990 V342 H1030}
+  - {id: w-load, from: acb, to: loads, type: load, path: M1200 384 V420}
+  - {id: w-earth, from: acb, to: earth, type: none, path: M1370 342 H1392 V370, earth_at: [1392, 374]}
+
+labels:
+  - {text: MPPT, at: [418, 400]}
+  - {text: AC IN, at: [800, 462]}
+  - {text: AC OUT, at: [800, 552]}
+  - {text: BAT, at: [418, 780]}
+  - {text: "+", at: [208, 1068]}
+  - {text: −, at: [628, 1068]}

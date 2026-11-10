@@ -1,0 +1,337 @@
+# Every product in the build: panels, inverter, battery, breakers, boards and
+# the parts inside the PV box. build.yaml and combiners.yaml refer to them by
+# id (the name ending in a colon, like jinko-tiger-neo-650).
+#
+#   name      full product name, shown on cards and in the detail panel
+#   short     optional short name, used in the sizing checks
+#   icon      pv, inverter, mppt, battery, combiner, fuse, mcb, mccb, spd, busbar,
+#             shunt, gx, db, meter, grid or home
+#   about     one line on what it does
+#   specs     key: value pairs. Each key needs a label in spec_labels below.
+#             Use null for a value you don't know yet: it stays hidden on the page
+#             and the build lists it, so you can see what's still missing.
+#   note, advice   optional extra lines in the detail panel
+#   links     datasheet, buy, alternatives and read (blog posts to read more,
+#             each with a title and url). Mark affiliate links with
+#             affiliate: true so the page labels them.
+#   brand     optional id from brands below. Its lines open the product's
+#             "Why this one" list in the detail panel
+#   why       optional line, or list of lines, on why this product was picked.
+#             Put quotes around a line that has a colon in it.
+
+spec_labels:   # spec key: [label shown on the page, unit]
+  pmax_w: [Power, W]
+  voc_v: [Voc, V]
+  isc_a: [Isc, A]
+  imp_a: [Imp, A]
+  voc_coef_pct: [Voc temp. coeff., "%/°C"]
+  max_fuse_a: [Max series fuse, A]
+  cont_w_25c: [Rated output, W]
+  peak_va: [Peak, VA]
+  motor: [Motor load, ""]
+  battery_v: [Battery, ""]
+  charge_a: [Max charge, A]
+  pv_voc_max_v: ["PV voltage, absolute max", V]
+  pv_w_max: [Max PV input power, W]
+  mppt_range: [MPPT range, ""]
+  trackers: [MPPTs, ""]
+  pv_op_a: [Max PV input current, A]
+  pv_isc_max_a: [PV short-circuit max, A]
+  ac_in: [AC input, ""]
+  transfer: [Transfer time, ""]
+  efficiency: [Peak efficiency, ""]
+  comms: [Comms, ""]
+  ip: [Protection, ""]
+  weight: [Weight, ""]
+  warranty: [Warranty, ""]
+  current_a: [Frame, A]
+  trip: [Trip, ""]
+  poles: [Poles, ""]
+  voltage_vdc: [Voltage, V DC]
+  fuse_a: [String fuses, A]
+  fuses: [Fuses, ""]
+  mcb_2p_a: [2P breaker, A]
+  spd_ucpv_v: [SPD voltage, V DC]
+  breaker_vdc: [Breaker voltage, V DC]
+  spd_v: [Max voltage, V DC]
+  kwh: [Energy, kWh]
+  cells: [Cells, ""]
+  nominal_v: [Nominal, V]
+  ah: [Capacity, Ah]
+  chem: [Chemistry, ""]
+  charge_v: [Charge voltage, ""]
+  bms_a: [Max charge and discharge, A]
+  cycles: [Cycle life, ""]
+  parallel: [Parallel, ""]
+  rating_a: [Rating, A]
+  bars: [Bars, ""]
+  main_a: [Main breaker, A]
+  spd: [Surge protector, ""]
+  inv_in_a: [Breaker to the SRNE AC input, A]
+  mcb_a: [MCB, A]
+  rcbo: [RCBO, ""]
+  phase: [Supply, ""]
+  meter: [Meter, ""]
+  spd_type: [Class, ""]
+  imax: [Max discharge, ""]
+  uc_v: [Uc, V AC]
+
+# Why each maker was picked. A product with `brand: feeo` starts its
+# "Why this one" list with these lines, then adds its own `why` lines.
+
+brands:
+
+  feeo:
+    why:
+      - "Feeo is a reputable Chinese maker of electrical protection for solar, like DC breakers, fuses and surge protectors. The company is ISO 9001 certified."
+
+  zjbeny:
+    why:
+      - "ZJBeny is a reputable Chinese maker of DC protection for solar, from breakers and fuses to isolators and surge protectors."
+
+  chint:
+    why:
+      - "Chint is one of China’s largest makers of low-voltage electrical equipment, founded in 1984 and sold in more than 140 countries and regions."
+      - "One maker for the whole board: breakers, RCBOs and surge protectors that fit the same DIN rail."
+      - "Chint has authorised dealers in Nigeria, so genuine parts can be bought locally."
+
+products:
+
+  jinko-tiger-neo-650:
+    name: Jinko Tiger Neo 3.0 N-type 66QL6, 650 W
+    short: Jinko 650 W
+    icon: pv
+    about: Solar panel. Turns sunlight into DC electricity.
+    specs:
+      pmax_w: 650
+      voc_v: 50.26
+      isc_a: 15.98
+      imp_a: 15.27
+      voc_coef_pct: -0.24
+      max_fuse_a: 35
+    note: "Availability varies, so any Jinko Tiger Neo from 590 to 650 W fits these strings. The checks use the 650 W panel; the 590 W has a little more voltage and less current, and stays inside every limit too. The same panel as the 48 V designs, so a later move up keeps the array."
+    advice: "Fake and relabelled panels are common. Buy from a distributor listed on the maker’s official website, check the serial number on the label with the maker, compare the label with the official datasheet, and walk away from prices far below other sellers."
+    links:
+      read:
+        - title: "A budget solar inverter system: solar panels"
+          url: https://blog.openculture.org.ng/of-a-budget-off-grid-solar/
+      datasheet: https://jinkosolar.com/en/site/tigerneo_3
+      buy:
+        - name: Jinko panels at Fouani
+          url: https://fouanistore.com/nigeria-en/search?subcategories=Solar+Panels&page=&brand=Jinko
+      alternatives:
+        - name: "LONGi, official site"
+          url: https://www.longi.com/en/
+          note: "Check its official site for distributors in your country. LONGi also has an online checker for module serial numbers."
+        - name: "JA Solar, official site"
+          url: https://www.jasolar.com/
+          note: "Check its official site for distributors in your country."
+        - name: "Trina Solar, official site"
+          url: https://www.trinasolar.com/
+          note: "Check its official site for distributors in your country."
+        - name: "Canadian Solar, official site"
+          url: https://www.canadiansolar.com/
+          note: "Check its official site for distributors in your country."
+
+  srne-hf2430s80-h:
+    name: SRNE HF2430S80-H, 3.3 kW, 24 V, off-grid
+    short: SRNE HF 3.3 kW
+    icon: inverter
+    about: Off-grid inverter-charger with a built-in solar tracker. Runs the house from solar and battery, and uses grid as a backup charger and bypass. It doesn’t export to grid.
+    why:
+      - "A mid-small 24 V inverter for essential house loads: lights, fans, TV, Wi-Fi, laptops and a small fridge, but nothing major."
+      - "Small enough to pair with about 3 kW of solar, with room to grow to the 4 kW its tracker can take."
+      - "A 500 V solar tracker, so the panels go in as one long string on thin cable, with no separate charge controller."
+      - "A 6,000 VA peak and a 2 HP motor rating, so a small fridge’s start-up is no trouble."
+      - "Talks RS485 and CAN, so a battery with BMS communication can be used later. Remote monitoring with the optional Wi-Fi module and the SmartESS app."
+    specs:
+      cont_w_25c: 3300
+      peak_va: 6000
+      motor: 2 HP
+      battery_v: 24 V, 20 to 33 V range
+      charge_a: 80
+      trackers: 1
+      pv_w_max: 4000
+      pv_voc_max_v: 500
+      mppt_range: 120 to 450 V
+      pv_op_a: 13
+      pv_isc_max_a: null
+      ac_in: "170 to 280 V (UPS), 90 to 280 V (APL)"
+      transfer: 10 ms
+      efficiency: 92% from battery
+      comms: "RS485, CAN, USB, dry contact; Wi-Fi module optional"
+      ip: IP20, indoor only
+      weight: 6.9 kg
+      warranty: 2 years
+    note: "Max charge is 80 A from solar, grid or both together. One tracker, so the panels make a single string. At midday the panels make more current than its 13 A input, so it trims the peak: about 15% with 650 W panels and 4% with 590 W."
+    advice: SRNE gives 13 A as the maximum PV input current but no short-circuit limit. The Jinko string can reach 16 A short-circuit with 650 W panels, so confirm with SRNE or HM Solar that this is allowed.
+    links:
+      read:
+        - title: "Building an off-grid solar system: my approach"
+          url: https://blog.openculture.org.ng/solar-plan/
+      datasheet: https://www.srnesolar.com/userfiles/files/2023/07/18/SRNE_HF%20series_HV_EU_solar%20charge%20inverter_datasheet_2(1).pdf
+      buy:
+        - name: HM Solar (Nigeria)
+          url: https://hmsolarltd.com/products/hf-series/
+
+  pv-box-1ch:
+    name: PV box, 1 channel, Feeo parts
+    icon: combiner
+    about: PV box. Where the panel string is protected and can be switched off before it reaches the inverter.
+    brand: feeo
+    why: "Built from Feeo parts: gPV fuses to IEC 60269-6, a DC breaker to IEC/EN 60947-2 and a surge protector to EN 50539-11 (now IEC/EN 61643-31)."
+    specs:
+      fuses: 2, on + and −
+      fuse_a: 25
+      spd_ucpv_v: 600
+      mcb_2p_a: null
+      breaker_vdc: null
+    note: One channel for the SRNE’s single tracker, built from the same Feeo fuses, 2-pole breaker and 600 V surge protector as the home system’s combiner.
+    links:
+      buy:
+        - name: Feeo fuse holder on AliExpress
+          url: https://s.click.aliexpress.com/e/_c41K6QGX
+          affiliate: true
+
+  feeo-fuse-25:
+    name: Feeo PV fuse and holder, 25 A
+    icon: fuse
+    about: PV fuse. Blows to protect a string’s cable if too much current flows back into it.
+    brand: feeo
+    why: "A gPV fuse, the class made to protect solar strings, built to IEC 60269-6. CE and TÜV certified."
+    specs:
+      fuse_a: 25
+    links:
+      buy:
+        - name: AliExpress
+          url: https://s.click.aliexpress.com/e/_c41K6QGX
+          affiliate: true
+
+  feeo-spd-600:
+    name: Feeo DC surge protector, 600 V
+    icon: spd
+    about: Surge protector. Diverts voltage spikes from lightning or switching to earth before they reach the equipment.
+    brand: feeo
+    why: "Built to EN 50539-11, the standard for surge protectors on the DC side of solar systems, since replaced by IEC/EN 61643-31. TÜV certified."
+    specs:
+      spd_v: 600
+
+  feeo-mcb-2p:
+    name: Feeo DC breaker, 2 pole
+    icon: mcb
+    about: DC breaker. Switches the string off and trips on overload.
+    brand: feeo
+    why: "Built to IEC/EN 60947-2, the international standard for low-voltage circuit breakers. CB and TÜV certified."
+    specs:
+      current_a: null
+      voltage_vdc: null
+
+  beny-bdm-250:
+    name: ZJBeny DC MCCB, 250 A frame, in enclosure
+    icon: mccb
+    about: DC moulded-case breaker. Protects the battery cable from overload and short circuit, and isolates the inverter from the batteries.
+    brand: zjbeny
+    why: "The BDM series is built to IEC 60947-2, the international standard for low-voltage circuit breakers, and China’s GB/T 14048.2. TÜV certified (TUV-027276-E), rated for 500 V DC and IP65 in its enclosure."
+    specs:
+      current_a: 250
+      trip: Adjustable
+      poles: 2
+      voltage_vdc: 500
+    note: The same adjustable unit as on the home system. Set the trip to 200 A, about 1.25 × the SRNE’s full-load battery current.
+    links:
+      buy:
+        - name: ZJBeny store on Alibaba
+          url: https://zjbeny.en.alibaba.com/search/product?SearchText=mccb
+      alternatives:
+        - name: Nanque 2P MCCB, 200 A
+          url: https://s.click.aliexpress.com/e/_c3VDGhOR
+          affiliate: true
+          note: "Nanque is a reputable Chinese maker of DC protection for solar."
+
+  busbar-24v:
+    name: Battery busbar pair
+    icon: busbar
+    about: Busbar. Copper bars where the inverter and the battery connect, with room for more packs.
+    specs:
+      bars: Positive and negative
+      rating_a: null
+
+  firman-b2520002:
+    name: FIRMAN 5 kWh lithium battery B2520002, 25.6 V
+    short: FIRMAN 5 kWh
+    icon: battery
+    about: LiFePO4 battery pack. Stores energy for night and cloudy days. Its BMS protects the cells from overcharge, overdischarge and too much current.
+    specs:
+      kwh: 5.12
+      cells: 8S
+      nominal_v: 25.6
+      ah: 200
+      chem: LiFePO4
+      charge_v: 27.6 to 28.8 V
+      bms_a: 150
+      cycles: "6,000"
+      parallel: Up to 6 packs (30.72 kWh)
+      weight: 50.4 kg
+      warranty: 6 years
+      comms: None published, so the SRNE runs on voltage settings
+    note: FIRMAN lists 220 Ah, but 5,120 Wh at 25.6 V is 200 Ah, which matches the model name, so this page uses 200 Ah.
+    links:
+      read:
+        - title: "Optimal charge settings for LiFePO4"
+          url: https://blog.openculture.org.ng/optimal-charge-settings-for-lithium-iron-phosphates-lifepo4/
+      buy:
+        - name: Sumec Firman store
+          url: https://sumecfirmanstore.com/product/firman-5kwh-lithium-battery-b2520002-200a-25-6v/
+      alternatives:
+        - name: "Deriy EVE LiFePO4, 25.6 V, 4.5 kWh"
+          url: https://www.deriyenergy.com/
+          note: "EVE cells and no BMS communication, so the same voltage settings apply. A little less energy than the FIRMAN; check its BMS current, since the SRNE can draw about 150 A at full output."
+        - name: "Deriy EVE LiFePO4, 25.6 V, 3.8 kWh"
+          url: https://www.deriyenergy.com/
+          note: "EVE cells and no BMS communication, so the same voltage settings apply. About three quarters of the FIRMAN’s energy; check its BMS current, since the SRNE can draw about 150 A at full output."
+
+  chint-nxu-ii-275:
+    name: Chint NXU-II Type 2 SPD, 2P, 40 kA, 275 V
+    icon: spd
+    about: Surge protector. Diverts voltage spikes from lightning or switching to earth before they reach the equipment.
+    brand: chint
+    why: "A Type 2 surge protector built to IEC/EN 61643-11, the standard for surge protectors on low-voltage AC supplies. CE and RoHS marked."
+    specs:
+      spd_type: Type 2
+      poles: 2
+      imax: 40 kA
+      uc_v: 275
+    advice: The local Chint dealer didn’t stock the 275 V version, so this one came from AliExpress.
+    links:
+      buy:
+        - name: AliExpress
+          url: https://s.click.aliexpress.com/e/_c3GayHMx
+          affiliate: true
+
+  grid-board:
+    name: "Grid board: Chint MCB, SPD, MCB"
+    icon: db
+    about: Grid distribution board. Takes the utility supply through breakers and surge protection, then feeds the SRNE’s AC input.
+    brand: chint
+    why: "Chint breakers are built to IEC/EN 60898-1, the standard for breakers in homes and similar buildings. The surge protector is the NXU-II, built to IEC/EN 61643-11."
+    specs:
+      phase: Single phase
+      meter: Utility kWh meter
+      main_a: null
+      spd: Chint NXU-II, 275 V
+      inv_in_a: 32
+    note: "The grid only charges the battery and bypasses to the house when solar and battery run short. The 2-pole 32 A breaker covers the SRNE’s 3.3 kW pass-through plus 80 A of grid charging, about 27 A at most."
+    advice: Buy Chint breakers and RCBOs from an authorised Chint dealer in Nigeria.
+
+  ac-board-load:
+    name: "Load board: Chint MCB, SPD, RCBO"
+    icon: db
+    about: Distribution board. A breaker, surge protection and an RCBO, which cuts power on overload or earth leakage to protect people from shock.
+    brand: chint
+    why: "Chint breakers are built to IEC/EN 60898-1 and its RCBOs to IEC/EN 61009-1, the standards for breakers and RCBOs in homes and similar buildings. The surge protector is the NXU-II, built to IEC/EN 61643-11."
+    specs:
+      mcb_a: 20
+      spd: Chint NXU-II, 275 V
+      rcbo: 2P 20 A, 30 mA
+    note: The SRNE gives about 14 A at its rated 3.3 kW, so 20 A breakers carry the full output with room for a fridge’s start-up.
+    advice: Buy Chint breakers and RCBOs from an authorised Chint dealer in Nigeria.

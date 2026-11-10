@@ -1,0 +1,134 @@
+# This design: the parts used and how many, how the panel string is wired,
+# the page text, the three energy-flow views and the battery-side check
+# settings. Products are described in products.yaml; positions on the drawing
+# live in layout.yaml.
+
+version: "0.1"
+updated: 2026-11-10   # shown in the footer, with the version
+
+# Text at the top of the page and in the "Why this design" section.
+# Text fields can use <b> for bold.
+page:
+  title: Project Anor · one SRNE HF 3.3 kW, 24 V essentials
+  description: A small 24 V system for essential house loads, built around one SRNE HF2430S80-H 3.3 kW inverter, 5 Jinko panels on its built-in tracker and one FIRMAN 5 kWh LiFePO4 battery.
+  brand: small system
+  eyebrow: Small system · 24 V · one SRNE HF2430S80-H
+  h1: Essentials on one SRNE
+  lead: A mid-small 24 V system for the loads that matter in an outage. One SRNE HF2430S80-H runs lights, fans, the TV, Wi-Fi, laptops and a small fridge from 5 Jinko 650 W panels (3.25 kWp) and a FIRMAN 5 kWh battery. Grid is a backup charger and bypass. Nothing major runs on it.
+  inverters_label: One inverter
+  glance:
+    - {icon: mppt, cat: solar, title: One tracker, one string, text: "5 Jinko panels, 590 to 650 W, in one string, about 250 to 265 V open-circuit, into the SRNE’s single 500 V tracker. Room for two more panels later."}
+    - {icon: battery, cat: batt, title: One 24 V battery, text: "One FIRMAN 5.12 kWh LiFePO4 pack through a 250 A breaker set to 200 A. It doesn’t talk to the inverter, so the SRNE charges and stops by voltage."}
+    - {icon: home, cat: load, title: Essentials only, text: "Lights, fans, TV, Wi-Fi, laptops and a small fridge share one output. Air conditioners, pumps and cooking stay on the grid."}
+  budget:
+    eyebrow: Essential loads
+    title: About 0.7 kW on at once, 5 kWh a day
+    lead: "The SRNE gives 3.3 kW, but plan on about 2.5 kW: the FIRMAN’s 150 A limit is reached near full output, and a fridge needs room to start. The hours are a typical day; wattages are typical figures, so check your own appliances’ labels."
+    budget_w: 2500
+    light_kwh: 0
+    sun_hours: 4
+    derate: 0.7
+    rows:
+      - {load: LED bulb, watts: 10, qty: 8, hours: 6}
+      - {load: Ceiling fan, watts: 70, qty: 3, hours: 10}
+      - {load: "LED TV, 43 inch", watts: 80, qty: 1, hours: 5}
+      - {load: Satellite decoder, watts: 20, qty: 1, hours: 5}
+      - {load: Wi-Fi router, watts: 12, qty: 1, hours: 24}
+      - {load: Laptop, watts: 65, qty: 2, hours: 6}
+      - {load: Phone charging, watts: 10, qty: 3, hours: 2}
+      - {load: "Small fridge, inverter type", watts: 100, qty: 1, hours: 8, note: "Runs on and off; 8 hours of running is about a day."}
+      - {load: "Air conditioner, 1.5 HP", watts: 1100, qty: 0, hours: 0, note: Not on this system. Keep it on the grid., status: "no"}
+      - {load: "Deep-well pump, 1 HP", watts: 750, qty: 0, hours: 0, note: Not on this system. Its start-up surge is too much for a 24 V battery this size., status: "no"}
+      - {load: "Cooker, kettle or pressing iron", watts: 2000, qty: 0, hours: 0, note: Not on this system. Heating elements belong on the grid., status: "no"}
+    settings:
+      - "Output priority <b>[01] SBU</b>: solar first, then battery, then grid."
+      - "Charger priority <b>[06] CSO</b>: solar charges first, and the grid only when solar can’t."
+      - "Battery type <b>[08] USE</b>, with the voltages on the battery page. The FIRMAN doesn’t publish BMS communication, so the SRNE works by voltage."
+      - "<b>Back to grid at 24.8 V [04]</b> and <b>back to battery at 26.4 V [05]</b>, so a cloudy day doesn’t empty the pack."
+      - "Max charge current <b>60 A [07]</b> and grid charge <b>60 A [28]</b>, about 0.3 C on the 200 Ah pack."
+      - Item numbers are from SRNE’s HF series manual. Check them against the manual for your unit.
+  upgrades:
+    - "<b>Two more panels</b>, 7 in the one string (4.55 kWp at 650 W, about 350 to 370 V open-circuit). At the SRNE’s 13 A input limit that’s about 4 kW, the most its tracker takes."
+    - "<b>A second FIRMAN pack</b> on the same busbar: 10.24 kWh, and half the current per pack. FIRMAN allows up to 6 in parallel (30.72 kWh)."
+    - "<b>For air conditioners, a pump or cooking</b>, move up to the <a href=\"https://medium.anor.openculture.org.ng\">Growatt design</a>: 48 V and 6 kW, with the same panels."
+  notes:
+    title: Why this design
+    lead: A step up from a small 12 V kit, for homes that want the essentials to stay on through an outage without paying for a system sized for air conditioners.
+    items:
+      - {h: What it runs, text: "Lights, ceiling fans, the TV and decoder, Wi-Fi, laptops, phones and a small fridge. Nothing major: no air conditioners, pumps, cookers or water heaters."}
+      - {h: Why 24 V, text: "Half the battery current of a 12 V system at the same power, so cables and breakers stay manageable at 3.3 kW."}
+      - {h: Why 3 kW of solar, text: "About 9 kWh on a typical day, enough for the day’s loads and to refill the battery. One string suits the SRNE’s single tracker, with room for two more panels."}
+      - {h: Panels, text: "The same Jinko Tiger Neo as the 48 V designs, 650 W where available and 590 W or more otherwise. 5 panels make 3.25 kWp at 650 W, or 2.95 kWp at 590 W."}
+    alt_title: Battery alternatives
+    alternatives:
+      - {name: "Deriy EVE LiFePO4, 25.6 V, 4.5 kWh", url: "https://www.deriyenergy.com/", text: "EVE cells and no BMS communication, so the same SRNE voltage settings apply."}
+      - {name: "Deriy EVE LiFePO4, 25.6 V, 3.8 kWh", url: "https://www.deriyenergy.com/", text: "The smaller pack, also on EVE cells with no BMS communication."}
+  footer:
+    - "Links marked Affiliate are AliExpress affiliate links: if you buy through them, Openculture earns a small commission at no extra cost to you. The HM Solar, Sumec Firman, ZJBeny and Deriy links are not affiliate links."
+    - "I consult for Deriy on technical matters: after-sales repairs, documentation and product improvement. My role has nothing to do with sales or marketing."
+
+parts:
+  - {id: pv-a, product: jinko-tiger-neo-650, qty: 5, series: 5, parallel: 1, layout: 5 in series, feeds: inv}
+  - {id: box-1, product: pv-box-1ch, qty: 1}
+  - {id: inv, product: srne-hf2430s80-h, qty: 1}
+  - {id: brk, product: beny-bdm-250, qty: 1, note: Trip set to 200 A.}
+  - {id: busbar, product: busbar-24v, qty: 1}
+  - {id: bat, product: firman-b2520002, qty: 1}
+  - {id: spd-ac, product: chint-nxu-ii-275, qty: null, note: Used on the grid board and the load board., show_on: gridbd}
+  - {id: gridbd, product: grid-board, qty: 1}
+  - {id: acb, product: ac-board-load, qty: 1}
+
+short_names:
+  pv-a: PV
+
+groups:
+  - title: Solar array
+    cards: [[pv-a], [box-1]]
+  - title: Inverter
+    cards: [[inv]]
+  - title: Battery and DC side
+    cards: [[bat], [busbar], [brk]]
+  - title: Grid and AC side
+    cards: [[gridbd], [acb], [spd-ac]]
+
+other_blocks:
+  grid:
+    title: Grid supply
+    icon: meter
+    category: grid
+    about: Single-phase utility supply through the kWh meter. Feeds the SRNE’s AC input, which charges the battery and bypasses to the house when solar and battery run short.
+    rows:
+      - [Supply, Single phase]
+      - [Feeds, SRNE AC input]
+  loads:
+    title: Essential loads
+    icon: home
+    category: load
+    about: "On the SRNE AC output: lights, ceiling fans, TV and decoder, Wi-Fi router, laptops, phone chargers and a small fridge."
+    rows:
+      - [Supplied by, SRNE AC output]
+      - [In an outage, Stay on]
+      - [Plan on, "About 2.5 kW at most"]
+
+modes:
+  day:
+    caption: <b>Sunny day.</b> The string feeds the SRNE’s tracker. It runs the essentials and charges the battery.
+    flowing: [w-pv, w-box, w-dc, w-brk, w-batp, w-batn, w-out, w-load]
+    reversed: []
+  night:
+    caption: <b>Night, grid off.</b> No solar. The SRNE runs the essentials from the 5.12 kWh pack until it reaches the back-to-grid level.
+    flowing: [w-dc, w-brk, w-batp, w-batn, w-out, w-load]
+    reversed: [w-dc, w-brk, w-batp, w-batn]
+  grid:
+    caption: <b>Grid on, battery low.</b> The SRNE bypasses grid to the house and recharges the battery.
+    flowing: [w-grid, w-gridin, w-out, w-load, w-dc, w-brk, w-batp, w-batn]
+    reversed: []
+
+checks:
+  battery: bat
+  inverters: [inv]
+  chargers: [inv]
+  charger_breakers:
+    brk: inv
+  low_battery_v: 24
+  inverter_efficiency: 0.92
