@@ -152,7 +152,7 @@ reference:
   name: The home build
   url: https://home.anor.openculture.org.ng
   sys: "48 V · Victron · 16 kVA · 58.8 kWh · 18.3 kWp"
-  text: "My own system, documented as it was built: every part, cable and setting, with live sizing checks. It grew one piece at a time, so it’s a reference for how things connect, not a shopping list. The Large design is what I’d build in its place today."
+  text: "I have run my home on solar for ten years, and people constantly ask how to build a setup like mine. Project Anor started as an attempt to open-source my current install, but I realized my system carries years of organic growth and technical debt that make little sense for a fresh build. Instead, I created clean-sheet designs that deliver the same reliability at different scales: from a full-house equivalent of my own setup down to smaller starter systems. That drive led me down the rabbit hole that led to this page."
 
 # Posts on blog.openculture.org.ng for readers who want more on a topic.
 # The energy audit post, linked beside the appliance tiles. Leave empty to hide the line.
