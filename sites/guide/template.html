@@ -557,7 +557,7 @@ $("#pgrid").innerHTML=SYS.filter(s=>s.state==="live").map(s=>`<div class="pcard"
   <tr><td colspan="3">Allowance for the rest, ${G.bos}%<small>${esc(G.bosText)}</small></td><td class="n">${naira(s.bos)}</td></tr>
   <tr class="tot"><td colspan="3">Reference total, before installation</td><td class="n">${naira(s.partsCost+s.bos)}</td></tr></tbody></table></div>`).join("");
 $("#psrc").innerHTML=`<thead><tr><th>Item</th><th class="n">Price used</th><th>Listed at</th><th>Source</th></tr></thead><tbody>${Object.values(P).map(p=>`<tr><td>${esc(p.n)}${p.note?`<small>${esc(p.note)}</small>`:""}</td><td class="n">${naira(p.p)}</td><td>${esc(p.range||naira(p.p))}</td><td>${p.src.map(x=>`<a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)} ↗</a>`).join(" · ")}</td></tr>`).join("")}</tbody>`;
-{const R=G.ref,c=$("#refcard");c.href=R.url;c.innerHTML=`<span class="tn">${esc(R.name)}</span><span class="ts">${esc(R.sys)}</span><p>${esc(R.text)}</p><span class="go">Open the home dashboard ↗</span>`;}
+{const R=G.ref,c=$("#refcard");c.href=R.url;c.innerHTML=`<span class="tn">${esc(R.name)}</span><span class="ts">${esc(R.sys)}</span>${R.text.split(/\n\s*\n/).map(x=>`<p>${esc(x.trim())}</p>`).join("")}<span class="go">Open the home dashboard ↗</span>`;}
 $("#readlist").innerHTML=G.reading.map(r=>`<li><a href="${r.url}" target="_blank" rel="noopener"><b>${esc(r.title)} ↗</b><span>${esc(r.text)}</span></a></li>`).join("");
 if(!G.reading.length)$("#reading").hidden=true;
 renderApps();$("#budget").value=fmt(S.budget);update();
