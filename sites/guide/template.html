@@ -470,8 +470,11 @@ function update(){
     bar.hidden=true;$("#r-barl").hidden=true;pill.className="pill bad";pill.textContent="Larger systems are outside this guide";
     tips.push(`The largest design is <strong>${esc(t.n)}</strong> (${esc(t.sys)}), about ${naira(t.cost)}. It carries ${fmt(t.cont)} W at once and about ${t.kwh} kWh a day, with at most ${t.ac} air conditioners, ${t.acAt} running at once and no more than ${t.ac2} of them 2 HP.`);
     tips.push("Above that, or for three-phase, ask an installer for a custom design.");
-    let best=null;r.on.forEach(a=>{S.sel[a.id].on=false;const t2=tierFor(calc());S.sel[a.id].on=true;if(t2>=0&&!best)best={a,t:t2};});
-    if(best)tips.push(`Drop the <strong>${esc(best.a.n)}</strong> and <strong>${esc(SYS[best.t].n)}</strong> covers the rest.`);
+    /* first try fewer of one appliance, then try dropping it */
+    let cut=null;r.on.forEach(a=>{const s=S.sel[a.id],q0=s.q;for(let q=q0-1;q>=1&&!cut;q--){s.q=q;if(tierFor(calc())>=0)cut={a,q};}s.q=q0;});
+    let best=null;if(!cut)r.on.forEach(a=>{S.sel[a.id].on=false;const t2=tierFor(calc());S.sel[a.id].on=true;if(t2>=0&&!best)best={a,t:t2};});
+    if(cut)tips.push(`Cut the <strong>${esc(cut.a.n)}</strong> from ${S.sel[cut.a.id].q} to ${cut.q} and <strong>${esc(t.n)}</strong> covers it.`);
+    else if(best)tips.push(`Drop the <strong>${esc(best.a.n)}</strong> and <strong>${esc(SYS[best.t].n)}</strong> covers the rest.`);
     gol.textContent="See the "+t.n+" design";}
   else{bar.hidden=false;$("#r-barl").hidden=false;
     $("#r-tier").textContent=pending?SYS[ti].n+" · 12 V":t.n;$("#r-cost").textContent=pending?"":"about "+naira(t.cost);$("#r-sys").textContent=pending?"Dashboard pending":t.sys;
