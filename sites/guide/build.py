@@ -135,6 +135,7 @@ def main():
     data = {"prices": prices, "systems": systems, "apps": apps, "bos": doc["allowance_pct"],
             "bosText": str(doc.get("allowance_text", "")),
             "ref": {k: str(ref.get(k, "")) for k in ("name", "url", "sys", "text")},
+            "consult": {k: str((doc.get("consult") or {}).get(k, "")) for k in ("url", "label", "card", "tip")},
             "reading": [{k: str(r.get(k, "")) for k in ("title", "url", "text")} for r in doc.get("reading") or [] if isinstance(r, dict)]}
     html = (ROOT / "template.html").read_text(encoding="utf-8")
     fills = {"/*__DATA__*/": "const G=" + json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/") + ";",

@@ -286,6 +286,8 @@ footer{border-top:1px solid var(--line);padding-block:24px;font-size:.84rem;colo
 a.tier{text-decoration:none;color:inherit}
 a.tier:hover{border-color:var(--line2)}
 .tier.off{opacity:.72;border-style:dashed}
+.tier.consult{border-style:dashed}
+.tips a{color:var(--solar);font-weight:650}
 .tier .tt{font-size:.78rem;font-weight:600;color:var(--solar)}
 .tier .go{font-size:.8rem;font-weight:650;color:var(--solar);margin-top:2px}
 .tier .badges{display:flex;gap:4px;flex-wrap:wrap;min-height:20px}
@@ -429,6 +431,7 @@ const LIVE=SYS.map((s,i)=>i).filter(i=>SYS[i].state==="live"),FIRST=LIVE[0],LAST
 
 /* ---------- planner ---------- */
 const S={budget:5000000,sel:{}};
+const CONSULT=!!(G.consult&&G.consult.url);
 APPS.forEach(a=>S.sel[a.id]={on:a.on,q:a.q,h:a.h});
 function tile(a){const s=S.sel[a.id];
   return `<div class="app ${s.on?"on":""}" data-id="${a.id}">
@@ -469,7 +472,7 @@ function update(){
   if(scope){$("#r-tier").textContent="Out of scope";$("#r-cost").textContent="";$("#r-sys").textContent="More than the largest design here carries.";
     bar.hidden=true;$("#r-barl").hidden=true;pill.className="pill bad";pill.textContent="Larger systems are outside this guide";
     tips.push(`The largest design is <strong>${esc(t.n)}</strong> (${esc(t.sys)}), about ${naira(t.cost)}. It carries ${fmt(t.cont)} W at once and about ${t.kwh} kWh a day, with at most ${t.ac} air conditioners, ${t.acAt} running at once and no more than ${t.ac2} of them 2 HP.`);
-    tips.push("Above that, or for three-phase, ask an installer for a custom design.");
+    tips.push(CONSULT?G.consult.tip.replace("<a>",`<a href="${esc(G.consult.url)}" target="_blank" rel="noopener">`):"Above that, or for three-phase, ask an installer for a custom design.");
     /* first try fewer of one appliance, then try dropping it */
     let cut=null;r.on.forEach(a=>{const s=S.sel[a.id],q0=s.q;for(let q=q0-1;q>=1&&!cut;q--){s.q=q;if(tierFor(calc())>=0)cut={a,q};}s.q=q0;});
     let best=null;if(!cut)r.on.forEach(a=>{S.sel[a.id].on=false;const t2=tierFor(calc());S.sel[a.id].on=true;if(t2>=0&&!best)best={a,t:t2};});
@@ -498,7 +501,8 @@ function update(){
   $("#track").innerHTML=SYS.map((s,i)=>{const live=s.state==="live";
     const inner=`<div class="badges">${i===mark?'<span class="bdg need">You need</span>':""}${live&&s.cost<=b?'<span class="bdg fit">In budget</span>':""}${s.state==="pending"?'<span class="bdg ph">Pending</span>':""}${s.state==="scope"?'<span class="bdg ph">Out of scope</span>':""}</div>
     <div class="lv">${SYS.map((_,j)=>`<i class="${j<=i?"f":""}"></i>`).join("")}</div><div class="tn">${esc(s.n)}</div><div class="tt">${esc(s.tag)}</div><div class="ts">${esc(s.sys)}</div><div class="tg">${esc(s.good)}</div>
-    <div class="tc">${live?"about "+short(s.cost):s.state==="pending"?"Dashboard pending":"Outside this guide"}</div>${live?'<div class="go">Open dashboard ↗</div>':""}`;
+    <div class="tc">${live?"about "+short(s.cost):s.state==="pending"?"Dashboard pending":CONSULT?esc(G.consult.card):"Outside this guide"}</div>${live?'<div class="go">Open dashboard ↗</div>':s.state==="scope"&&CONSULT?`<div class="go">${esc(G.consult.label)} ↗</div>`:""}`;
+    if(s.state==="scope"&&CONSULT)return `<a class="tier consult ${i===mark?"need":""}" href="${esc(G.consult.url)}" target="_blank" rel="noopener">${inner}</a>`;
     return live?`<a class="tier ${i===mark?"need":""}" href="${s.url}" target="_blank" rel="noopener">${inner}</a>`:`<div class="tier off ${i===mark?"need":""}">${inner}</div>`;}).join("");
 }
 document.addEventListener("change",e=>{const el=e.target.closest(".app");if(!el||e.target.type!=="checkbox")return;

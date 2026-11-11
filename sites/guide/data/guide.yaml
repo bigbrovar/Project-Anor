@@ -139,6 +139,14 @@ systems:
     sys: "Above 16 kW, or three-phase"
     good: "Big homes, estates and businesses."
 
+# Paid 1:1 sessions, offered only where the guide has no design: on the out-of-scope
+# card and in the out-of-scope result. Leave url empty to hide both.
+consult:
+  url: https://calendar.app.google/V7tEH4MKXfbbSs4e9
+  label: Book a 1:1
+  card: "Custom build: talk it through 1:1"
+  tip: "Above that, or for three-phase, <a>book a 1:1 session</a> with bigbrovar to plan a custom build. An installer can also quote one."
+
 # The author's own install: documented as built, not one of the recommendations.
 reference:
   name: The home build
