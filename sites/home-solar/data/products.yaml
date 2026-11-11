@@ -124,6 +124,9 @@ products:
     short: Jinko 590 W
     icon: pv
     about: Solar panel. Turns sunlight into DC electricity.
+    why:
+      - "Jinko Tiger Neo panels use N-type cells, which lose less output in roof heat than older P-type panels."
+      - "Certified to IEC 61215 and IEC 61730, and widely stocked in Nigeria."
     specs:
       pmax_w: 590
       voc_v: 52.62
@@ -155,6 +158,9 @@ products:
     short: Jinko 580 W
     icon: pv
     about: Solar panel. Turns sunlight into DC electricity.
+    why:
+      - "Jinko Tiger Neo panels use N-type cells, which lose less output in roof heat than older P-type panels."
+      - "Certified to IEC 61215 and IEC 61730, and widely stocked in Nigeria."
     specs:
       pmax_w: 580
       voc_v: 52.62
@@ -186,6 +192,9 @@ products:
     short: Canadian Solar 600 W
     icon: pv
     about: Solar panel. Turns sunlight into DC electricity.
+    why:
+      - "I chose it for its low open-circuit voltage: 41.3 V a panel, so 3 in series stays under the 150 V limit of the SmartSolar 150/100, even on a cold morning."
+      - "That gives 600 W a panel without stepping up to a costlier 250 V charger."
     specs:
       pmax_w: 600
       voc_v: 41.3
@@ -341,6 +350,9 @@ products:
     name: MidNite Solar MNSPD-300-DC surge protector
     icon: spd
     about: Surge protector. Diverts voltage spikes from lightning or switching to earth before they reach the equipment.
+    why:
+      - "Long rooftop cable runs pick up lightning and switching surges, which can destroy a solar charger. This diverts the spike to earth before it gets there."
+      - "It has a status LED on each leg and a Type 4X rated enclosure, so it holds up in humid weather."
     specs:
       spd_v: 300
     links:
@@ -396,6 +408,9 @@ products:
     name: Battery busbar pair
     icon: busbar
     about: Busbar. Copper bars where every charger, inverter and battery pack connects in one place.
+    why:
+      - "With several battery packs, inverters and chargers on one bank, a busbar gives every cable its own bolted connection, in place of lugs stacked on a battery terminal."
+      - "Equal-length cables from each pack to the busbar keep the packs sharing charge and discharge current evenly."
     specs:
       bars: Positive and negative
       rating_a: null
@@ -423,7 +438,7 @@ products:
       kwh: 14.7
       cells: 16S
       nominal_v: 51.2
-      ah: null
+      ah: 280
       chem: LiFePO4, EVE cells
       bms: JK inverter BMS
       bms_a: 200
@@ -449,6 +464,10 @@ products:
     name: DIY GX on Raspberry Pi CM4
     icon: gx
     about: GX monitoring hub. Collects data from the inverters, chargers and batteries for monitoring, and allows remote control of the system.
+    why:
+      - "I built it around a Raspberry Pi Compute Module 4 with 4 GB of RAM and a dual isolated CAN HAT. It runs Venus OS for far less than a Cerbo GX, with more processing headroom."
+      - "The CM4 has onboard eMMC storage, which holds up to round-the-clock logging better than a microSD card."
+      - "It runs Venus OS Large with Node-RED flows that read the JK BMS and the Victron inverters over CAN, shed heavy loads when the battery runs low, and send live data to Home Assistant, InfluxDB and Grafana."
     specs:
       compute: Raspberry Pi CM4
       storage: eMMC
@@ -545,7 +564,9 @@ products:
     icon: mcb
     about: DC breaker. Switches the string off and trips on overload.
     brand: feeo
-    why: "Built to IEC/EN 60947-2, the international standard for low-voltage circuit breakers. CB and TÜV certified."
+    why:
+      - "Built to IEC/EN 60947-2, the international standard for low-voltage circuit breakers. CB and TÜV certified."
+      - "Feeo’s FPV series breakers are non-polarity, so they break fault current flowing in either direction. That matters on solar and battery circuits."
     specs:
       current_a: null
       voltage_vdc: null

@@ -112,6 +112,9 @@ products:
     short: Jinko 650 W
     icon: pv
     about: Solar panel. Turns sunlight into DC electricity.
+    why:
+      - "Jinko Tiger Neo panels use N-type cells, which lose less output in roof heat than older P-type panels."
+      - "Certified to IEC 61215 and IEC 61730, and stocked in Nigeria by Fouani."
     specs:
       pmax_w: 650
       voc_v: 50.26
@@ -233,7 +236,9 @@ products:
     icon: mcb
     about: DC breaker. Switches the string off and trips on overload.
     brand: feeo
-    why: "Built to IEC/EN 60947-2, the international standard for low-voltage circuit breakers. CB and TÜV certified."
+    why:
+      - "Built to IEC/EN 60947-2, the international standard for low-voltage circuit breakers. CB and TÜV certified."
+      - "Feeo’s FPV series breakers are non-polarity, so they break fault current flowing in either direction. That matters on solar and battery circuits."
     specs:
       current_a: null
       voltage_vdc: null
@@ -264,6 +269,8 @@ products:
     name: Battery busbar pair
     icon: busbar
     about: Busbar. Copper bars where the inverter and the battery connect, with room for a second pack.
+    why:
+      - "A busbar gives the battery, the inverter and anything added later their own bolted connections, in place of lugs stacked on a battery terminal."
     specs:
       bars: Positive and negative
       rating_a: null
@@ -277,7 +284,7 @@ products:
       kwh: 14.7
       cells: 16S
       nominal_v: 51.2
-      ah: null
+      ah: 280
       chem: LiFePO4, EVE cells
       bms: JK inverter BMS
       bms_a: 200

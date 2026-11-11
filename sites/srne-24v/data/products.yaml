@@ -102,6 +102,9 @@ products:
     short: Jinko 650 W
     icon: pv
     about: Solar panel. Turns sunlight into DC electricity.
+    why:
+      - "Jinko Tiger Neo panels use N-type cells, which lose less output in roof heat than older P-type panels."
+      - "Certified to IEC 61215 and IEC 61730, and stocked in Nigeria by Fouani."
     specs:
       pmax_w: 650
       voc_v: 50.26
@@ -221,7 +224,9 @@ products:
     icon: mcb
     about: DC breaker. Switches the string off and trips on overload.
     brand: feeo
-    why: "Built to IEC/EN 60947-2, the international standard for low-voltage circuit breakers. CB and TÜV certified."
+    why:
+      - "Built to IEC/EN 60947-2, the international standard for low-voltage circuit breakers. CB and TÜV certified."
+      - "Feeo’s FPV series breakers are non-polarity, so they break fault current flowing in either direction. That matters on solar and battery circuits."
     specs:
       current_a: null
       voltage_vdc: null
@@ -252,6 +257,8 @@ products:
     name: Battery busbar pair
     icon: busbar
     about: Busbar. Copper bars where the inverter and the battery connect, with room for more packs.
+    why:
+      - "A busbar gives the battery, the inverter and anything added later their own bolted connections, in place of lugs stacked on a battery terminal."
     specs:
       bars: Positive and negative
       rating_a: null
@@ -261,6 +268,9 @@ products:
     short: FIRMAN 5 kWh
     icon: battery
     about: LiFePO4 battery pack. Stores energy for night and cloudy days. Its BMS protects the cells from overcharge, overdischarge and too much current.
+    why:
+      - "Sumec Firman is newer to solar and lithium storage in Nigeria, but has sold and serviced generators here for many years, with service centres across the country."
+      - "I have not run their solar hardware in my own home. Their batteries and inverters have been well received locally, with good feedback from homeowners and installers I trust."
     specs:
       kwh: 5.12
       cells: 8S
