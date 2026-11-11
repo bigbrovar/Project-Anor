@@ -11,6 +11,16 @@ img{max-width:100%}
 </style>
 <title>Project Anor Solar Guide</title>
 <meta name="description" content="Pick your appliances and budget, and find the Project Anor solar design that fits: four worked systems for Nigerian homes, each with its own dashboard and reference prices.">
+<link rel="canonical" href="https://project.anor.openculture.org.ng/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Project Anor">
+<meta property="og:title" content="Project Anor Solar Guide">
+<meta property="og:description" content="Pick your appliances and budget, and find the Project Anor solar design that fits: four worked systems for Nigerian homes, each with its own dashboard and reference prices.">
+<meta property="og:url" content="https://project.anor.openculture.org.ng/">
+<meta property="og:image" content="https://project.anor.openculture.org.ng/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
@@ -288,6 +298,8 @@ a.tier:hover{border-color:var(--line2)}
 .tier.off{opacity:.72;border-style:dashed}
 .tier.consult{border-style:dashed}
 .tips a{color:var(--solar);font-weight:650}
+.audit{margin:14px 0 0;font-size:.92rem;color:var(--muted);max-width:62ch}
+.audit a{color:var(--solar);font-weight:650}
 .tier .tt{font-size:.78rem;font-weight:600;color:var(--solar)}
 .tier .go{font-size:.8rem;font-weight:650;color:var(--solar);margin-top:2px}
 .tier .badges{display:flex;gap:4px;flex-wrap:wrap;min-height:20px}
@@ -347,6 +359,7 @@ footer a{color:inherit}
       <p class="eyebrow">Solar planner for Nigerian homes</p>
       <h1 id="h1p">Select what you want to power.<br>See the setup that fits.</h1>
       <p class="lead">Tick your appliances and set a budget. The planner matches them to one of four worked designs, based on my current install. The smallest is a 3.3 kW system for lights, fans, a TV and a fridge. The largest is a 16 kW system that runs a full house with air conditioners. Each design has its own dashboard with the wiring, parts, settings and sizing checks. The limits are conservative on purpose: an efficient load is cheaper than generating more power.</p>
+      <p class="audit" id="audit">Not sure what your appliances draw? <a target="_blank" rel="noopener">How to do a home energy audit</a> shows how to add it up first.</p>
       <div class="budget">
         <div class="field"><label for="budget">Budget</label><span>₦</span><input id="budget" inputmode="numeric" value="5,000,000"></div>
         <div class="presets" id="presets">
@@ -379,6 +392,7 @@ footer a{color:inherit}
       <div class="r-sec" style="display:flex;gap:8px;flex-wrap:wrap">
         <a class="btn" id="r-go" href="#systems" target="_blank" rel="noopener"><span id="r-gol">Open the dashboard</span> <span data-i="arrow-right"></span></a>
         <button class="btn ghost" id="r-copy" type="button">Copy plan</button>
+        <button class="btn ghost" id="r-link" type="button">Copy link</button>
       </div>
       <p class="r-foot">Prices are a reference only. They change often and don’t include the installer’s charge.</p>
     </aside>
@@ -433,6 +447,17 @@ const LIVE=SYS.map((s,i)=>i).filter(i=>SYS[i].state==="live"),FIRST=LIVE[0],LAST
 const S={budget:5000000,sel:{}};
 const CONSULT=!!(G.consult&&G.consult.url);
 APPS.forEach(a=>S.sel[a.id]={on:a.on,q:a.q,h:a.h});
+/* a shared link restores the load: ?load=id:qty:hours,...&budget=N. Anything it doesn't recognise is ignored. */
+(function(){let q;try{q=new URLSearchParams(location.search);}catch(_){return;}
+  const l=q.get("load"),b=parseInt(q.get("budget"),10);
+  if(l!==null){APPS.forEach(a=>S.sel[a.id].on=false);
+    l.split(",").forEach(x=>{const [id,qt,h]=x.split(":"),s=S.sel[id];if(!s)return;s.on=true;
+      const n=parseInt(qt,10);if(n>=1)s.q=Math.min(30,n);
+      const hh=parseFloat(h);if(s.h!=null&&hh>=0.5)s.h=Math.min(24,Math.round(hh*2)/2);});}
+  if(b>=100000)S.budget=Math.min(b,500000000);})();
+const BASE=/^https?:$/.test(location.protocol)?location.origin+location.pathname:"https://project.anor.openculture.org.ng/";
+const shareURL=()=>BASE+"?load="+APPS.filter(a=>S.sel[a.id].on).map(a=>{const s=S.sel[a.id];return a.id+":"+s.q+(s.h!=null?":"+s.h:"");}).join(",")+"&budget="+S.budget;
+let touched=false;   /* the address only changes once the reader changes something */
 function tile(a){const s=S.sel[a.id];
   return `<div class="app ${s.on?"on":""}" data-id="${a.id}">
    <input type="checkbox" id="c-${a.id}" ${s.on?"checked":""} aria-label="${esc(a.n)}">
@@ -462,6 +487,7 @@ function whyUp(r,ti){ /* one line on what pushed the pick up a size */
   if(r.kwh>p.kwh)return `${r.kwh.toFixed(1)} kWh a day is more than ${esc(p.n)}’s panels make on a typical day (about ${p.kwh} kWh).`;
   if(r.surge>p.surge)return `The start-up surge is more than ${esc(p.n)} can take.`;return "";}
 function update(){
+  if(touched){try{history.replaceState(null,"",shareURL());}catch(_){}}touched=true;
   const r=calc(),b=S.budget,tips=[];let ti=tierFor(r);
   const pk=ti<0?r.peak:r.peakFor(SYS[ti]);
   $("#k-peak").innerHTML=fmt(pk)+"<small>W</small>";$("#k-surge").innerHTML=fmt(pk+r.ext)+"<small>W</small>";$("#k-kwh").innerHTML=r.kwh.toFixed(1)+"<small>kWh</small>";
@@ -517,6 +543,9 @@ $("#r-copy").onclick=async e=>{const t=e.currentTarget,r=calc(),ti=tierFor(r);
   const txt=`${ti<0?"Out of scope":SYS[ti].n} · budget ${short(S.budget)} · `+APPS.filter(a=>S.sel[a.id].on).map(a=>`${a.n} ×${S.sel[a.id].q}`).join(", ");
   try{await navigator.clipboard.writeText(txt);t.textContent="Copied";}catch(_){t.textContent="Couldn’t copy";}
   setTimeout(()=>t.textContent="Copy plan",1600);};
+$("#r-link").onclick=async e=>{const t=e.currentTarget;
+  try{await navigator.clipboard.writeText(shareURL());t.textContent="Link copied";}catch(_){t.textContent="Couldn’t copy";}
+  setTimeout(()=>t.textContent="Copy link",1600);};
 /* in-page links scroll without changing the address, so they also work in sandboxed previews */
 document.addEventListener("click",e=>{const a=e.target.closest('a[href^="#"]');if(!a)return;const el=document.getElementById(a.getAttribute("href").slice(1));
   if(el){e.preventDefault();el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});}});
@@ -531,7 +560,8 @@ $("#psrc").innerHTML=`<thead><tr><th>Item</th><th class="n">Price used</th><th>L
 {const R=G.ref,c=$("#refcard");c.href=R.url;c.innerHTML=`<span class="tn">${esc(R.name)}</span><span class="ts">${esc(R.sys)}</span><p>${esc(R.text)}</p><span class="go">Open the home dashboard ↗</span>`;}
 $("#readlist").innerHTML=G.reading.map(r=>`<li><a href="${r.url}" target="_blank" rel="noopener"><b>${esc(r.title)} ↗</b><span>${esc(r.text)}</span></a></li>`).join("");
 if(!G.reading.length)$("#reading").hidden=true;
-renderApps();update();
+renderApps();$("#budget").value=fmt(S.budget);update();
+if(G.audit)$("#audit a").href=G.audit;else $("#audit").hidden=true;
 </script>
 </body>
 </html>

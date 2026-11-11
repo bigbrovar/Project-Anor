@@ -13,6 +13,7 @@ import base64
 import datetime
 import json
 import pathlib
+import shutil
 import sys
 
 try:
@@ -719,6 +720,9 @@ def main():
 
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(html, encoding="utf-8")
+    # the link preview image (og:image) sits beside the page
+    if (ROOT / "og.png").exists():
+        shutil.copyfile(ROOT / "og.png", OUT.parent / "og.png")
     print(f"Read {len(products)} products, {len(part_list)} parts, {len(combiners)} combiners, {len(wires)} wires")
     if blanks:
         print(f"{len(blanks)} specs are blank and will be hidden on the page:")

@@ -12,6 +12,7 @@ Needs Python 3.8+ and PyYAML (on Fedora: sudo dnf install python3-pyyaml).
 import datetime
 import json
 import pathlib
+import shutil
 import sys
 
 try:
@@ -135,6 +136,7 @@ def main():
     data = {"prices": prices, "systems": systems, "apps": apps, "bos": doc["allowance_pct"],
             "bosText": str(doc.get("allowance_text", "")),
             "ref": {k: str(ref.get(k, "")) for k in ("name", "url", "sys", "text")},
+            "audit": str(doc.get("audit_url", "")),
             "consult": {k: str((doc.get("consult") or {}).get(k, "")) for k in ("url", "label", "card", "tip")},
             "reading": [{k: str(r.get(k, "")) for k in ("title", "url", "text")} for r in doc.get("reading") or [] if isinstance(r, dict)]}
     html = (ROOT / "template.html").read_text(encoding="utf-8")
@@ -146,6 +148,9 @@ def main():
         html = html.replace(key, value)
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(html, encoding="utf-8")
+    # the link preview image (og:image) sits beside the page
+    if (ROOT / "og.png").exists():
+        shutil.copyfile(ROOT / "og.png", OUT.parent / "og.png")
     live = [s for s in systems if s["state"] == "live"]
     print(f"Read {len(systems)} systems ({len(live)} live), {len(prices)} prices, {len(apps)} appliances")
     for s in live:

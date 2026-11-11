@@ -155,6 +155,9 @@ reference:
   text: "My own system, documented as it was built: every part, cable and setting, with live sizing checks. It grew one piece at a time, so it’s a reference for how things connect, not a shopping list. The Large design is what I’d build in its place today."
 
 # Posts on blog.openculture.org.ng for readers who want more on a topic.
+# The energy audit post, linked beside the appliance tiles. Leave empty to hide the line.
+audit_url: "https://blog.openculture.org.ng/of-a-budget-solar-inverter-system-energy-audit/"
+
 reading:
   - {title: "A budget solar inverter system: energy audit", url: "https://blog.openculture.org.ng/of-a-budget-solar-inverter-system-energy-audit/", text: How to add up what your home really uses before you size anything.}
   - {title: "Building an off-grid solar system: my approach", url: "https://blog.openculture.org.ng/solar-plan/", text: The thinking behind the home build.}
