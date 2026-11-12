@@ -2,7 +2,7 @@
 # busbar, the cables, the measured balance and the JK BMS settings.
 
 title: Battery bank
-lead: Two Deriy 14.7 kWh LiFePO4 packs in parallel, stacked and numbered 1 and 2 from top to bottom. One pack takes the busbar’s positive run and the other takes the negative run, so both share current evenly. Two more packs fit the same busbar later.
+lead: Two Deriy 14.3 kWh LiFePO4 packs in parallel, stacked and numbered 1 and 2 from top to bottom. One pack takes the busbar’s positive run and the other takes the negative run, so both share current evenly. Two more packs fit the same busbar later.
 
 packs: [1, 2]
 

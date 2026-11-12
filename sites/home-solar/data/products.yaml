@@ -430,12 +430,12 @@ products:
           url: https://www.victronenergy.com/where-to-buy
 
   diy-lfp-14k7:
-    name: Deriy EVE LiFePO4 battery, 14.7 kWh
+    name: Deriy EVE LiFePO4 battery, 14.3 kWh
     icon: battery
     about: LiFePO4 battery pack. Stores energy for night and cloudy days. Its BMS protects the cells from overcharge, overdischarge and too much current.
     brand: deriy
     specs:
-      kwh: 14.7
+      kwh: 14.3
       cells: 16S
       nominal_v: 51.2
       ah: 280

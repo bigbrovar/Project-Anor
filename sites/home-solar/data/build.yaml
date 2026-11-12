@@ -167,7 +167,7 @@ modes:
       w-lightout, w-mpout, w-heavyout]
     reversed: [w-mpdc, w-brkmp]
   night:
-    caption: <b>Night.</b> No solar. Both inverters draw from the shared 58.8 kWh bank, each through its own 250 A breaker.
+    caption: <b>Night.</b> No solar. Both inverters draw from the shared 57.3 kWh bank, each through its own 250 A breaker.
     flowing: [w-rsdc, w-brkrs, w-mpdc, w-brkmp, w-batp, w-shunt1, w-shunt2, w-rsout,
       w-lightout, w-mpout, w-heavyout]
     reversed: [w-rsdc, w-brkrs, w-mpdc, w-brkmp, w-batp, w-shunt1, w-shunt2]

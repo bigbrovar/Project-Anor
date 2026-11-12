@@ -22,10 +22,10 @@ diagrams/          source wiring diagrams (.drawio), opened with draw.io
 | Site | Folder | Worker | Live |
 | --- | --- | --- | --- |
 | Guide | `sites/guide/` | `anor-guide` | [project.anor.openculture.org.ng](https://project.anor.openculture.org.ng) |
-| Home build: two Victrons, 58.8 kWh, 18.3 kWp | `sites/home-solar/` | `project-anor` | [home.anor.openculture.org.ng](https://home.anor.openculture.org.ng) |
-| Large: two Deye 8 kW, 58.8 kWh, 20.8 kWp | `sites/deye-parallel/` | `anor-deye-parallel` | [large.anor.openculture.org.ng](https://large.anor.openculture.org.ng) |
-| Big little: one Deye 8 kW, 29.4 kWh, 10.4 kWp | `sites/deye-single/` | `anor-deye` | [biglittle.anor.openculture.org.ng](https://biglittle.anor.openculture.org.ng) |
-| Medium: one Growatt SPF 6000, 14.7 kWh, 5.2 kWp | `sites/growatt-single/` | `anor-growatt` | [medium.anor.openculture.org.ng](https://medium.anor.openculture.org.ng) |
+| Home build: two Victrons, 57.3 kWh, 18.3 kWp | `sites/home-solar/` | `project-anor` | [home.anor.openculture.org.ng](https://home.anor.openculture.org.ng) |
+| Large: two Deye 8 kW, 57.3 kWh, 20.8 kWp | `sites/deye-parallel/` | `anor-deye-parallel` | [large.anor.openculture.org.ng](https://large.anor.openculture.org.ng) |
+| Big little: one Deye 8 kW, 28.7 kWh, 10.4 kWp | `sites/deye-single/` | `anor-deye` | [biglittle.anor.openculture.org.ng](https://biglittle.anor.openculture.org.ng) |
+| Medium: one Growatt SPF 6000, 14.3 kWh, 5.2 kWp | `sites/growatt-single/` | `anor-growatt` | [medium.anor.openculture.org.ng](https://medium.anor.openculture.org.ng) |
 | Medium small: one SRNE HF 3.3 kW, 5.1 kWh, 3.25 kWp | `sites/srne-24v/` | `anor-srne` | [msmall.anor.openculture.org.ng](https://msmall.anor.openculture.org.ng) |
 
 The files in `diagrams/` open with [draw.io](https://app.diagrams.net/). They are reference drawings of what connects to what; the sites draw their own schematics from their data.

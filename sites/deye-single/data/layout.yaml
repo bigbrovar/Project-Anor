@@ -73,8 +73,8 @@ blocks:
     part: bat
     short: Battery bank
     at: [30, 1080, 760, 210]
-    title: Battery bank · 29.4 kWh
-    subtitle: 2 × Deriy 14.7 kWh LiFePO4, stacked · 16S · JK BMS 200 A
+    title: Battery bank · 28.7 kWh
+    subtitle: 2 × Deriy 14.3 kWh LiFePO4, stacked · 16S · JK BMS 200 A
     icon: battery
     photo_height: 130
     packs: 2

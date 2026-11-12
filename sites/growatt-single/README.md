@@ -1,6 +1,6 @@
 # Project Anor on one Growatt
 
-Part of [Project Anor](../../README.md). The entry-level alternative to the home solar system, built around one Growatt SPF 6000 ES Plus off-grid inverter: 8 Jinko 650 W panels (5.2 kWp; 590 to 650 W, depending on availability) on its two built-in MPPTs, one Deriy 14.7 kWh pack, and light loads plus one air conditioner on its single output.
+Part of [Project Anor](../../README.md). The entry-level alternative to the home solar system, built around one Growatt SPF 6000 ES Plus off-grid inverter: 8 Jinko 650 W panels (5.2 kWp; 590 to 650 W, depending on availability) on its two built-in MPPTs, one Deriy 14.3 kWh pack, and light loads plus one air conditioner on its single output.
 
 Built the same way as `sites/home-solar/`: the YAML files in `data/` hold everything, `template.html` holds the design, and `build.py` checks the data and writes `dist/index.html`.
 

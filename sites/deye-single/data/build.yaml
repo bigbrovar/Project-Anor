@@ -14,11 +14,11 @@ page:
   brand: alternative design
   eyebrow: Budget alternative · 48 V · one Deye 8 kW
   h1: Project Anor on one Deye
-  lead: A budget take on the home system, built around a single Deye 8 kW hybrid inverter. 16 Jinko 650 W panels (10.4 kWp) feed its three built-in solar trackers, and two Deriy packs (29.4 kWh) store the energy. Light loads run on the backup output; heavy loads run on the GEN port as a smart load, within a set budget. It grows into the two-Deye design.
+  lead: A budget take on the home system, built around a single Deye 8 kW hybrid inverter. 16 Jinko 650 W panels (10.4 kWp) feed its three built-in solar trackers, and two Deriy packs (28.7 kWh) store the energy. Light loads run on the backup output; heavy loads run on the GEN port as a smart load, within a set budget. It grows into the two-Deye design.
   inverters_label: One inverter
   glance:
     - {icon: mppt, cat: solar, title: Three trackers, one panel model, text: "16 Jinko panels, 590 to 650 W, in strings of 6, 5 and 5, one string per built-in Deye tracker, at up to about 330 V. No separate solar chargers."}
-    - {icon: battery, cat: batt, title: Two battery packs, text: "Two Deriy 14.7 kWh packs on one busbar, through one 250 A breaker. The JK BMS talks CAN straight to the Deye, so no SmartShunt or GX. Room for two more packs."}
+    - {icon: battery, cat: batt, title: Two battery packs, text: "Two Deriy 14.3 kWh packs on one busbar, through one 250 A breaker. The JK BMS talks CAN straight to the Deye, so no SmartShunt or GX. Room for two more packs."}
     - {icon: home, cat: load, title: Light loads always on, heavy loads by budget, text: "Light loads sit on the Deye’s backup output. Heavy loads sit on its GEN port as a smart load, which switches off before the battery runs low so the light loads last the night."}
   budget:
     title: Two ACs at most, about 5 kW
@@ -39,7 +39,7 @@ page:
       - "Without grid: <b>on at 90%</b> battery with at least 1 kW of solar, <b>off at 50%</b>, so half the bank is kept for the light loads overnight."
       - These are starting points. Raise the off level if the light loads run out before morning.
   upgrades:
-    - "<b>Two more battery packs</b> (58.8 kWh, the home bank). Same busbar, no other changes."
+    - "<b>Two more battery packs</b> (57.3 kWh, the home bank). Same busbar, no other changes."
     - "<b>Three more panels</b>: 19 in strings of 7, 6 and 6, 12.35 kWp with 650 W panels, just under the Deye’s 12.8 kW PV limit."
     - "<b>A second Deye 8K in parallel</b>: 16 kW and six trackers. That’s the <a href=\"https://large.anor.openculture.org.ng\">two-Deye design</a>, the direct replacement for the Victron setup."
     - "<b>Or one Deye 12K</b> in place of the 8K: same body and wiring, 12 kW and 19.2 kW of PV."
@@ -53,8 +53,8 @@ page:
       - {h: Panels, text: "Standardised on the Jinko Tiger Neo, 650 W where available and 590 W or more otherwise. 16 panels make 10.4 kWp at 650 W, or 9.4 kWp at 590 W, against today’s 31 mixed panels."}
     alt_title: Close alternatives
     alternatives:
-      - {name: "Growatt SPF 6000 ES Plus, 6 kW, at Fouani", url: "https://fouanistore.com/nigeria-en/product/922?growatt-hybrid-inverter-spf-es-series-6kw-48v-6000es", text: "Same 6 kW class with two high-voltage trackers. It’s the inverter in the Growatt design. Off-grid only: no CT, no export and no separate smart-load port."}
-      - {name: "SRNE HESP 6 kW (HESP4860S100-H), at HM Solar", url: "https://hmsolarltd.com/products/series-hesp/", text: "Close match: 6 kW, two trackers taking up to 500 V, BMS communication, time-slot charging, and up to 6 in parallel, single or three phase."}
+      - {name: "Growatt SPF 6000 ES Plus, 6 kW, at Fouani", url: "https://fouanistore.com/nigeria-en/product/922?growatt-hybrid-inverter-spf-es-series-6kw-48v-6000es", text: "Same 6 kW class with two high-voltage trackers. It’s the inverter in the Growatt design. Off-grid only: no CT, no export and no separate smart-load port, so the heavy-load scheme here doesn’t carry over. Two trackers and 8,000 W of panels, so the array becomes 12 panels in two strings of 6, where this design has 16 in three strings."}
+      - {name: "SRNE HESP 6 kW (HESP4860S100-H), at HM Solar", url: "https://hmsolarltd.com/products/series-hesp/", text: "Close match: 6 kW, two trackers taking up to 500 V, BMS communication, time-slot charging, and up to 6 in parallel, single or three phase. Two trackers, so the array becomes two strings where this design has three. Check its panel power limit on the datasheet."}
   footer:
     - "Links marked Affiliate are AliExpress affiliate links: if you buy through them, Openculture earns a small commission at no extra cost to you. The Fouani, HM Solar, Deye, ZJBeny and Deriy links are not affiliate links."
     - "I consult for Deriy on technical matters: after-sales repairs, documentation and product improvement. My role has nothing to do with sales or marketing."
@@ -161,7 +161,7 @@ modes:
     flowing: [w-pva, w-pvb, w-pvc, w-boxa, w-boxb, w-boxc, w-deyedc, w-brk, w-batp, w-batn, w-lightout, w-light, w-genout, w-heavy]
     reversed: []
   night:
-    caption: <b>Night, grid off.</b> No solar. The Deye runs the light loads from the 29.4 kWh bank. The heavy loads stay on until the battery reaches the smart-load off level, then go off to save the rest for the light loads.
+    caption: <b>Night, grid off.</b> No solar. The Deye runs the light loads from the 28.7 kWh bank. The heavy loads stay on until the battery reaches the smart-load off level, then go off to save the rest for the light loads.
     flowing: [w-deyedc, w-brk, w-batp, w-batn, w-lightout, w-light, w-genout, w-heavy]
     reversed: [w-deyedc, w-brk, w-batp, w-batn]
   grid:

@@ -15,7 +15,7 @@ blocks:
   - {id: inv, part: inv, short: Growatt, at: [30, 420, 760, 300], title: Growatt SPF 6000 ES Plus, subtitle: "6 kW · 48 V battery · 2 MPPT, up to 500 V", icon: inverter, photo_height: 170, ports: [[solar, PV 1-2], [grid, AC IN], [batt, BAT], [load, AC OUT]]}
   - {id: brk, part: brk, short: Battery breaker, at: [330, 790, 160, 120], title: BENY 250 A, subtitle: Growatt battery, icon: mccb, style: stack}
   - {id: busbar, part: busbar, at: [30, 960, 760, 70], title: Battery busbar, subtitle: Room for a second pack, icon: busbar, style: side}
-  - {id: bat, part: bat, short: Battery, at: [30, 1080, 760, 160], title: Battery · 14.7 kWh, subtitle: "1 × Deriy 14.7 kWh LiFePO4 · 16S · JK BMS 200 A", icon: battery, photo_height: 80, packs: 1}
+  - {id: bat, part: bat, short: Battery, at: [30, 1080, 760, 160], title: Battery · 14.3 kWh, subtitle: "1 × Deriy 14.3 kWh LiFePO4 · 16S · JK BMS 200 A", icon: battery, photo_height: 80, packs: 1}
   - {id: grid, at: [1030, 30, 340, 84], title: Grid supply, subtitle: Single phase · kWh meter, icon: meter, style: side}
   - {id: gridbd, part: gridbd, at: [1030, 150, 340, 84], title: Grid board, subtitle: 2P MCB · T2 SPD, icon: db, category: grid, style: side}
   - {id: acb-light, part: acb-light, at: [1030, 300, 340, 84], title: Light-load board, subtitle: Chint MCB · T2 SPD · RCBO, icon: db, style: side}

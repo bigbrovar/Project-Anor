@@ -154,6 +154,9 @@ main{padding-block:40px 80px}
 .pill.ok{background:var(--batt-t);color:var(--ok)} .pill.bad{background:var(--bad-t);color:var(--bad)}
 .tips{list-style:none;margin:14px 0 0;padding:0;display:grid;gap:10px}
 .tips li{font-size:.9rem;display:flex;gap:10px;color:var(--muted)}
+.rnote{margin:16px 0 0;padding-top:14px;border-top:1px solid var(--line);font-size:.84rem;color:var(--muted)}
+.rnote b{color:var(--ink)}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:0}
 .tips li svg{width:16px;height:16px;flex:none;margin-top:3px;color:var(--solar)}
 .tips strong{color:var(--ink);font-weight:650}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 18px;border-radius:12px;border:0;background:var(--solar);color:var(--on-accent);text-decoration:none;font-weight:700;font-size:.92rem}
@@ -371,7 +374,8 @@ footer a{color:inherit}
 
   <div class="plan">
     <div id="groups"></div>
-    <aside class="result" aria-live="polite">
+    <aside class="result">
+      <p class="sr" id="r-say" role="status" aria-live="polite"></p>
       <div class="r-sec">
         <p class="eyebrow">Your load</p>
         <div class="kpis" style="margin-top:12px">
@@ -388,6 +392,7 @@ footer a{color:inherit}
         <div class="bar-l" id="r-barl"><span>Reference price</span><span id="r-bl">Your budget</span></div>
         <div class="pill" id="r-pill"></div>
         <ul class="tips" id="r-tips"></ul>
+        <p class="rnote"><b>A safe estimate, not a final design.</b> It assumes everything you ticked runs at the same time, so it leans large. Run heavy loads like the iron, oven and water heater in turns, and by day when the sun is up, and a smaller system may do.</p>
       </div>
       <div class="r-sec" style="display:flex;gap:8px;flex-wrap:wrap">
         <a class="btn" id="r-go" href="#systems" target="_blank" rel="noopener"><span id="r-gol">Open the dashboard</span> <span data-i="arrow-right"></span></a>
@@ -405,7 +410,7 @@ footer a{color:inherit}
 
   <section id="prices" aria-labelledby="pr-h">
     <div class="sec-h"><h2 id="pr-h">Reference prices</h2><span class="muted" style="font-size:.9rem">Checked __UPDATED__</span></div>
-    <p class="callout"><span data-i="alert"></span><span><b>A reference, not a quote.</b> These figures come from public price listings in Nigeria. Prices change often, sometimes weekly, and stock varies. They cover the equipment only: the installer’s charge is not included. Get current quotes before you budget.</span></p>
+    <p class="callout"><span data-i="alert"></span><span><b>A reference, not a quote.</b> These figures come from public price listings in Nigeria. Prices change often, sometimes weekly, and stock varies. They cover the equipment only: the installer’s charge is not included. Get current quotes before you budget. If a part is out of stock, ask the store for an equivalent.</span></p>
     <div class="pgrid" id="pgrid"></div>
     <h3 class="psub">Where each price comes from</h3>
     <div class="tscroll"><table class="ptable" id="psrc"></table></div>
@@ -462,8 +467,8 @@ function tile(a){const s=S.sel[a.id];
   return `<div class="app ${s.on?"on":""}" data-id="${a.id}">
    <input type="checkbox" id="c-${a.id}" ${s.on?"checked":""} aria-label="${esc(a.n)}">
    <label class="top-row" for="c-${a.id}"><span class="ico">${ico(a.i)}</span><span><span class="nm">${esc(a.n)}</span><br><span class="w">${fmt(a.w)} W${a.s?" · surge "+fmt(a.s)+" W":""}</span></span><span class="tick">${ico("check",3)}</span></label>
-   ${s.on?`<div class="steps"><div class="step"><span>Qty</span><div class="stp"><button type="button" data-k="q" data-d="-1" aria-label="Fewer">−</button><output>${s.q}</output><button type="button" data-k="q" data-d="1" aria-label="More">+</button></div></div>
-     ${a.kd?`<div class="step"><span>Per day</span><div class="fix" style="padding-top:7px">about ${a.kd} kWh</div></div>`:`<div class="step"><span>Hrs / day</span><div class="stp"><button type="button" data-k="h" data-d="-1" aria-label="Fewer hours">−</button><output>${s.h}</output><button type="button" data-k="h" data-d="1" aria-label="More hours">+</button></div></div>`}</div>
+   ${s.on?`<div class="steps"><div class="step"><span>Qty</span><div class="stp"><button type="button" data-k="q" data-d="-1" aria-label="Fewer ${esc(a.n)}">−</button><output>${s.q}</output><button type="button" data-k="q" data-d="1" aria-label="More ${esc(a.n)}">+</button></div></div>
+     ${a.kd?`<div class="step"><span>Runs all day</span><div class="fix" style="padding-top:7px">about ${a.kd} kWh</div></div>`:`<div class="step"><span>Hrs / day</span><div class="stp"><button type="button" data-k="h" data-d="-1" aria-label="Fewer hours for ${esc(a.n)}">−</button><output>${s.h}</output><button type="button" data-k="h" data-d="1" aria-label="More hours for ${esc(a.n)}">+</button></div></div>`}</div>
      ${a.min>FIRST?`<div class="need">${ico("alert",2).replace("<svg","<svg width='13' height='13'")}Needs ${esc(SYS[a.min].n)} or bigger</div>`:""}`:""}
   </div>`;}
 function renderApps(){const gs=[...new Set(APPS.map(a=>a.g))];
@@ -476,16 +481,18 @@ function calc(){let base=0,ext=0,kwh=0,minT=0,big=0;const on=[],acw=[];
   /* peakFor: a system may fit more air conditioners than it runs at once, so count its biggest few */
   return{peak:all,surge:all+ext,kwh,minT,acs:acw.length,big,ext,on,peakFor:t=>base+acw.slice(0,t.acAt).reduce((x,y)=>x+y,0)};}
 /* the smallest system that carries the load; -1 when nothing in this guide does */
+const idleK=t=>(t.idle||0)*24/1000;   /* the inverter’s own use, kWh a day */
 function tierFor(r){for(let i=r.minT;i<SYS.length;i++){const t=SYS[i];if(t.state==="scope")break;
-  const pk=r.peakFor(t);if(pk<=t.cont&&pk+r.ext<=t.surge&&r.kwh<=t.kwh&&r.acs<=t.ac&&r.big<=t.ac2)return i;}return -1;}
+  const pk=r.peakFor(t);if(pk<=t.cont&&pk+r.ext<=t.surge&&r.kwh+idleK(t)<=t.kwh&&r.acs<=t.ac&&r.big<=t.ac2)return i;}return -1;}
 function whyUp(r,ti){ /* one line on what pushed the pick up a size */
   if(ti<=FIRST)return "";const p=SYS[ti-1];
   const drv=r.on.find(a=>a.min===ti);if(drv&&drv.why)return drv.why;
   if(r.acs>p.ac)return `${r.acs} air conditioner${r.acs>1?"s":""} is more than ${esc(p.n)} is designed for (${p.ac||"none"}).`;
   if(r.big>p.ac2)return `${esc(p.n)} isn’t designed for a 2 HP air conditioner.`;
   if(r.peakFor(p)>p.cont)return `${fmt(r.peakFor(p))} W running at once is more than ${esc(p.n)}’s ${fmt(p.cont)} W.`;
-  if(r.kwh>p.kwh)return `${r.kwh.toFixed(1)} kWh a day is more than ${esc(p.n)}’s panels make on a typical day (about ${p.kwh} kWh).`;
+  if(r.kwh+idleK(p)>p.kwh)return `${r.kwh.toFixed(1)} kWh a day${idleK(p)?`, plus ${idleK(p).toFixed(1)} kWh for the inverter itself,`:""} is more than ${esc(p.n)}’s panels make on a typical day (about ${p.kwh} kWh).`;
   if(r.surge>p.surge)return `The start-up surge is more than ${esc(p.n)} can take.`;return "";}
+let sayT=0;
 function update(){
   if(touched){try{history.replaceState(null,"",shareURL());}catch(_){}}touched=true;
   const r=calc(),b=S.budget,tips=[];let ti=tierFor(r);
@@ -506,7 +513,7 @@ function update(){
     else if(best)tips.push(`Drop the <strong>${esc(best.a.n)}</strong> and <strong>${esc(SYS[best.t].n)}</strong> covers the rest.`);
     gol.textContent="See the "+t.n+" design";}
   else{bar.hidden=false;$("#r-barl").hidden=false;
-    $("#r-tier").textContent=pending?SYS[ti].n+" · 12 V":t.n;$("#r-cost").textContent=pending?"":"about "+naira(t.cost);$("#r-sys").textContent=pending?"Dashboard pending":t.sys;
+    $("#r-tier").textContent=pending?SYS[ti].n+" · 12 V":t.n;$("#r-cost").textContent=pending?"":"about "+naira(t.cost);$("#r-sys").textContent=pending?"Dashboard pending":t.sys+(t.roof?` · ${t.panels} panels, about ${Math.round(t.roof)} m² of roof`:"");
     if(pending){tips.push(`The small 12 V dashboard isn’t published yet. The nearest one that is live is <strong>${esc(t.n)}</strong> (${esc(t.sys)}), about ${naira(t.cost)}.`);}
     else{const w=whyUp(r,ti);if(w)tips.push(w);
       if(r.acs>t.acAt)tips.push(`Run no more than <strong>${t.acAt} air conditioners at once</strong> on ${esc(t.n)}.`);}
@@ -521,12 +528,13 @@ function update(){
       tips.push(af<0?`The smallest live design starts at about <strong>${naira(SYS[FIRST].cost)}</strong>.`:`Your budget reaches <strong>${esc(SYS[af].n)}</strong> (about ${naira(SYS[af].cost)}).`);}
     gol.textContent=pending?"See "+t.n+" instead":"Open the "+t.n+" dashboard";}
   go.href=t.url;
+  clearTimeout(sayT);sayT=setTimeout(()=>{$("#r-say").textContent=[$("#r-eyebrow").textContent+":",$("#r-tier").textContent,$("#r-cost").textContent+".",pill.textContent+"."].join(" ");},600);
   $("#r-tips").innerHTML=tips.map(x=>`<li>${ico("arrow-right",2.2)}<span>${x}</span></li>`).join("");
   document.querySelectorAll(".preset").forEach(p=>p.classList.toggle("on",+p.dataset.b===b));
   const mark=scope?SYS.findIndex(s=>s.state==="scope"):ti;
   $("#track").innerHTML=SYS.map((s,i)=>{const live=s.state==="live";
     const inner=`<div class="badges">${i===mark?'<span class="bdg need">You need</span>':""}${live&&s.cost<=b?'<span class="bdg fit">In budget</span>':""}${s.state==="pending"?'<span class="bdg ph">Pending</span>':""}${s.state==="scope"?'<span class="bdg ph">Out of scope</span>':""}</div>
-    <div class="lv">${SYS.map((_,j)=>`<i class="${j<=i?"f":""}"></i>`).join("")}</div><div class="tn">${esc(s.n)}</div><div class="tt">${esc(s.tag)}</div><div class="ts">${esc(s.sys)}</div><div class="tg">${esc(s.good)}</div>
+    <div class="lv">${SYS.map((_,j)=>`<i class="${j<=i?"f":""}"></i>`).join("")}</div><div class="tn">${esc(s.n)}</div><div class="tt">${esc(s.tag)}</div><div class="ts">${esc(s.sys)}</div>${s.roof?`<div class="ts">${s.panels} panels · about ${Math.round(s.roof)} m² of roof</div>`:""}<div class="tg">${esc(s.good)}</div>
     <div class="tc">${live?"about "+short(s.cost):s.state==="pending"?"Dashboard pending":CONSULT?esc(G.consult.card):"Outside this guide"}</div>${live?'<div class="go">Open dashboard ↗</div>':s.state==="scope"&&CONSULT?`<div class="go">${esc(G.consult.label)} ↗</div>`:""}`;
     if(s.state==="scope"&&CONSULT)return `<a class="tier consult ${i===mark?"need":""}" href="${esc(G.consult.url)}" target="_blank" rel="noopener">${inner}</a>`;
     return live?`<a class="tier ${i===mark?"need":""}" href="${s.url}" target="_blank" rel="noopener">${inner}</a>`:`<div class="tier off ${i===mark?"need":""}">${inner}</div>`;}).join("");

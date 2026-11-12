@@ -61,8 +61,8 @@ page:
       - {h: Panels, text: "The same Jinko Tiger Neo as the 48 V designs, 650 W where available and 590 W or more otherwise. 5 panels make 3.25 kWp at 650 W, or 2.95 kWp at 590 W."}
     alt_title: Battery alternatives
     alternatives:
-      - {name: "Deriy EVE LiFePO4, 25.6 V, 4.5 kWh", url: "https://www.deriyenergy.com/", text: "EVE cells and no BMS communication, so the same SRNE voltage settings apply."}
-      - {name: "Deriy EVE LiFePO4, 25.6 V, 3.8 kWh", url: "https://www.deriyenergy.com/", text: "The smaller pack, also on EVE cells with no BMS communication."}
+      - {name: "Deriy EVE LiFePO4, 25.6 V, 4.5 kWh", url: "https://www.deriyenergy.com/", text: "EVE cells and no BMS communication, so the same SRNE voltage settings apply. Check the pack’s BMS rating against the inverter’s draw, about 140 A at full output."}
+      - {name: "Deriy EVE LiFePO4, 25.6 V, 3.8 kWh", url: "https://www.deriyenergy.com/", text: "The smaller pack, also on EVE cells with no BMS communication. Check the pack’s BMS rating against the inverter’s draw, about 140 A at full output."}
   footer:
     - "Links marked Affiliate are AliExpress affiliate links: if you buy through them, Openculture earns a small commission at no extra cost to you. The HM Solar, Sumec Firman, ZJBeny and Deriy links are not affiliate links."
     - "I consult for Deriy on technical matters: after-sales repairs, documentation and product improvement. My role has nothing to do with sales or marketing."

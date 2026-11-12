@@ -519,7 +519,7 @@ details.whyd li{display:list-item}
     <div class="glance">
       <div class="g"><div class="gi tint load" data-c="home"></div><h3>Two AC islands</h3><p>Light loads sit on the Multi RS. Air conditioners, the borehole pump, cooking and water heating sit on the MultiPlus-II. Each side has its own breaker, surge protector and RCBO board.</p></div>
       <div class="g"><div class="gi tint solar" data-c="mppt"></div><h3>Two ways in for solar</h3><p id="g-solar">13 panels go straight into the Multi RS’s two built-in trackers at high voltage. The other 18 go through two SmartSolar chargers, one 250 V and one 150 V, straight into the batteries.</p></div>
-      <div class="g"><div class="gi tint batt" data-c="busbar"></div><h3>One shared battery bank</h3><p>Four 14.7 kWh packs are joined on one set of copper bars, called a busbar. Every charger and inverter connects to those bars through its own DC breaker. A SmartShunt and a small home-built monitoring computer (the GX) keep track of the whole bank.</p></div>
+      <div class="g"><div class="gi tint batt" data-c="busbar"></div><h3>One shared battery bank</h3><p>Four 14.3 kWh packs are joined on one set of copper bars, called a busbar. Every charger and inverter connects to those bars through its own DC breaker. A SmartShunt and a small home-built monitoring computer (the GX) keep track of the whole bank.</p></div>
     </div>
   </section>
 
@@ -1225,7 +1225,7 @@ function drawBattery(){
     g+=`<g class="ci batt"><rect x="${X}" y="${y}" width="${W}" height="${H}" rx="8" fill="currentColor" fill-opacity=".12" stroke="currentColor" stroke-width="1.6"/>
       <rect x="${X+W-112}" y="${y+16}" width="64" height="20" rx="3" fill="currentColor" fill-opacity=".38"/>
       <circle cx="${X}" cy="${y+H/2}" r="7" fill="var(--surface)" stroke="var(--muted)" stroke-width="2"/><circle cx="${X+W}" cy="${y+H/2}" r="7" fill="var(--surface)" stroke="currentColor" stroke-width="2"/></g>
-      <text x="${X+22}" y="${y+34}" style="font:700 17px var(--f-d);fill:var(--ink)">Pack ${p}</text><text class="valm" x="${X+22}" y="${y+56}">Deriy · 14.7 kWh · LiFePO4</text>
+      <text x="${X+22}" y="${y+34}" style="font:700 17px var(--f-d);fill:var(--ink)">Pack ${p}</text><text class="valm" x="${X+22}" y="${y+56}">Deriy · 14.3 kWh · LiFePO4</text>
       <text x="${X+14}" y="${y+H/2+5}" style="font:700 14px var(--f-b);fill:var(--muted)">−</text><text x="${X+W-24}" y="${y+H/2+5}" style="font:700 14px var(--f-b);fill:var(--batt)">+</text>`;});
   const H2=sy+150;
   return `<svg viewBox="0 0 900 ${H2}" role="img" aria-label="How the four battery packs are wired to the busbar">${w}${g}${t}</svg>`;}

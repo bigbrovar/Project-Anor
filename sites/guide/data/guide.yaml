@@ -18,6 +18,7 @@ updated: 2026-11-10   # shown in the footer; also the date the prices were check
 prices:
   jinko-650:
     name: Jinko Tiger Neo 650 W panel
+    area_m2: 2.7   # 2,382 x 1,134 mm, from the datasheet. Gives each system its panel area.
     price: 165000
     range: "₦156,500 to ₦175,000"
     sources:
@@ -51,7 +52,6 @@ prices:
     name: "Deriy LiFePO4 battery, 51.2 V 280 Ah"
     price: 2450000
     range: "₦2,450,000 to ₦3,150,000"
-    note: Listed as 14.3 kWh by the reseller.
     sources:
       - {name: Lithium Battery Depot, url: "https://lithiumbatteries.com.ng/brand/deriy/"}
 
@@ -59,6 +59,10 @@ prices:
 allowance_pct: 15
 allowance_text: Breakers, the PV box, surge protectors, busbar, distribution boards, cable and panel mounting. An estimate, not a quoted price.
 
+# cont_w is what a system should carry at once: 80% of the inverter's rated power in kW,
+# which leaves room for heat. An inverter rated in kVA is first converted at 0.8 kW per kVA.
+# idle_w is the inverter's own use, added to the daily energy. The SRNE datasheet gives 50 W.
+# Growatt and Deye don't publish a figure, so 50 W per inverter is an allowance for them.
 systems:
   - id: small
     name: Small
@@ -77,7 +81,8 @@ systems:
     url: https://msmall.anor.openculture.org.ng
     sys: "24 V · 3.3 kW · 5.1 kWh · 3.25 kWp"
     good: "Essentials and a small fridge. Nothing major."
-    cont_w: 2500
+    cont_w: 2640
+    idle_w: 50
     surge_w: 6000
     kwh_day: 9
     max_ac: 0
@@ -90,9 +95,10 @@ systems:
     tag: One Growatt
     state: live
     url: https://medium.anor.openculture.org.ng
-    sys: "48 V · 6 kW · 14.7 kWh · 5.2 kWp"
+    sys: "48 V · 6 kW · 14.3 kWh · 5.2 kWp"
     good: "One air conditioner, the pump and a cooker."
-    cont_w: 5000
+    cont_w: 4800
+    idle_w: 50
     surge_w: 12000
     kwh_day: 14.5
     max_ac: 1
@@ -105,9 +111,10 @@ systems:
     tag: One Deye
     state: live
     url: https://biglittle.anor.openculture.org.ng
-    sys: "48 V · 8 kW · 29.4 kWh · 10.4 kWp"
+    sys: "48 V · 8 kW · 28.7 kWh · 10.4 kWp"
     good: "Two air conditioners, the pump and a cooker."
-    cont_w: 6500
+    cont_w: 6400
+    idle_w: 50
     surge_w: 16000
     kwh_day: 29
     max_ac: 2
@@ -120,9 +127,10 @@ systems:
     tag: Two Deyes
     state: live
     url: https://large.anor.openculture.org.ng
-    sys: "48 V · 16 kW · 58.8 kWh · 20.8 kWp"
+    sys: "48 V · 16 kW · 57.3 kWh · 20.8 kWp"
     good: "Most of a house: up to five air conditioners, four running at once, plus oven and water heater."
-    cont_w: 14500
+    cont_w: 12800
+    idle_w: 100
     surge_w: 32000
     kwh_day: 58
     max_ac: 5
@@ -151,7 +159,7 @@ consult:
 reference:
   name: Project Anor, my home build
   url: https://home.anor.openculture.org.ng
-  sys: "48 V · Victron · 16 kVA · 58.8 kWh · 18.3 kWp"
+  sys: "48 V · Victron · 16 kVA · 57.3 kWh · 18.3 kWp"
   # A blank line starts a new paragraph.
   text: |-
     2026 marks ten years of using solar as an alternative source of electricity, and in all that time people have constantly asked how to build a setup like mine. I set out to open-source my current install, but I realized it carries years of organic growth and technical debt that make little sense for a fresh build. Instead, I created clean-sheet designs that deliver the same reliability at different scales: from a full-house equivalent of my own setup down to smaller systems for people just getting started.

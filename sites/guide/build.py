@@ -77,7 +77,8 @@ def main():
                 if s.get(key) is not None and not is_num(s[key]):
                     problem(where, f"`{key}` should be a number")
             out.update({"cont": s.get("cont_w"), "surge": s.get("surge_w"), "kwh": s.get("kwh_day"), "ac": s.get("max_ac"),
-                        "acAt": s.get("ac_at_once", s.get("max_ac")), "ac2": s.get("max_ac_2hp", 0)})
+                        "acAt": s.get("ac_at_once", s.get("max_ac")), "ac2": s.get("max_ac_2hp", 0),
+                        "idle": s.get("idle_w", 0) if is_num(s.get("idle_w", 0)) else 0})
         if s.get("state") == "live":
             if not out["url"].startswith("https://"):
                 problem(where, "a live system needs its https:// url")
@@ -88,6 +89,10 @@ def main():
                 problem(where, "each part needs price (an id from prices) and qty")
                 continue
             out["parts"].append({"p": part["price"], "q": part["qty"]})
+            area = (doc.get("prices") or {}).get(part["price"], {}).get("area_m2")
+            if is_num(area):   # panels: count them and add up their area
+                out["panels"] = out.get("panels", 0) + part["qty"]
+                out["roof"] = round(out.get("roof", 0) + part["qty"] * area, 1)
         systems.append(out)
         ids.append(out["id"])
     if not any(s["state"] == "live" for s in systems):

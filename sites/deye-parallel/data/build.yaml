@@ -18,7 +18,7 @@ page:
   inverters_label: Two in parallel
   glance:
     - {icon: mppt, cat: solar, title: Six trackers, one panel model, text: "32 Jinko panels, 590 to 650 W, in six strings of 5 or 6, one string per built-in Deye tracker, at up to about 330 V. No separate solar chargers."}
-    - {icon: battery, cat: batt, title: The same battery bank, text: "The four Deriy 14.7 kWh packs stay on the same busbar. Each Deye has its own 250 A breaker. The JK BMS talks CAN to the master Deye, which shares the limits with the second unit."}
+    - {icon: battery, cat: batt, title: The same battery bank, text: "The four Deriy 14.3 kWh packs stay on the same busbar. Each Deye has its own 250 A breaker. The JK BMS talks CAN to the master Deye, which shares the limits with the second unit."}
     - {icon: home, cat: load, title: 16 kW shared, two outputs, text: "The joined LOAD outputs carry the light loads. The GEN ports, set as a smart load, carry the heavy loads within about 13 kW and switch them off before the battery runs low."}
   budget:
     title: About 13 kW for heavy loads
@@ -36,7 +36,7 @@ page:
     settings:
       - "Both GEN ports set to <b>Smart load output</b>, with the same settings on master and slave."
       - "<b>On grid always on</b>: heavy loads run whenever the grid is up."
-      - "Without grid: <b>on at 90%</b> battery with at least 2 kW of solar, <b>off at 40%</b>, keeping the rest of the 58.8 kWh for the light loads."
+      - "Without grid: <b>on at 90%</b> battery with at least 2 kW of solar, <b>off at 40%</b>, keeping the rest of the 57.3 kWh for the light loads."
       - "Deye’s manual doesn’t say whether smart load works in a parallel system. Confirm it with Deye or your installer for your firmware. If it doesn’t, give each Deye’s GEN port its own heavy circuits."
   upgrades:
     - "<b>Two Deye 12K units</b> in place of the 8Ks: 24 kW, so every heavy load fits at once, and room for up to 38.4 kW of PV."
@@ -53,8 +53,8 @@ page:
       - {h: How parallel works, text: "One Deye is set as master and the other as slave. A parallel cable joins their communication ports, so they share load, charging and the grid connection as one system. Their load outputs are wired together."}
     alt_title: Close alternatives
     alternatives:
-      - {name: "Growatt SPF 6000 ES Plus, 6 kW, at Fouani", url: "https://fouanistore.com/nigeria-en/product/922?growatt-hybrid-inverter-spf-es-series-6kw-48v-6000es", text: "Two in parallel give 12 kW, a little under two Deyes. Off-grid only: no CT, no export and no separate smart-load port."}
-      - {name: "SRNE HESP 6 kW (HESP4860S100-H), at HM Solar", url: "https://hmsolarltd.com/products/series-hesp/", text: "Close match: 6 kW, two trackers taking up to 500 V, BMS communication, time-slot charging, and up to 6 in parallel, single or three phase."}
+      - {name: "Growatt SPF 6000 ES Plus, 6 kW, at Fouani", url: "https://fouanistore.com/nigeria-en/product/922?growatt-hybrid-inverter-spf-es-series-6kw-48v-6000es", text: "Two in parallel give 12 kW, a little under two Deyes. Off-grid only: no CT, no export and no separate smart-load port. Each has two trackers and takes 8,000 W of panels, so the array becomes 24 panels in four strings of 6, where this design has 32 in six strings."}
+      - {name: "SRNE HESP 6 kW (HESP4860S100-H), at HM Solar", url: "https://hmsolarltd.com/products/series-hesp/", text: "Close match: 6 kW, two trackers taking up to 500 V, BMS communication, time-slot charging, and up to 6 in parallel, single or three phase. Two give 12 kW and four trackers, so the array becomes four strings where this design has six. Check its panel power limit on the datasheet."}
   footer:
     - "Links marked Affiliate are AliExpress affiliate links: if you buy through them, Openculture earns a small commission at no extra cost to you. The Fouani, HM Solar, Deye, ZJBeny and Deriy links are not affiliate links."
     - "I consult for Deriy on technical matters: after-sales repairs, documentation and product improvement. My role has nothing to do with sales or marketing."
@@ -137,7 +137,7 @@ modes:
     flowing: [w-pv1, w-pv2, w-pv3, w-pv4, w-pv5, w-pv6, w-b1a, w-b1b, w-b1c, w-b2a, w-b2b, w-b2c, w-dc1, w-dc2, w-brk1, w-brk2, w-batp, w-batn, w-load1, w-load2, w-light, w-gen1, w-gen2, w-heavy]
     reversed: []
   night:
-    caption: <b>Night, grid off.</b> No solar. Both Deyes draw from the 58.8 kWh bank. The heavy loads stay on until the battery reaches the smart-load off level, then go off to save the rest for the light loads.
+    caption: <b>Night, grid off.</b> No solar. Both Deyes draw from the 57.3 kWh bank. The heavy loads stay on until the battery reaches the smart-load off level, then go off to save the rest for the light loads.
     flowing: [w-dc1, w-dc2, w-brk1, w-brk2, w-batp, w-batn, w-load1, w-load2, w-light, w-gen1, w-gen2, w-heavy]
     reversed: [w-dc1, w-dc2, w-brk1, w-brk2, w-batp, w-batn]
   grid:

@@ -14,11 +14,11 @@ page:
   brand: alternative design
   eyebrow: Entry alternative · 48 V · one Growatt SPF 6000 ES Plus
   h1: Project Anor on one Growatt
-  lead: The smallest of the alternatives. One Growatt SPF 6000 ES Plus runs the house from 8 Jinko 650 W panels (5.2 kWp) on its two built-in solar trackers and one Deriy 14.7 kWh pack. Grid is a backup charger and bypass. Light loads and one air conditioner share its 6 kW output.
+  lead: The smallest of the alternatives. One Growatt SPF 6000 ES Plus runs the house from 8 Jinko 650 W panels (5.2 kWp) on its two built-in solar trackers and one Deriy 14.3 kWh pack. Grid is a backup charger and bypass. Light loads and one air conditioner share its 6 kW output.
   inverters_label: One inverter
   glance:
     - {icon: mppt, cat: solar, title: Two trackers, one panel model, text: "8 Jinko panels, 590 to 650 W, in two strings of 4, one string per built-in Growatt tracker, at up to about 220 V. No separate solar chargers."}
-    - {icon: battery, cat: batt, title: One battery pack, text: "One Deriy 14.7 kWh pack through a 250 A breaker, with room on the busbar for a second. The JK BMS talks CAN to the Growatt, so no SmartShunt or GX."}
+    - {icon: battery, cat: batt, title: One battery pack, text: "One Deriy 14.3 kWh pack through a 250 A breaker, with room on the busbar for a second. The JK BMS talks CAN to the Growatt, so no SmartShunt or GX."}
     - {icon: home, cat: load, title: One output for everything, text: "The Growatt has a single AC output. Light loads and a limited set of heavy loads share it, so the heavy-load budget matters more here than on the Deye designs."}
   budget:
     title: One AC, about 4 kW for heavy loads
@@ -40,7 +40,7 @@ page:
       - "Maximum charge current <b>80 A</b>, under the JK BMS’s 88 A setting."
       - These are starting points. Raise the back-to-grid level if the light loads run short before morning.
   upgrades:
-    - "<b>A second battery pack</b> on the same busbar: 29.4 kWh."
+    - "<b>A second battery pack</b> on the same busbar: 28.7 kWh."
     - "<b>More panels</b>: up to 12, 6 per string, 7.8 kWp with 650 W panels, under the Growatt’s 8 kW PV limit."
     - "<b>A second SPF 6000 ES Plus</b> in parallel: 12 kW and two more trackers. The Growatt parallels up to 6 units."
     - "<b>Or move to the <a href=\"https://biglittle.anor.openculture.org.ng\">one-Deye design</a></b>: grid-tied with a CT, three trackers, and a separate smart-load port for heavy loads."
@@ -54,7 +54,7 @@ page:
       - {h: Panels, text: "Standardised on the Jinko Tiger Neo, 650 W where available and 590 W or more otherwise. 8 panels make 5.2 kWp at 650 W, or 4.7 kWp at 590 W."}
     alt_title: Close alternatives
     alternatives:
-      - {name: "SRNE HESP 6 kW (HESP4860S100-H), at HM Solar", url: "https://hmsolarltd.com/products/series-hesp/", text: "Close match: 6 kW, two trackers taking up to 500 V, BMS communication, time-slot charging, and up to 6 in parallel, single or three phase."}
+      - {name: "SRNE HESP 6 kW (HESP4860S100-H), at HM Solar", url: "https://hmsolarltd.com/products/series-hesp/", text: "Close match: 6 kW, two trackers taking up to 500 V, BMS communication, time-slot charging, and up to 6 in parallel, single or three phase. Same two-tracker layout, so the strings of 4 fit as drawn. Confirm each tracker takes the panel’s 15.3 A working current."}
   footer:
     - "Links marked Affiliate are AliExpress affiliate links: if you buy through them, Openculture earns a small commission at no extra cost to you. The Growatt, Fouani, HM Solar, ZJBeny and Deriy links are not affiliate links."
     - "I consult for Deriy on technical matters: after-sales repairs, documentation and product improvement. My role has nothing to do with sales or marketing."
@@ -118,7 +118,7 @@ modes:
     flowing: [w-pva, w-pvb, w-boxa, w-boxb, w-dc, w-brk, w-batp, w-batn, w-out, w-light, w-heavyin, w-heavy]
     reversed: []
   night:
-    caption: <b>Night, grid off.</b> No solar. The Growatt runs the house from the 14.7 kWh pack until it reaches the back-to-grid level.
+    caption: <b>Night, grid off.</b> No solar. The Growatt runs the house from the 14.3 kWh pack until it reaches the back-to-grid level.
     flowing: [w-dc, w-brk, w-batp, w-batn, w-out, w-light, w-heavyin, w-heavy]
     reversed: [w-dc, w-brk, w-batp, w-batn]
   grid:

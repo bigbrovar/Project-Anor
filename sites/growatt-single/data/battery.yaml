@@ -2,7 +2,7 @@
 # busbar, the cables, the measured balance and the JK BMS settings.
 
 title: Battery
-lead: One Deriy 14.7 kWh LiFePO4 pack, wired to the busbar so a second pack can join later without rewiring the inverter side.
+lead: One Deriy 14.3 kWh LiFePO4 pack, wired to the busbar so a second pack can join later without rewiring the inverter side.
 
 packs: [1]
 
