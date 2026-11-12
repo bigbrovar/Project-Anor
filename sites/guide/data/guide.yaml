@@ -50,8 +50,9 @@ prices:
       - {name: Sumec Firman, url: "https://sumecfirmanstore.com/product/firman-5kwh-lithium-battery-b2520002-200a-25-6v/"}
   deriy-14:
     name: "Deriy LiFePO4 battery, 51.2 V 280 Ah"
-    price: 2450000
+    price: 2800000
     range: "₦2,450,000 to ₦3,150,000"
+    note: "The middle of four public listings for the 280 Ah pack: ₦2,450,000, ₦2,580,000, ₦3,050,000 and ₦3,150,000."
     sources:
       - {name: Lithium Battery Depot, url: "https://lithiumbatteries.com.ng/brand/deriy/"}
 
