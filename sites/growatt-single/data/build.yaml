@@ -3,8 +3,8 @@
 # settings. Products are described in products.yaml; positions on the drawing
 # live in layout.yaml.
 
-version: "0.1"
-updated: 2026-11-10   # shown in the footer, with the version
+version: "0.92"
+updated: 2026-11-12   # shown in the footer, with the version
 
 # Text at the top of the page and in the "Why this design" section.
 # Text fields can use <b> for bold.
