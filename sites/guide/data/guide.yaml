@@ -13,11 +13,13 @@
 
 updated: 2026-11-10   # shown in the footer; also the date the prices were checked
 
-# Reference prices in naira, from public listings. `price` is the figure the
+# Reference prices in naira, from public listings. `plain` is the everyday name
+# shown as the main text and `name` the exact model under it. `price` is the figure the
 # totals use; `range` is shown beside it when the sources differ.
 prices:
   jinko-650:
-    name: Jinko Tiger Neo 650 W panel
+    name: Jinko Tiger Neo 650 W
+    plain: Solar panel
     area_m2: 2.7   # 2,382 x 1,134 mm, from the datasheet. Gives each system its panel area.
     price: 165000
     range: "₦156,500 to ₦175,000"
@@ -25,31 +27,36 @@ prices:
       - {name: Thrillhouse, url: "https://www.thrillhouse.com.ng/shop/alternative-energy/solar-panels/650w-jinko-solar-panel/"}
       - {name: Leaf Solar, url: "https://leafsolar.ng/solar-prices-nigeria"}
   srne-3k3:
-    name: SRNE HF2430S80-H inverter, 3.3 kW
+    name: "SRNE HF2430S80-H, 3.3 kW"
+    plain: Inverter
     price: 425000
     note: One listing, from May 2026, and out of stock there.
     sources:
       - {name: Thrillhouse, url: "https://www.thrillhouse.com.ng/shop/alternative-energy/inverters/hybrid-inverters/srne-3-3kw-24vdc-inverter/"}
   growatt-6k:
-    name: Growatt SPF 6000 ES Plus inverter, 6 kW
+    name: "Growatt SPF 6000 ES Plus, 6 kW"
+    plain: Inverter
     price: 555000
     range: "₦545,000 to ₦568,750"
     sources:
       - {name: Thrillhouse, url: "https://www.thrillhouse.com.ng/shop/alternative-energy/inverters/hybrid-inverters/growatt-6kw-48vdc-spf-6000-es-8000w/"}
       - {name: Leaf Solar, url: "https://leafsolar.ng/solar-prices-nigeria"}
   deye-8k:
-    name: Deye SUN-8K-SG06LP1-EU-CM3 inverter, 8 kW
+    name: "Deye SUN-8K-SG06LP1-EU-CM3, 8 kW"
+    plain: Inverter
     price: 1575000
     sources:
       - {name: Leaf Solar, url: "https://leafsolar.ng/solar-prices-nigeria"}
   firman-5k:
-    name: FIRMAN 5 kWh battery, 25.6 V
+    name: "FIRMAN 5 kWh, 25.6 V"
+    plain: Lithium battery
     price: 1250000
     note: "Sale price; the list price is ₦1,600,000."
     sources:
       - {name: Sumec Firman, url: "https://sumecfirmanstore.com/product/firman-5kwh-lithium-battery-b2520002-200a-25-6v/"}
   deriy-14:
-    name: "Deriy LiFePO4 battery, 51.2 V 280 Ah"
+    name: "Deriy 14.3 kWh LiFePO4, 51.2 V 280 Ah"
+    plain: Lithium battery
     price: 2800000
     range: "₦2,450,000 to ₦3,150,000"
     note: "The middle of four public listings for the 280 Ah pack: ₦2,450,000, ₦2,580,000, ₦3,050,000 and ₦3,150,000."
@@ -58,7 +65,7 @@ prices:
 
 # What the allowance covers, added to each total as a percentage of the parts above.
 allowance_pct: 15
-allowance_text: Breakers, the PV box, surge protectors, busbar, distribution boards, cable and panel mounting. An estimate, not a quoted price.
+allowance_text: Breakers, the solar combiner box, surge protectors, battery connection bars, distribution boards, cable and panel mounting. An estimate, not a quoted price.
 
 # cont_w is what a system should carry at once: 80% of the inverter's rated power in kW,
 # which leaves room for heat. An inverter rated in kVA is first converted at 0.8 kW per kVA.
@@ -93,7 +100,7 @@ systems:
       - {price: firman-5k, qty: 1}
   - id: medium
     name: Medium
-    tag: One Growatt
+    tag: One 6 kW inverter
     state: live
     url: https://medium.anor.openculture.org.ng
     sys: "48 V · 6 kW · 14.3 kWh · 5.2 kWp"
@@ -109,7 +116,7 @@ systems:
       - {price: deriy-14, qty: 1}
   - id: biglittle
     name: Big little
-    tag: One Deye
+    tag: One 8 kW inverter
     state: live
     url: https://biglittle.anor.openculture.org.ng
     sys: "48 V · 8 kW · 28.7 kWh · 10.4 kWp"
@@ -125,7 +132,7 @@ systems:
       - {price: deriy-14, qty: 2}
   - id: large
     name: Large
-    tag: Two Deyes
+    tag: Two 8 kW inverters
     state: live
     url: https://large.anor.openculture.org.ng
     sys: "48 V · 16 kW · 57.3 kWh · 20.8 kWp"
@@ -194,11 +201,11 @@ appliances:
   - {group: Kitchen, id: micro, icon: microwave, name: Microwave, watts: 1200, hours: 0.5, qty: 1, needs: msmall, why: A microwave draws more than a 12 V starter should carry.}
   - {group: Kitchen, id: blend, icon: blend, name: Blender, watts: 400, surge_w: 800, hours: 0.5, qty: 1}
   - {group: Kitchen, id: cooker, icon: zap, name: Induction cooker, watts: 2000, hours: 1, qty: 1, needs: medium, why: Cooking needs a 48 V system. On 24 V it would drain the battery and strain the inverter.}
-  - {group: Kitchen, id: oven, icon: microwave, name: Electric oven, watts: 2500, hours: 0.5, qty: 1, needs: large, why: An oven only fits on backup with the two-Deye design. On the smaller ones it stays on the grid.}
+  - {group: Kitchen, id: oven, icon: microwave, name: Electric oven, watts: 2500, hours: 0.5, qty: 1, needs: large, why: An oven only fits on backup with the Large design. On the smaller ones it stays on the grid.}
   - {group: Heavy loads, id: iron, icon: shirt, name: Pressing iron, watts: 1000, hours: 0.5, qty: 1, needs: medium, why: Heating elements stay on the grid on the 24 V system.}
   - {group: Heavy loads, id: wash, icon: washing-machine, name: Washing machine, watts: 500, surge_w: 1200, hours: 1, qty: 1, needs: msmall, why: A washing machine’s motor is too much for a 12 V starter.}
   - {group: Heavy loads, id: pump, icon: droplets, name: "Pumping machine, 1 HP", watts: 750, surge_w: 2250, hours: 1, qty: 1, needs: medium, why: A 1 HP pump’s start-up surge needs a 48 V system.}
   - {group: Heavy loads, id: ac1, icon: air-vent, name: "AC, 1 HP inverter", watts: 900, surge_w: 2700, hours: 6, qty: 1, ac: true, needs: medium, why: Air conditioners need a 48 V system. Hours of running would empty a 12 V or 24 V battery long before morning.}
   - {group: Heavy loads, id: ac15, icon: air-vent, name: "AC, 1.5 HP inverter", watts: 1100, surge_w: 3300, hours: 6, qty: 1, ac: true, needs: medium, why: Air conditioners need a 48 V system. Hours of running would empty a 12 V or 24 V battery long before morning.}
-  - {group: Heavy loads, id: ac2, icon: air-vent, name: "AC, 2 HP inverter", watts: 1500, surge_w: 4500, hours: 6, qty: 1, ac: true, ac_2hp: true, needs: large, why: A 2 HP air conditioner only fits the two-Deye design, and no more than two of them.}
-  - {group: Heavy loads, id: heater, icon: droplets, name: Water heater, watts: 2000, hours: 1.5, qty: 1, needs: large, why: A water heater only fits on backup with the two-Deye design. On the smaller ones it stays on the grid.}
+  - {group: Heavy loads, id: ac2, icon: air-vent, name: "AC, 2 HP inverter", watts: 1500, surge_w: 4500, hours: 6, qty: 1, ac: true, ac_2hp: true, needs: large, why: A 2 HP air conditioner only fits the Large design, and no more than two of them.}
+  - {group: Heavy loads, id: heater, icon: droplets, name: Water heater, watts: 2000, hours: 1.5, qty: 1, needs: large, why: A water heater only fits on backup with the Large design. On the smaller ones it stays on the grid.}

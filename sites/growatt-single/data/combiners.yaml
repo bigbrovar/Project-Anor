@@ -11,8 +11,8 @@
 #   steps              "How it's wired", one line per step (<b> for bold)
 
 pv-box-1:
-  title: PV box
-  short: PV 1 and 2
+  title: Solar combiner box
+  short: Panels 1 and 2
   part: box-1
   kind: pair
   arrays: [pv-a, pv-b]

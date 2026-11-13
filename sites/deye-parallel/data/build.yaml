@@ -3,8 +3,8 @@
 # battery-side checks. Products are described in products.yaml; positions on
 # the drawing live in layout.yaml.
 
-version: "0.92"
-updated: 2026-11-12   # shown in the footer, with the version
+version: "0.93"
+updated: 2026-11-13   # shown in the footer, with the version
 
 # Text at the top of the page and in the "Why this design" section.
 # Text fields can use <b> for bold.
@@ -81,21 +81,21 @@ parts:
   - {id: acb-heavy, product: ac-board-heavy, qty: 1}
 
 short_names:
-  pv-1: PV 1
-  pv-2: PV 2
-  pv-3: PV 3
-  pv-4: PV 4
-  pv-5: PV 5
-  pv-6: PV 6
-  box-1: Deye 1
-  box-2: Deye 2
-  deye-1: Deye 1
-  deye-2: Deye 2
-  brk-1: Deye 1
-  brk-2: Deye 2
+  pv-1: Solar panels 1
+  pv-2: Solar panels 2
+  pv-3: Solar panels 3
+  pv-4: Solar panels 4
+  pv-5: Solar panels 5
+  pv-6: Solar panels 6
+  box-1: Inverter 1
+  box-2: Inverter 2
+  deye-1: Inverter 1
+  deye-2: Inverter 2
+  brk-1: Inverter 1
+  brk-2: Inverter 2
 
 groups:
-  - title: Solar array
+  - title: Solar panels
     cards: [[pv-1, pv-2, pv-3, pv-4, pv-5, pv-6], [box-1, box-2]]
   - title: Inverters
     cards: [[deye-1, deye-2]]
@@ -133,15 +133,15 @@ other_blocks:
 
 modes:
   day:
-    caption: <b>Sunny day.</b> Six strings feed the two Deyes’ trackers. Together they run the light loads, charge the shared bank and, once it’s above the smart-load level, run the heavy loads on the GEN ports.
+    caption: <b>Sunny day.</b> Six groups of panels feed the two inverters’ solar inputs. Together they run the light loads, charge the shared bank and, once it’s above the smart-load level, run the heavy loads on the GEN ports.
     flowing: [w-pv1, w-pv2, w-pv3, w-pv4, w-pv5, w-pv6, w-b1a, w-b1b, w-b1c, w-b2a, w-b2b, w-b2c, w-dc1, w-dc2, w-brk1, w-brk2, w-batp, w-batn, w-load1, w-load2, w-light, w-gen1, w-gen2, w-heavy]
     reversed: []
   night:
-    caption: <b>Night, grid off.</b> No solar. Both Deyes draw from the 57.3 kWh bank. The heavy loads stay on until the battery reaches the smart-load off level, then go off to save the rest for the light loads.
+    caption: <b>Night, grid off.</b> No solar. Both inverters draw from the 57.3 kWh bank. The heavy loads stay on until the battery reaches the smart-load off level, then go off to save the rest for the light loads.
     flowing: [w-dc1, w-dc2, w-brk1, w-brk2, w-batp, w-batn, w-load1, w-load2, w-light, w-gen1, w-gen2, w-heavy]
     reversed: [w-dc1, w-dc2, w-brk1, w-brk2, w-batp, w-batn]
   grid:
-    caption: <b>Grid on.</b> Grid passes through both Deyes to the light and heavy loads and can recharge the bank, depending on their settings.
+    caption: <b>Grid on.</b> Grid passes through both inverters to the light and heavy loads and can recharge the bank, depending on their settings.
     flowing: [w-grid, w-grid1, w-grid2, w-load1, w-load2, w-light, w-gen1, w-gen2, w-heavy, w-dc1, w-dc2, w-brk1, w-brk2, w-batp, w-batn]
     reversed: []
 

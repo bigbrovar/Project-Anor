@@ -13,37 +13,37 @@ canvas: [1400, 1270]   # width, height
 blocks:
   - id: pv-a
     part: pv-a
-    short: PV A
+    short: Solar panels A
     at: [30, 30, 170, 200]
-    title: PV A · 3.54 kWp
-    subtitle: 6 × 590 W
+    title: Solar panels A
+    subtitle: 6 × Jinko 590 W
     icon: pv
     photo_height: 120
     panels: {count: 6, cols: 3, size: 30}
   - id: pv-b
     part: pv-b
-    short: PV B
+    short: Solar panels B
     at: [215, 30, 170, 200]
-    title: PV B · 4.13 kWp
-    subtitle: 7 × 590 W
+    title: Solar panels B
+    subtitle: 7 × Jinko 590 W
     icon: pv
     photo_height: 120
     panels: {count: 7, cols: 4, size: 30}
   - id: pv-c
     part: pv-c
-    short: PV C
+    short: Solar panels C
     at: [420, 30, 275, 200]
-    title: PV C · Jinko
-    subtitle: 9 × 580 W · 3s3p · 5.22 kWp
+    title: Solar panels C
+    subtitle: 9 × Jinko 580 W · 5.22 kWp
     icon: pv
     photo_height: 120
     panels: {count: 9, cols: 3, size: 30}
   - id: pv-d
     part: pv-d
-    short: PV D
+    short: Solar panels D
     at: [715, 30, 275, 200]
-    title: PV D · Canadian Solar
-    subtitle: 9 × 600 W · 3s3p · 5.40 kWp
+    title: Solar panels D
+    subtitle: 9 × Canadian Solar 600 W
     icon: pv
     photo_height: 120
     panels: {count: 9, cols: 3, size: 30}
@@ -56,125 +56,133 @@ blocks:
   - id: gridbd
     part: gridbd
     at: [1030, 150, 340, 84]
-    title: Grid board
-    subtitle: 2P MCB · T2 SPD · 2P MCB
+    title: Grid protection board
+    subtitle: Breakers and surge protector
     icon: db
     category: grid
     style: side
   - id: comb-ab
     part: comb-ab
+    short: Solar combiner box A + B
     at: [30, 280, 355, 84]
-    title: Feeo PV combiner
-    subtitle: 2 in 2 out · fuses, SPD, breaker
+    title: Solar combiner box A + B
+    subtitle: Feeo · 2 in 2 out
     icon: combiner
     style: side
     opens: combiner-ab
   - id: comb-c
     part: comb-c
+    short: Solar combiner box C
     at: [420, 280, 275, 84]
-    title: Combiner C
-    subtitle: 3 strings · 63 A · SPD
+    title: Solar combiner box C
+    subtitle: 3 strings joined · 63 A
     icon: combiner
     style: side
     opens: combiner-c
   - id: comb-d
     part: comb-d
+    short: Solar combiner box D
     at: [715, 280, 275, 84]
-    title: Combiner D
-    subtitle: 3 strings · 63 A · SPD
+    title: Solar combiner box D
+    subtitle: 3 strings joined · 63 A
     icon: combiner
     style: side
     opens: combiner-d
   - id: gx
     part: gx
+    short: System monitor
     at: [1150, 290, 220, 84]
-    title: DIY GX
-    subtitle: CM4 · dual CAN
+    title: Monitor
+    subtitle: DIY GX · CM4
     icon: gx
     style: side
   - id: rs
     part: rs
+    short: Inverter 1
     at: [30, 410, 340, 300]
-    title: Multi RS Solar
-    subtitle: 48/6000/100 · MPPT 450/100
+    title: Inverter 1
+    subtitle: Victron Multi RS Solar · built-in MPPT
     icon: inverter
     photo_height: 170
     ports: [[solar, PV], [grid, AC in], [batt, BAT], [load, AC out]]
   - id: mppt-c
     part: mppt-c
-    short: SmartSolar 250/100
+    short: Charge controller C
     at: [420, 410, 275, 84]
-    title: SmartSolar MPPT
-    subtitle: 250/100-Tr VE.Can
+    title: Charge controller C
+    subtitle: Victron MPPT 250/100
     icon: mppt
     style: side
   - id: mppt-d
     part: mppt-d
-    short: SmartSolar 150/100
+    short: Charge controller D
     at: [715, 410, 275, 84]
-    title: SmartSolar MPPT
-    subtitle: 150/100-Tr VE.Can
+    title: Charge controller D
+    subtitle: Victron MPPT 150/100
     icon: mppt
     style: side
   - id: mp
     part: mp
+    short: Inverter 2
     at: [1030, 410, 340, 300]
-    title: MultiPlus-II
-    subtitle: 48/10000/140-100
+    title: Inverter 2
+    subtitle: Victron MultiPlus-II 48/10000
     icon: inverter
     photo_height: 170
     ports: [[grid, AC in], [batt, BAT], [load, AC out]]
   - id: brk-rs
     part: brk-rs
-    short: Multi RS breaker
+    short: Inverter 1 breaker
     at: [420, 560, 128, 120]
-    title: BENY 250 A
-    subtitle: Multi RS
+    title: Breaker
+    subtitle: BENY 250 A
     icon: mccb
     style: stack
   - id: brk-c
     part: brk-c
-    short: MPPT C breaker
+    short: Charge controller C breaker
     at: [567, 560, 128, 120]
-    title: BENY 125 A
-    subtitle: MPPT C
+    title: Breaker
+    subtitle: BENY 125 A
     icon: mccb
     style: stack
   - id: brk-d
     part: brk-d
-    short: MPPT D breaker
+    short: Charge controller D breaker
     at: [714, 560, 128, 120]
-    title: BENY 125 A
-    subtitle: MPPT D
+    title: Breaker
+    subtitle: BENY 125 A
     icon: mccb
     style: stack
   - id: brk-mp
     part: brk-mp
-    short: MultiPlus breaker
+    short: Inverter 2 breaker
     at: [861, 560, 128, 120]
-    title: BENY 250 A
-    subtitle: MultiPlus
+    title: Breaker
+    subtitle: BENY 250 A
     icon: mccb
     style: stack
   - id: busbar
     part: busbar
+    short: Battery connection bars
     at: [420, 720, 570, 70]
-    title: Battery busbar
+    title: Battery connection bars (busbar)
     subtitle: Copper bars joining everything to the batteries
     icon: busbar
     style: side
   - id: shunt
     part: shunt
+    short: Battery monitor
     at: [595, 820, 220, 70]
-    title: SmartShunt
-    subtitle: 1000 A · negative
+    title: Battery monitor
+    subtitle: SmartShunt 1000 A
     icon: shunt
     style: side
   - id: bat
     part: bat
-    short: Battery bank
+    short: Lithium battery bank
     at: [420, 920, 570, 330]
-    title: Battery bank · 57.3 kWh
+    title: Lithium battery bank · 57.3 kWh
     subtitle: 4 × Deriy 14.3 kWh LiFePO4, stacked · 16S · JK BMS 200 A
     icon: battery
     photo_height: 250
@@ -182,15 +190,15 @@ blocks:
   - id: acb-light
     part: acb-light
     at: [30, 760, 340, 84]
-    title: Light-load board
-    subtitle: Chint MCB · T2 SPD · RCBO
+    title: Light loads board
+    subtitle: Breakers and surge protector
     icon: db
     style: side
   - id: acb-heavy
     part: acb-heavy
     at: [1030, 760, 340, 84]
-    title: Heavy-load board
-    subtitle: Chint MCB · T2 SPD · RCBO
+    title: Heavy loads board
+    subtitle: Breakers and surge protector
     icon: db
     style: side
   - id: light
@@ -263,7 +271,7 @@ labels:
 
 # Numbered callouts on install.jpg, linked to blocks. at is [x%, y%] of the photo.
 photo_pins:
-  - {block: rs, at: [76, 29], title: Multi RS Solar, where: Right of the rack, icon: inverter, category: hub}
-  - {block: mp, at: [62, 38], title: MultiPlus-II, where: Left of the rack, icon: inverter, category: hub}
-  - {block: mppt-c, at: [71, 12], title: SmartSolar chargers, where: Top of the rack, icon: mppt, category: solar}
-  - {block: bat, at: [31, 76], title: Battery bank, where: "4 packs, stacked", icon: battery, category: batt}
+  - {block: rs, at: [76, 29], title: Inverter 1, where: Right of the rack, icon: inverter, category: hub}
+  - {block: mp, at: [62, 38], title: Inverter 2, where: Left of the rack, icon: inverter, category: hub}
+  - {block: mppt-c, at: [71, 12], title: Charge controllers, where: Top of the rack, icon: mppt, category: solar}
+  - {block: bat, at: [31, 76], title: Lithium battery bank, where: "4 packs, stacked", icon: battery, category: batt}

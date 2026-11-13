@@ -3,8 +3,8 @@
 # battery-side checks. Products are described in products.yaml; positions on
 # the drawing live in layout.yaml.
 
-version: "0.92"
-updated: 2026-11-12   # shown in the footer, with the version
+version: "0.93"
+updated: 2026-11-13   # shown in the footer, with the version
 
 # Text at the top of the page and in the "Why this design" section.
 # Text fields can use <b> for bold.
@@ -114,12 +114,12 @@ parts:
     qty: 1
 
 short_names:
-  pv-a: PV 1
-  pv-b: PV 2
-  pv-c: PV 3
+  pv-a: Solar panels 1
+  pv-b: Solar panels 2
+  pv-c: Solar panels 3
 
 groups:
-  - title: Solar array
+  - title: Solar panels
     cards: [[pv-a, pv-b, pv-c], [box-1]]
   - title: Inverter
     cards: [[deye]]
@@ -157,15 +157,15 @@ other_blocks:
 
 modes:
   day:
-    caption: <b>Sunny day.</b> The three strings feed the Deye’s trackers. It runs the light loads, charges the batteries and, once the battery is above the smart-load level, the heavy loads on the GEN port too.
+    caption: <b>Sunny day.</b> The three groups of panels feed the inverter’s solar inputs. It runs the light loads, charges the batteries and, once the battery is above the smart-load level, the heavy loads on the GEN port too.
     flowing: [w-pva, w-pvb, w-pvc, w-boxa, w-boxb, w-boxc, w-deyedc, w-brk, w-batp, w-batn, w-lightout, w-light, w-genout, w-heavy]
     reversed: []
   night:
-    caption: <b>Night, grid off.</b> No solar. The Deye runs the light loads from the 28.7 kWh bank. The heavy loads stay on until the battery reaches the smart-load off level, then go off to save the rest for the light loads.
+    caption: <b>Night, grid off.</b> No solar. The inverter runs the light loads from the 28.7 kWh bank. The heavy loads stay on until the battery reaches the smart-load off level, then go off to save the rest for the light loads.
     flowing: [w-deyedc, w-brk, w-batp, w-batn, w-lightout, w-light, w-genout, w-heavy]
     reversed: [w-deyedc, w-brk, w-batp, w-batn]
   grid:
-    caption: <b>Grid on.</b> Grid passes through the Deye to both the light and the heavy loads, and can recharge the bank, depending on its settings.
+    caption: <b>Grid on.</b> Grid passes through the inverter to both the light and the heavy loads, and can recharge the bank, depending on its settings.
     flowing: [w-grid, w-gridin, w-lightout, w-light, w-genout, w-heavy, w-deyedc, w-brk, w-batp, w-batn]
     reversed: []
 

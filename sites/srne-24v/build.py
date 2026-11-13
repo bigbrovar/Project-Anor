@@ -96,7 +96,7 @@ def entry_id(entry, where, i):
 
 # ---------- products.yaml ----------
 
-PRODUCT_FIELDS = {"name", "short", "icon", "about", "specs", "note", "advice", "links", "brand", "why"}
+PRODUCT_FIELDS = {"name", "plain", "short", "icon", "about", "specs", "note", "advice", "links", "brand", "why"}
 
 
 def text_lines(value, where, field):
@@ -188,7 +188,7 @@ def read_products(doc):
                 problem(where, f"alternative {i} needs a name and a url")
 
         product = {"name": str(p.get("name", pid)), "icon": p.get("icon"), "specs": specs, "links": out}
-        for field in ("short", "note", "advice"):
+        for field in ("plain", "short", "note", "advice"):
             if p.get(field):
                 product[field] = str(p[field])
         why = []

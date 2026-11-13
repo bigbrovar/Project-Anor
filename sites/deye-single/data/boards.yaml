@@ -11,7 +11,7 @@
 #   steps    "How it's wired", one line per step (<b> for bold)
 
 grid-board:
-  title: Grid board
+  title: Grid protection board
   part: gridbd
   line: grid
   lead: Where the utility supply is switched and protected before it reaches the Deye’s grid port. The CT clamp sits on the incoming live, with its lead running to the Deye.
@@ -28,7 +28,7 @@ grid-board:
     - The <b>CT clamp</b> goes around the incoming live before the main breaker, arrow pointing to the Deye.
 
 light-board:
-  title: Light-load board
+  title: Light loads board
   part: acb-light
   line: load
   lead: The Deye’s LOAD output, switched and protected before it reaches the light circuits.
@@ -45,7 +45,7 @@ light-board:
     - The RCBO’s bottom terminals feed the circuits.
 
 heavy-board:
-  title: Heavy-load board
+  title: Heavy loads board
   part: acb-heavy
   line: load
   lead: The Deye’s GEN port, set as a smart load, switched and protected before it reaches the heavy circuits.

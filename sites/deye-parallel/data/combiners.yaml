@@ -11,8 +11,8 @@
 #   steps              "How it's wired", one line per step (<b> for bold)
 
 pv-box-1:
-  title: PV box 1
-  short: Deye 1
+  title: Solar combiner box 1
+  short: Inverter 1
   part: box-1
   kind: pair
   arrays: [pv-1, pv-2, pv-3]
@@ -34,8 +34,8 @@ pv-box-1:
     - Each channel leaves the box to its own <b>Deye 1 MPPT</b>.
 
 pv-box-2:
-  title: PV box 2
-  short: Deye 2
+  title: Solar combiner box 2
+  short: Inverter 2
   part: box-2
   kind: pair
   arrays: [pv-4, pv-5, pv-6]
