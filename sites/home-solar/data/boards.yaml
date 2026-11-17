@@ -10,7 +10,7 @@
 #   to       what the last device in the chain feeds, when there are no outputs
 #   steps    "How it's wired", one line per step (<b> for bold)
 grid-board:
-  title: Grid board
+  title: Grid protection board
   part: gridbd
   line: grid
   lead: Where the utility supply is switched and protected, then split to each inverter’s AC input.
@@ -29,7 +29,7 @@ grid-board:
     - From there a second loop feeds one breaker per inverter, <b>63 A</b> for the Multi RS and <b>100 A</b> for the MultiPlus-II.
 
 light-board:
-  title: Light-load board
+  title: Light loads board
   part: acb-light
   line: load
   lead: The Multi RS output, protected at both ends of the cable run to the house, then through an RCBO to the light circuits.
@@ -49,7 +49,7 @@ light-board:
     - The last loop ends in the <b>top</b> of the <b>RCBO</b>, whose bottom terminals feed the circuits.
 
 heavy-board:
-  title: Heavy-load board
+  title: Heavy loads board
   part: acb-heavy
   line: load
   lead: The MultiPlus-II output, switched and protected before it reaches the heavy circuits.

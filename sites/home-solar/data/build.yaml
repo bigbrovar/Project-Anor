@@ -3,8 +3,12 @@
 # checks. Products are described in products.yaml; positions on the drawing
 # live in layout.yaml.
 
-version: "0.92"
-updated: 2026-11-12   # shown in the footer, with the version
+version: "0.93"
+updated: 2026-11-13   # shown in the footer, with the version
+
+# The live monitoring page for this install. The button under the headline
+# and the Live link in the menu both open it.
+live_url: https://rana.openculture.org.ng/
 
 # Parts used in this install. `product` is an id from products.yaml.
 # A panel array also has series, parallel and feeds (the part its strings
@@ -108,21 +112,21 @@ parts:
 
 # How parts are named in the "Used for:" line on shared parts-list cards.
 short_names:
-  pv-a: PV A
-  pv-b: PV B
-  comb-c: Combiner C
-  comb-d: Combiner D
-  brk-rs: Multi RS
-  brk-mp: MultiPlus
-  brk-c: MPPT C
-  brk-d: MPPT D
+  pv-a: Solar panels A
+  pv-b: Solar panels B
+  comb-c: Combiner box C
+  comb-d: Combiner box D
+  brk-rs: Inverter 1
+  brk-mp: Inverter 2
+  brk-c: Charge controller C
+  brk-d: Charge controller D
 
 # Sections of the parts list. Each card shows one product; put several part ids
 # on one card when they share a product, like [brk-rs, brk-mp].
 groups:
-  - title: Solar array
+  - title: Solar panels
     cards: [[pv-a, pv-b], [pv-c], [pv-d], [comb-ab], [comb-c], [comb-d], [spd-cd]]
-  - title: Inverters, chargers and monitoring
+  - title: Inverters, charge controllers and monitoring
     cards: [[rs], [mp], [mppt-c], [mppt-d], [gx]]
   - title: Battery and DC side
     cards: [[bat], [busbar], [shunt], [brk-rs, brk-mp], [brk-c, brk-d]]
@@ -161,7 +165,7 @@ other_blocks:
 # direction. Captions can use <b> for bold.
 modes:
   day:
-    caption: <b>Sunny day.</b> PV A and B power the Multi RS, which runs the light loads and sends any extra to the batteries. PV C and D charge the batteries through the two solar chargers. The MultiPlus-II runs the heavy loads from those same batteries.
+    caption: <b>Sunny day.</b> Solar panels A and B power Inverter 1, which runs the light loads and sends any extra to the batteries. Solar panels C and D charge the batteries through the two charge controllers. Inverter 2 runs the heavy loads from those same batteries.
     flowing: [w-pva, w-pvb, w-combrs, w-pvc, w-combc, w-pvd, w-combd, w-mpptc, w-mpptd, w-brkc,
       w-brkd, w-rsdc, w-brkrs, w-mpdc, w-brkmp, w-batp, w-shunt1, w-shunt2, w-rsout,
       w-lightout, w-mpout, w-heavyout]

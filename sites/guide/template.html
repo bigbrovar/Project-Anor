@@ -324,6 +324,7 @@ a.tier:hover{border-color:var(--line2)}
 .ptable tr.tot td{font-weight:700;border-top:1px solid var(--line2)}
 #psrc .n{padding-right:22px}   /* keep the price used clear of the listed range beside it */
 .ptable small{display:block;color:var(--muted);font-size:.76rem}
+.ptable small.model{font-family:var(--f-m);font-size:.72rem}
 .ptable a{color:var(--solar);font-weight:600;text-decoration:none}
 .ptable a:hover{text-decoration:underline}
 .psub{font:650 1rem var(--f-b);margin:26px 0 8px}
@@ -560,12 +561,13 @@ document.addEventListener("click",e=>{const a=e.target.closest('a[href^="#"]');i
   if(el){e.preventDefault();el.scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth",block:"start"});}});
 
 /* ---------- prices and reference ---------- */
+const pname=p=>p.plain?`${esc(p.plain)}<small class="model">${esc(p.n)}</small>`:esc(p.n);   /* plain name, exact model under it */
 $("#pgrid").innerHTML=SYS.filter(s=>s.state==="live").map(s=>`<div class="pcard"><h3>${esc(s.n)} <span>about ${naira(s.cost)}</span></h3><div class="ts">${esc(s.sys)}</div>
   <table class="ptable"><thead><tr><th>Part</th><th class="n">Qty</th><th class="n">Each</th><th class="n">Total</th></tr></thead><tbody>
-  ${s.parts.map(p=>`<tr><td>${esc(P[p.p].n)}</td><td class="n">${p.q}</td><td class="n">${naira(P[p.p].p)}</td><td class="n">${naira(P[p.p].p*p.q)}</td></tr>`).join("")}
+  ${s.parts.map(p=>`<tr><td>${pname(P[p.p])}</td><td class="n">${p.q}</td><td class="n">${naira(P[p.p].p)}</td><td class="n">${naira(P[p.p].p*p.q)}</td></tr>`).join("")}
   <tr><td colspan="3">Allowance for the rest, ${G.bos}%<small>${esc(G.bosText)}</small></td><td class="n">${naira(s.bos)}</td></tr>
   <tr class="tot"><td colspan="3">Reference total, before installation</td><td class="n">${naira(s.partsCost+s.bos)}</td></tr></tbody></table></div>`).join("");
-$("#psrc").innerHTML=`<thead><tr><th>Item</th><th class="n">Price used</th><th>Listed at</th><th>Source</th></tr></thead><tbody>${Object.values(P).map(p=>`<tr><td>${esc(p.n)}${p.note?`<small>${esc(p.note)}</small>`:""}</td><td class="n">${naira(p.p)}</td><td>${esc(p.range||naira(p.p))}</td><td>${p.src.map(x=>`<a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)} ↗</a>`).join(" · ")}</td></tr>`).join("")}</tbody>`;
+$("#psrc").innerHTML=`<thead><tr><th>Item</th><th class="n">Price used</th><th>Listed at</th><th>Source</th></tr></thead><tbody>${Object.values(P).map(p=>`<tr><td>${pname(p)}${p.note?`<small>${esc(p.note)}</small>`:""}</td><td class="n">${naira(p.p)}</td><td>${esc(p.range||naira(p.p))}</td><td>${p.src.map(x=>`<a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)} ↗</a>`).join(" · ")}</td></tr>`).join("")}</tbody>`;
 {const R=G.ref,c=$("#refcard");c.href=R.url;c.innerHTML=`<span class="tn">${esc(R.name)}</span><span class="ts">${esc(R.sys)}</span>${R.text.split(/\n\s*\n/).map(x=>`<p>${esc(x.trim())}</p>`).join("")}<span class="go">Open the home dashboard ↗</span>`;}
 $("#readlist").innerHTML=G.reading.map(r=>`<li><a href="${r.url}" target="_blank" rel="noopener"><b>${esc(r.title)} ↗</b><span>${esc(r.text)}</span></a></li>`).join("");
 if(!G.reading.length)$("#reading").hidden=true;

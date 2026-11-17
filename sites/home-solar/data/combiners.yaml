@@ -11,8 +11,8 @@
 #   steps              "How it's wired", one line per step (<b> for bold)
 
 combiner-ab:
-  title: Feeo PV combiner
-  short: PV A + B
+  title: Solar combiner box A + B
+  short: Panels A + B
   part: comb-ab
   kind: pair
   arrays: [pv-a, pv-b]
@@ -33,8 +33,8 @@ combiner-ab:
     - Each channel leaves the box to its own <b>Multi RS tracker</b>.
 
 combiner-c:
-  title: Combiner C
-  short: PV C
+  title: Solar combiner box C
+  short: Panels C
   part: comb-c
   kind: par3
   arrays: [pv-c]
@@ -54,8 +54,8 @@ combiner-c:
     - The output pair runs to the <b>SmartSolar 250/100</b>.
 
 combiner-d:
-  title: Combiner D
-  short: PV D
+  title: Solar combiner box D
+  short: Panels D
   part: comb-d
   kind: par3
   arrays: [pv-d]

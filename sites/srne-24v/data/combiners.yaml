@@ -11,8 +11,8 @@
 #   steps              "How it's wired", one line per step (<b> for bold)
 
 pv-box-1:
-  title: PV box
-  short: PV string
+  title: Solar combiner box
+  short: One string
   part: box-1
   kind: pair
   arrays: [pv-a]

@@ -200,6 +200,14 @@ h1[tabindex="-1"]:focus{outline:none}
 .d-acts{display:flex;gap:8px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 14px;border-radius:12px;border:0;background:var(--solar);color:var(--on-accent);text-decoration:none;font-weight:700;font-size:.86rem}
 .btn:hover{filter:brightness(1.06)}
+/* link to the live monitoring page */
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--batt);flex:none;animation:pulse 2s ease-out infinite}
+.btn .dot{background:var(--on-accent)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,currentColor 55%,transparent)}100%{box-shadow:0 0 0 8px transparent}}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}}
+.top nav a.livelink{display:inline-flex;align-items:center;gap:6px;color:var(--batt)}
+.livecta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:16px 0 0}
+.livecta span{color:var(--muted);font-size:.9rem}
 .btn svg{width:15px;height:15px}
 .note{font-size:.84rem;color:var(--muted);margin:0}
 .wired{display:grid;gap:9px}
@@ -310,6 +318,7 @@ details.behind p{margin:12px 0 0;font-size:.84rem;color:var(--muted);max-width:8
 .part .qty{position:absolute;top:10px;left:10px;font:500 .74rem var(--f-m);background:var(--surface);color:var(--ink);padding:3px 8px;border-radius:99px}
 .part .pb{padding:14px;display:grid;gap:7px;align-content:start}
 .part h4{margin:0;font:650 1rem/1.3 var(--f-b)}
+.pmodel{margin:3px 0 0;font:400 .78rem/1.4 var(--f-m);color:var(--muted)}   /* the exact model, under the plain name */
 .pbtn{background:none;border:0;padding:0;margin:0;font:inherit;color:inherit;text-align:left;cursor:pointer}
 .pbtn::after{content:"";position:absolute;inset:0;border-radius:var(--r)}
 .pbtn:focus-visible{outline:none}
@@ -444,6 +453,7 @@ details.whyd li{display:list-item}
   <a class="brand" href="#top"><span class="logo" data-i="sun"></span>openculture <small>home solar</small></a>
   <nav aria-label="Sections">
     <a href="#schematic">Schematic</a>
+    <a class="livelink" href="#" data-live target="_blank" rel="noopener"><i class="dot" aria-hidden="true"></i>Live</a>
     <a href="#install">Install</a>
     <a href="#checks">Checks</a>
     <a href="#parts-h">Parts</a>
@@ -461,6 +471,7 @@ details.whyd li{display:list-item}
       <p class="eyebrow">DIY residential off-grid setup · 48 V with grid backup</p>
       <h1 id="h1" style="margin-top:10px">Project Anor</h1>
       <p class="lead">Two Victron inverters on one shared battery. A Multi RS Solar runs the light loads from its own panels. A MultiPlus-II runs the heavy loads, fed by two separate solar charge controllers. Grid is the backup for both.</p>
+      <p class="livecta"><a class="btn" href="#" data-live target="_blank" rel="noopener"><i class="dot" aria-hidden="true"></i>See this system live</a><span>Solar, battery and load readings from this install, as they happen.</span></p>
     </div>
     <div class="chips">
       <div class="spec"><div class="v" id="c-pv">0</div><div class="k" id="c-pvk">Solar</div></div>
@@ -541,8 +552,8 @@ details.whyd li{display:list-item}
     <details class="behind">
       <summary>How these are worked out</summary>
       <ul>
-        <li><b>Cold voltage:</b> <code>Voc × panels in series × (1 + |temp. coeff.| × (25 °C − coldest °C))</code>, compared with the charger’s absolute maximum PV voltage. The temperature coefficient comes from each panel’s datasheet.</li>
-        <li><b>Short-circuit current:</b> <code>Isc × strings in parallel</code>, compared with the charger’s maximum PV short-circuit current.</li>
+        <li><b>Cold voltage:</b> <code>Voc × panels in series × (1 + |temp. coeff.| × (25 °C − coldest °C))</code>, compared with the charger’s absolute maximum solar input (PV) voltage. The temperature coefficient comes from each panel’s datasheet.</li>
+        <li><b>Short-circuit current:</b> <code>Isc × strings in parallel</code>, compared with the charger’s maximum solar input short-circuit current.</li>
         <li><b>Working current and panel power:</b> compared with what the charger or tracker accepts. Going over isn’t unsafe; the charger trims the excess, which is called clipping.</li>
         <li><b>String fuses and breakers:</b> IEC 62548 puts their rating between <code>1.5 × Isc</code> and <code>2.4 × Isc</code> of one panel, and no higher than the panel’s maximum series fuse rating.</li>
         <li><b>Surge protectors:</b> their rated DC voltage should stay above the string’s cold open-circuit voltage.</li>
@@ -781,7 +792,7 @@ const why=p=>p.why?`<div class="why"><p class="eyebrow">Why this one</p>${whyLis
 const whyFold=p=>p.why?`<details class="whyd"><summary>Why this one</summary>${whyList(p)}</details>`:"";
 const boxWhy=C=>{const pt=PARTS.find(x=>x.id===C.part),bp=pt&&PRODUCTS[pt.product];return bp&&bp.why?`<div class="why"><p class="eyebrow">Why this box</p>${whyList(bp)}</div>`:"";};
 function wireLabel(w){if(w.type==="data")return w.label;
-  return {solar:"PV DC",batt:"DC"+(w.pole?" "+(w.pole==="-"?"−":w.pole):""),grid:"Grid AC",load:"AC",none:""}[w.type];}
+  return {solar:"Solar DC",batt:"DC"+(w.pole?" "+(w.pole==="-"?"−":w.pole):""),grid:"Grid AC",load:"AC",none:""}[w.type];}
 function cableText(w){return [w.size,w.len].filter(Boolean).join(" · ");}
 function wiredHTML(id){
   const seen=new Set(),chips=[];
@@ -882,7 +893,7 @@ function showDetail(id,light=true,quiet=false){
     lightCard(null);if(!quiet)$("#live").textContent=`Showing ${inf.t}`;return;}
   const part=partById(n.part),p=PRODUCTS[part.product],c=n.cat||CAT[p.icon];
   box.innerHTML=`<p class="eyebrow">Selected part</p><div class="d-photo tint ${c}">${cicon(p.icon,1.6)}${part.qty>1?`<span class="qty">× ${part.qty}</span>`:""}</div>
-   <div><h3 style="font-size:1.2rem">${p.name}</h3>${ABOUT[part.product]?`<p class="note" style="margin-top:8px;color:var(--ink)">${ABOUT[part.product]}</p>`:""}</div>
+   <div><h3 style="font-size:1.2rem">${p.plain?(n.short||p.plain):p.name}</h3>${p.plain?`<p class="pmodel">${p.name}</p>`:""}${ABOUT[part.product]?`<p class="note" style="margin-top:8px;color:var(--ink)">${ABOUT[part.product]}</p>`:""}</div>
    ${part.board?`<div class="d-acts"><a class="btn" href="#${part.board}">See the wiring inside ${ico("arrow-right",2)}</a></div>`:""}
    ${part.box?`<div class="d-acts"><a class="btn" href="#${part.box}">See the wiring inside ${ico("arrow-right",2)}</a></div>`:""}
    ${part.series&&combOf(part.id)?`<div class="d-acts"><a class="btn" href="#panels-${combOf(part.id)}">See how the panels are strung ${ico("arrow-right",2)}</a></div>`:""}
@@ -894,7 +905,7 @@ function showDetail(id,light=true,quiet=false){
    ${advice(p)}
    ${why(p)}
    ${linkList(p)}`;
-  lightCard(light?n.part:null);if(!quiet)$("#live").textContent=`Showing ${p.name}`;}
+  lightCard(light?n.part:null);if(!quiet)$("#live").textContent=`Showing ${p.plain?(n.short||p.plain):p.name}`;}
 function lightCard(pid){document.querySelectorAll(".part").forEach(c=>c.classList.toggle("lit",!!pid&&c.dataset.parts.split(",").includes(pid)));}
 function select(id,how="diagram"){
   showDetail(id,how!=="init",how==="init");
@@ -918,7 +929,7 @@ function cardHTML(grp){
   const box=parts[0].box||alt.box,nid=node?node.id:(alt.node||"");
   return `<article class="part" data-parts="${grp.join(",")}">
     <div class="pp tint ${c}">${cicon(p.icon,1.7)}${qty?`<span class="qty">× ${qty}</span>`:""}</div>
-    <div class="pb"><h4><button type="button" class="pbtn"${nid?` data-node="${nid}"`:""}${box?` data-box="${box}"`:""}>${p.name}<span class="sr">${box?", open the wiring inside":", show on the schematic"}</span></button></h4>
+    <div class="pb"><h4><button type="button" class="pbtn"${nid?` data-node="${nid}"`:""}${box?` data-box="${box}"`:""}>${p.plain||p.name}<span class="sr">${box?", open the wiring inside":", show on the schematic"}</span></button></h4>${p.plain?`<p class="pmodel">${p.name}</p>`:""}
      ${shown?`<dl class="pk">${shown}</dl>`:""}${where?`<div class="ps">${where}</div>`:""}
      ${parts[0].box?`<div class="go">Open the wiring inside ›</div>`:""}
      ${link?`<div class="pr">${link}</div>`:""}</div></article>`;}
@@ -1013,7 +1024,7 @@ function drawStrings(cb){
 function panelSteps(cb){
   const C=COMBINERS[cb],S=stringsOf(cb),joined=C.kind!=="pair",n=[...new Set(S.map(s=>s.n))];
   const st=[`Inside each string, panel 1’s <b>+</b> plugs into panel 2’s <b>−</b>, panel 2’s <b>+</b> into panel 3’s <b>−</b>, and so on. This is <b>series</b>: the voltages add, the current stays that of one panel.`,
-    `The <b>−</b> left free on the first panel and the <b>+</b> left free on the last are the string’s two ends. Both run to the ${esc(C.title)} in PV cable, the + and − of one string kept together.`];
+    `The <b>−</b> left free on the first panel and the <b>+</b> left free on the last are the string’s two ends. Both run to the ${esc(C.title)} in solar (PV) cable, the + and − of one string kept together.`];
   st.push(joined?`The ${S.length} strings only meet <b>inside the box</b>: each <b>+</b> through its own breaker onto the comb busbar, every <b>−</b> onto the link bar. This is <b>parallel</b>: the currents add, the voltage stays that of one string.`
     :`The strings are <b>never joined</b>. Each keeps its own channel in the box and its own tracker, so ${S.length>1?"a shaded or faulty string doesn’t pull the others down":"it is checked and switched on its own"}.`);
   st.push(`Bond every panel frame to the earth run, and the earth run to the earth rod.`);
@@ -1078,7 +1089,7 @@ function drawPar3(cb){
   neg+=`<path class="neg" d="M${MN} 392 ${hop(MN+50)} H${SX+18} V${SY}"/>`+dot(MN,392,"jn");
   g+=rail(SX-16,SY,104)+spdSym(SX,SY,2)+dlabel(SX-24,SY+44,esc(PRODUCTS[C.spd.p].name.split(" ")[0])+" SPD",`${pspec(C.spd.p,C.spd.k)} V DC`,"end");
   pe+=`<path class="pe" d="M${SX+36} ${SY+DH} V612"/>`+earthSym(SX+36,612,"");
-  g+=outBox(MX-64,560,200,esc(nodeName(partById(pvId).feeds)),"PV in · + and −");
+  g+=outBox(MX-64,560,200,esc(nodeName(partById(pvId).feeds)),"Solar in · + and −");
   g+=`<text class="lbl" x="${MP-12}" y="548" text-anchor="end">+</text><text class="lbl" x="${MN+12}" y="548">−</text>`;
   const top=strTile(30,20,360,`${s.n} × ${pp.specs.pmax_w} W each · ${s.v.toFixed(1)} V`,"3 strings in parallel");
   const enc=`<rect class="encl" x="20" y="126" width="860" height="446" rx="18"/><text class="lbl" x="866" y="148" text-anchor="end">${C.title} enclosure</text>`;
@@ -1184,7 +1195,7 @@ function renderComb(id){
       <div class="legend"><span><i style="background:var(--solar)"></i>+ conductor</span><span><i class="neg"></i>− conductor</span><span><i class="pe"></i>Earth</span></div></div>
     <div class="cgrid">
       <div><div class="canvas">${C.kind==="pair"?drawPair(id):drawPar3(id)}</div>
-        ${C.kind==="pair"&&COMBINER_IMG?`<figure class="cshot"><img src="${COMBINER_IMG}" alt="Two channels of a PV box built from Feeo parts: in each, two fuse holders, a surge protector and a 2-pole breaker side by side on the rail, with the string wires entering the bottom of the fuses" loading="lazy"><figcaption><b>How it looks with the real parts.</b> Two channels, each with its fuse holders, surge protector and breaker in a row. The earth wire from each surge protector isn’t in this picture; the drawing shows it.</figcaption></figure>`:""}</div>
+        ${C.kind==="pair"&&COMBINER_IMG?`<figure class="cshot"><img src="${COMBINER_IMG}" alt="Two channels of a solar combiner box built from Feeo parts: in each, two fuse holders, a surge protector and a 2-pole breaker side by side on the rail, with the string wires entering the bottom of the fuses" loading="lazy"><figcaption><b>How it looks with the real parts.</b> Two channels, each with its fuse holders, surge protector and breaker in a row. The earth wire from each surge protector isn’t in this picture; the drawing shows it.</figcaption></figure>`:""}</div>
       <aside class="cside">
         <div><p class="eyebrow">How it’s wired</p><ol class="steps">${C.steps.map(s=>`<li>${s}</li>`).join("")}</ol></div>
         ${combSizing(id)}
@@ -1277,6 +1288,7 @@ function renderSpots(){
 /* ---------- routing: #combiner-* opens a box, anything else is the main page ---------- */
 let view="main",lastComb=null;
 const NAVMAP=[["schematic","#schematic"],["install","#install"],["checks","#checks"],["parts-sec","#parts-h"]];
+document.querySelectorAll("a[data-live]").forEach(a=>{a.href="__LIVE_URL__";});   /* the live monitoring page, from build.yaml */
 function setNav(href){document.querySelectorAll(".top nav a").forEach(a=>{if(a.getAttribute("href")===href)a.setAttribute("aria-current","true");else a.removeAttribute("aria-current");});}
 function spy(){if(view!=="main")return;const y=innerHeight*.35;let cur=null;
   for(const [id,href] of NAVMAP){const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=y)cur=href;}setNav(cur);}

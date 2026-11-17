@@ -10,7 +10,7 @@
 #   to       what the last device in the chain feeds, when there are no outputs
 #   steps    "How it's wired", one line per step (<b> for bold)
 grid-board:
-  title: Grid board
+  title: Grid protection board
   part: gridbd
   line: grid
   lead: Where the utility supply is switched and protected before it reaches the SRNE’s AC input.
@@ -26,7 +26,7 @@ grid-board:
     - The loop ends in the <b>top</b> of the 2-pole <b>32 A breaker</b>, whose bottom terminals feed the SRNE’s AC input.
 
 load-board:
-  title: Load board
+  title: Loads board
   part: acb
   line: load
   lead: The SRNE’s AC output, switched and protected before it reaches the essential circuits.

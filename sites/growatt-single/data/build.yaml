@@ -3,8 +3,8 @@
 # settings. Products are described in products.yaml; positions on the drawing
 # live in layout.yaml.
 
-version: "0.92"
-updated: 2026-11-12   # shown in the footer, with the version
+version: "0.93"
+updated: 2026-11-13   # shown in the footer, with the version
 
 # Text at the top of the page and in the "Why this design" section.
 # Text fields can use <b> for bold.
@@ -73,11 +73,11 @@ parts:
   - {id: acb-heavy, product: ac-board-heavy, qty: 1}
 
 short_names:
-  pv-a: PV 1
-  pv-b: PV 2
+  pv-a: Solar panels 1
+  pv-b: Solar panels 2
 
 groups:
-  - title: Solar array
+  - title: Solar panels
     cards: [[pv-a, pv-b], [box-1]]
   - title: Inverter
     cards: [[inv]]
@@ -114,15 +114,15 @@ other_blocks:
 
 modes:
   day:
-    caption: <b>Sunny day.</b> The two strings feed the Growatt’s trackers. It runs the house and charges the battery.
+    caption: <b>Sunny day.</b> The two groups of panels feed the inverter’s solar inputs. It runs the house and charges the battery.
     flowing: [w-pva, w-pvb, w-boxa, w-boxb, w-dc, w-brk, w-batp, w-batn, w-out, w-light, w-heavyin, w-heavy]
     reversed: []
   night:
-    caption: <b>Night, grid off.</b> No solar. The Growatt runs the house from the 14.3 kWh pack until it reaches the back-to-grid level.
+    caption: <b>Night, grid off.</b> No solar. The inverter runs the house from the 14.3 kWh pack until it reaches the back-to-grid level.
     flowing: [w-dc, w-brk, w-batp, w-batn, w-out, w-light, w-heavyin, w-heavy]
     reversed: [w-dc, w-brk, w-batp, w-batn]
   grid:
-    caption: <b>Grid on, battery low.</b> The Growatt bypasses grid to the house and recharges the battery.
+    caption: <b>Grid on, battery low.</b> The inverter passes grid power to the house and recharges the battery.
     flowing: [w-grid, w-gridin, w-out, w-light, w-heavyin, w-heavy, w-dc, w-brk, w-batp, w-batn]
     reversed: []
 

@@ -9,18 +9,18 @@
 canvas: [1400, 1260]
 
 blocks:
-  - {id: pv-a, part: pv-a, short: PV 1, at: [30, 30, 370, 200], title: PV 1 · 2.6 kWp, subtitle: 4 × Jinko 650 W, icon: pv, photo_height: 120, panels: {count: 4, cols: 4, size: 34}}
-  - {id: pv-b, part: pv-b, short: PV 2, at: [420, 30, 370, 200], title: PV 2 · 2.6 kWp, subtitle: 4 × Jinko 650 W, icon: pv, photo_height: 120, panels: {count: 4, cols: 4, size: 34}}
-  - {id: box-1, part: box-1, short: PV box, at: [30, 280, 760, 84], title: PV box, subtitle: "2 in 2 out · fuses, breaker and SPD on each channel", icon: combiner, style: side, opens: pv-box-1}
-  - {id: inv, part: inv, short: Growatt, at: [30, 420, 760, 300], title: Growatt SPF 6000 ES Plus, subtitle: "6 kW · 48 V battery · 2 MPPT, up to 500 V", icon: inverter, photo_height: 170, ports: [[solar, PV 1-2], [grid, AC IN], [batt, BAT], [load, AC OUT]]}
-  - {id: brk, part: brk, short: Battery breaker, at: [330, 790, 160, 120], title: BENY 250 A, subtitle: Growatt battery, icon: mccb, style: stack}
-  - {id: busbar, part: busbar, at: [30, 960, 760, 70], title: Battery busbar, subtitle: Room for a second pack, icon: busbar, style: side}
-  - {id: bat, part: bat, short: Battery, at: [30, 1080, 760, 160], title: Battery · 14.3 kWh, subtitle: "1 × Deriy 14.3 kWh LiFePO4 · 16S · JK BMS 200 A", icon: battery, photo_height: 80, packs: 1}
+  - {id: pv-a, part: pv-a, short: Solar panels 1, at: [30, 30, 370, 200], title: Solar panels 1 · 2.6 kWp, subtitle: 4 × Jinko Tiger Neo 650 W, icon: pv, photo_height: 120, panels: {count: 4, cols: 4, size: 34}}
+  - {id: pv-b, part: pv-b, short: Solar panels 2, at: [420, 30, 370, 200], title: Solar panels 2 · 2.6 kWp, subtitle: 4 × Jinko Tiger Neo 650 W, icon: pv, photo_height: 120, panels: {count: 4, cols: 4, size: 34}}
+  - {id: box-1, part: box-1, short: Solar combiner box, at: [30, 280, 760, 84], title: Solar combiner box, subtitle: "Fuses, a breaker and a surge protector for each group of panels", icon: combiner, style: side, opens: pv-box-1}
+  - {id: inv, part: inv, short: Inverter, at: [30, 420, 760, 300], title: Inverter · 6 kW, subtitle: Growatt SPF 6000 ES Plus · 48 V · 2 solar inputs (MPPT), icon: inverter, photo_height: 170, ports: [[solar, PV 1-2], [grid, AC IN], [batt, BAT], [load, AC OUT]]}
+  - {id: brk, part: brk, short: Battery breaker, at: [330, 790, 160, 120], title: Battery breaker, subtitle: BENY 250 A, icon: mccb, style: stack}
+  - {id: busbar, part: busbar, short: Battery connection bars, at: [30, 960, 760, 70], title: Battery connection bars (busbar), subtitle: Room for a second battery, icon: busbar, style: side}
+  - {id: bat, part: bat, short: Lithium battery, at: [30, 1080, 760, 160], title: Lithium battery · 14.3 kWh, subtitle: "1 × Deriy 14.3 kWh LiFePO4 · 16S · JK BMS 200 A", icon: battery, photo_height: 80, packs: 1}
   - {id: grid, at: [1030, 30, 340, 84], title: Grid supply, subtitle: Single phase · kWh meter, icon: meter, style: side}
-  - {id: gridbd, part: gridbd, at: [1030, 150, 340, 84], title: Grid board, subtitle: 2P MCB · T2 SPD, icon: db, category: grid, style: side}
-  - {id: acb-light, part: acb-light, at: [1030, 300, 340, 84], title: Light-load board, subtitle: Chint MCB · T2 SPD · RCBO, icon: db, style: side}
+  - {id: gridbd, part: gridbd, at: [1030, 150, 340, 84], title: Grid protection board, subtitle: Breaker and surge protector, icon: db, category: grid, style: side}
+  - {id: acb-light, part: acb-light, at: [1030, 300, 340, 84], title: Light loads board, subtitle: Breakers and surge protector, icon: db, style: side}
   - {id: light, at: [1030, 420, 340, 200], title: Light loads, subtitle: On the Growatt AC output, icon: home, photo_height: 120, loads: [lightbulb, fan, tv, refrigerator, router, laptop]}
-  - {id: acb-heavy, part: acb-heavy, at: [1030, 700, 340, 84], title: Heavy-load board, subtitle: Same output · about 4 kW, icon: db, style: side}
+  - {id: acb-heavy, part: acb-heavy, at: [1030, 700, 340, 84], title: Heavy loads board, subtitle: Same output · about 4 kW, icon: db, style: side}
   - {id: heavy, at: [1030, 820, 340, 200], title: Heavy loads, subtitle: One AC · see the budget, icon: home, photo_height: 120, loads: [air-vent, droplets, flame]}
 
 wires:

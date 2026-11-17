@@ -55,7 +55,7 @@ def main():
                    if isinstance(s, dict) and s.get("name") and s.get("url")]
         if not sources:
             problem(where, "needs at least one source with a name and a url")
-        prices[pid] = {"n": str(p["name"]), "p": p["price"], "range": str(p.get("range", "")),
+        prices[pid] = {"n": str(p["name"]), "plain": str(p.get("plain", "")), "p": p["price"], "range": str(p.get("range", "")),
                        "note": str(p.get("note", "")), "src": sources}
 
     systems, ids = [], []

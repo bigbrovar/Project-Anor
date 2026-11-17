@@ -11,7 +11,7 @@
 #   steps    "How it's wired", one line per step (<b> for bold)
 
 grid-board:
-  title: Grid board
+  title: Grid protection board
   part: gridbd
   line: grid
   lead: Where the utility supply is switched and protected before it reaches the Growatt’s AC input.
@@ -27,7 +27,7 @@ grid-board:
     - The loop ends in the <b>top</b> of the second 2-pole breaker, whose bottom terminals feed the Growatt’s AC input.
 
 light-board:
-  title: Light-load board
+  title: Light loads board
   part: acb-light
   line: load
   lead: The Growatt’s AC output, switched and protected before it reaches the light circuits.
@@ -44,7 +44,7 @@ light-board:
     - The RCBO’s bottom terminals feed the circuits.
 
 heavy-board:
-  title: Heavy-load board
+  title: Heavy loads board
   part: acb-heavy
   line: load
   lead: The same Growatt AC output, on its own board for the heavy circuits.
