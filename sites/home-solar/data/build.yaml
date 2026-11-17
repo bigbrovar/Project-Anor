@@ -6,6 +6,10 @@
 version: "0.93"
 updated: 2026-11-13   # shown in the footer, with the version
 
+# The live monitoring page for this install. The button under the headline
+# and the Live link in the menu both open it.
+live_url: https://rana.openculture.org.ng/
+
 # Parts used in this install. `product` is an id from products.yaml.
 # A panel array also has series, parallel and feeds (the part its strings
 # connect to); the sizing checks use these. qty can be null if it varies.

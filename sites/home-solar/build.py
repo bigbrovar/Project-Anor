@@ -677,6 +677,9 @@ def main():
             problem(where, f"opens `{part['opens']}`, which isn't in combiners.yaml")
 
     version = str(build_doc.get("version", ""))
+    live_url = str(build_doc.get("live_url", "")).strip()
+    if not live_url.startswith("https://"):
+        problem("build.yaml", "live_url should be the full https:// address of the live monitoring page")
     updated = build_doc.get("updated", "")
     if isinstance(updated, datetime.date):
         updated = f"{updated.day} {updated.strftime('%b %Y')}"
@@ -704,7 +707,7 @@ def main():
             "BATTERY": battery, "BOARDS": boards}
     script = "\n".join(f"const {name}={json.dumps(value, ensure_ascii=False, separators=(',', ':'))};"
                        for name, value in data.items()).replace("</", "<\\/")
-    fills = {"__VERSION__": version, "__UPDATED__": str(updated),
+    fills = {"__VERSION__": version, "__UPDATED__": str(updated), "__LIVE_URL__": live_url,
              "__CANVAS_W__": str(canvas["w"]), "__CANVAS_H__": str(canvas["h"]),
              "__INSTALL_IMG__": "data:image/jpeg;base64," + base64.b64encode(photo.read_bytes()).decode("ascii"),
              "__BUSBAR_IMG__": ("data:image/jpeg;base64," + base64.b64encode(busbar_photo.read_bytes()).decode("ascii"))

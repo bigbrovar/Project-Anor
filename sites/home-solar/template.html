@@ -200,6 +200,14 @@ h1[tabindex="-1"]:focus{outline:none}
 .d-acts{display:flex;gap:8px;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:9px 14px;border-radius:12px;border:0;background:var(--solar);color:var(--on-accent);text-decoration:none;font-weight:700;font-size:.86rem}
 .btn:hover{filter:brightness(1.06)}
+/* link to the live monitoring page */
+.dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--batt);flex:none;animation:pulse 2s ease-out infinite}
+.btn .dot{background:var(--on-accent)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 color-mix(in srgb,currentColor 55%,transparent)}100%{box-shadow:0 0 0 8px transparent}}
+@media (prefers-reduced-motion:reduce){.dot{animation:none}}
+.top nav a.livelink{display:inline-flex;align-items:center;gap:6px;color:var(--batt)}
+.livecta{display:flex;flex-wrap:wrap;align-items:center;gap:10px 14px;margin:16px 0 0}
+.livecta span{color:var(--muted);font-size:.9rem}
 .btn svg{width:15px;height:15px}
 .note{font-size:.84rem;color:var(--muted);margin:0}
 .wired{display:grid;gap:9px}
@@ -445,6 +453,7 @@ details.whyd li{display:list-item}
   <a class="brand" href="#top"><span class="logo" data-i="sun"></span>openculture <small>home solar</small></a>
   <nav aria-label="Sections">
     <a href="#schematic">Schematic</a>
+    <a class="livelink" href="#" data-live target="_blank" rel="noopener"><i class="dot" aria-hidden="true"></i>Live</a>
     <a href="#install">Install</a>
     <a href="#checks">Checks</a>
     <a href="#parts-h">Parts</a>
@@ -462,6 +471,7 @@ details.whyd li{display:list-item}
       <p class="eyebrow">DIY residential off-grid setup · 48 V with grid backup</p>
       <h1 id="h1" style="margin-top:10px">Project Anor</h1>
       <p class="lead">Two Victron inverters on one shared battery. A Multi RS Solar runs the light loads from its own panels. A MultiPlus-II runs the heavy loads, fed by two separate solar charge controllers. Grid is the backup for both.</p>
+      <p class="livecta"><a class="btn" href="#" data-live target="_blank" rel="noopener"><i class="dot" aria-hidden="true"></i>See this system live</a><span>Solar, battery and load readings from this install, as they happen.</span></p>
     </div>
     <div class="chips">
       <div class="spec"><div class="v" id="c-pv">0</div><div class="k" id="c-pvk">Solar</div></div>
@@ -1278,6 +1288,7 @@ function renderSpots(){
 /* ---------- routing: #combiner-* opens a box, anything else is the main page ---------- */
 let view="main",lastComb=null;
 const NAVMAP=[["schematic","#schematic"],["install","#install"],["checks","#checks"],["parts-sec","#parts-h"]];
+document.querySelectorAll("a[data-live]").forEach(a=>{a.href="__LIVE_URL__";});   /* the live monitoring page, from build.yaml */
 function setNav(href){document.querySelectorAll(".top nav a").forEach(a=>{if(a.getAttribute("href")===href)a.setAttribute("aria-current","true");else a.removeAttribute("aria-current");});}
 function spy(){if(view!=="main")return;const y=innerHeight*.35;let cur=null;
   for(const [id,href] of NAVMAP){const el=document.getElementById(id);if(el&&el.getBoundingClientRect().top<=y)cur=href;}setNav(cur);}
