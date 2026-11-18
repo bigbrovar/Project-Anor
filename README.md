@@ -4,7 +4,7 @@ Open schematics and interactive write-ups of solar and power builds, by [bigbrov
 
 Each site lives in its own folder under `sites/`, with its own data, build script and Cloudflare config, and publishes as its own Cloudflare Worker.
 
-Start at the guide, [project.anor.openculture.org.ng](https://project.anor.openculture.org.ng) (`sites/guide/`): pick your appliances and budget, and it points to the dashboard that fits.
+Start at the guide, [project.anor.openculture.org.ng](https://project.anor.openculture.org.ng) (`sites/guide/`): pick your state, your appliances and a budget, and it points to the dashboard that fits.
 
 ## What's here
 
