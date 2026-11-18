@@ -90,12 +90,41 @@ main{padding-block:40px 80px}
 
 /* planner */
 .hero{display:grid;gap:4px}
-.budget{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:26px}
-.field{display:flex;align-items:center;gap:6px;background:var(--surface);border:1px solid var(--line2);border-radius:var(--r);padding:6px 8px 6px 16px}
-.field:focus-within{border-color:var(--solar);box-shadow:0 0 0 4px var(--solar-t)}
-.field label{font-size:.78rem;color:var(--muted);font-weight:600;margin-right:6px}
-.field span{font-family:var(--f-m);color:var(--muted);font-size:1.3rem}
-.field input{border:0;background:transparent;outline:none;font:500 1.45rem var(--f-m);width:9.5ch;padding:6px 4px}
+.sets{display:grid;grid-template-columns:repeat(auto-fit,minmax(235px,1fr));gap:12px;margin-top:26px}
+.set{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:8px;min-width:0}
+.set>label,.set>.lab{font-size:.78rem;color:var(--muted);font-weight:600}
+.set select,.set input,.own input[type=text],.own input[type=number]{min-height:44px;width:100%;border-radius:var(--r-s);border:1px solid var(--line2);background:var(--bg2);color:var(--ink);padding:0 10px;font:600 1rem var(--f-b)}
+.set input,.own input[type=number]{font-family:var(--f-m);font-weight:500}
+.set select:focus,.set input:focus,.own input:focus{outline:none;border-color:var(--solar);box-shadow:0 0 0 4px var(--solar-t)}
+.money{position:relative}
+.money span{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:var(--muted);font-family:var(--f-m)}
+.money input{padding-left:28px}
+.sunrow{display:flex;align-items:center;gap:8px;justify-content:space-between}
+.sunrow label{font-size:.8rem;color:var(--muted)}
+.sunrow input{width:84px;flex:none}
+.hint{font-size:.78rem;color:var(--muted);margin:0}
+.chip{border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 13px;font-size:.86rem;font-weight:600;color:var(--muted)}
+.chip:hover,.seg button:hover{color:var(--ink);border-color:var(--line2)}
+.chip[aria-pressed="true"],.seg button[aria-pressed="true"]{color:var(--ink);background:var(--solar-t);border-color:var(--solar)}
+.seg{display:flex;flex-direction:column;gap:6px}
+.seg button{min-height:40px;padding:0 12px;border-radius:var(--r-s);border:1px solid var(--line);background:transparent;color:var(--muted);text-align:left;font-weight:600;font-size:.9rem}
+.pickcol{min-width:0;display:grid;gap:22px}
+.own{border:1px dashed var(--line2);border-radius:var(--r);padding:16px;display:grid;gap:12px}
+.own h3{margin:0;font:650 1rem var(--f-b)}
+.own .row{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.own .row label{display:grid;gap:5px;font-size:.78rem;color:var(--muted);font-weight:600}
+.own .motor{display:flex;gap:10px;align-items:flex-start;font-size:.88rem;color:var(--muted);cursor:pointer}
+.own .motor input{flex:none;width:20px;height:20px;margin:1px 0 0;accent-color:var(--solar)}
+.ownact{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.app .rm{justify-self:start;background:none;border:0;padding:2px 0;color:var(--muted);text-decoration:underline;font-size:.8rem}
+.gridc{font:500 1.3rem var(--f-m);color:var(--grid);margin-top:10px;letter-spacing:-.02em}
+.need-t{width:100%;border-collapse:collapse;margin-top:10px}
+.need-t th,.need-t td{padding:8px 0 8px 8px;text-align:right;border-top:1px solid var(--line);font:500 .86rem var(--f-m);white-space:nowrap}
+.need-t thead th{border-top:0;font:600 .72rem var(--f-b);color:var(--muted);padding-top:0;white-space:normal}
+.need-t tbody th{text-align:left;padding-left:0;font:500 .9rem var(--f-b)}
+.need-t tbody th i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:8px}
+.need-t td.ok{color:var(--ok)}
+.need-t td.short{color:var(--bad)}
 .presets{display:flex;gap:6px;flex-wrap:wrap}
 .preset{border:1px solid var(--line);background:transparent;border-radius:999px;padding:7px 13px;font-size:.86rem;font-weight:600;color:var(--muted)}
 .preset:hover{color:var(--ink);border-color:var(--line2)}
@@ -319,7 +348,6 @@ a.tier:hover{border-color:var(--line2)}
 .ptable th{text-align:left;font-size:.7rem;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);padding:6px 8px 6px 0}
 .ptable td{padding:7px 8px 7px 0;border-top:1px solid var(--line);vertical-align:top}
 .bar[hidden],.bar-l[hidden]{display:none}
-.field input{width:11ch}
 .ptable .n{padding-left:12px;text-align:right;font-family:var(--f-m);font-size:.8rem;white-space:nowrap;padding-right:0}
 .ptable tr.tot td{font-weight:700;border-top:1px solid var(--line2)}
 #psrc .n{padding-right:22px}   /* keep the price used clear of the listed range beside it */
@@ -363,19 +391,52 @@ footer a{color:inherit}
     <div class="hero">
       <p class="eyebrow">Solar planner for Nigerian homes</p>
       <h1 id="h1p">Select what you want to power.<br>See the setup that fits.</h1>
-      <p class="lead">Tick your appliances and set a budget. The planner matches them to one of four worked designs, based on my current install. The smallest is a 3.3 kW system for lights, fans, a TV and a fridge. The largest is a 16 kW system that runs a full house with air conditioners. Each design has its own dashboard with the wiring, parts, settings and sizing checks. The limits are conservative on purpose: an efficient load is cheaper than generating more power.</p>
+      <p class="lead">Pick your state, tick your appliances and set a budget. The planner matches them to one of four worked designs, based on my current install. The smallest is a 3.3 kW system for lights, fans, a TV and a fridge. The largest is a 16 kW system that runs a full house with air conditioners. Each design has its own dashboard with the wiring, parts, settings and sizing checks. The limits are conservative on purpose: an efficient load is cheaper than generating more power.</p>
       <p class="audit" id="audit">Not sure what your appliances draw? <a target="_blank" rel="noopener">How to do a home energy audit</a> shows how to add it up first.</p>
-      <div class="budget">
-        <div class="field"><label for="budget">Budget</label><span>₦</span><input id="budget" inputmode="numeric" value="5,000,000"></div>
+      <div class="sets">
+        <div class="set">
+          <label for="state">Your state</label>
+          <select id="state"></select>
+          <div class="sunrow"><label for="sun">Good sun hours a day</label><input id="sun" type="number" min="2" max="8" step="0.1" inputmode="decimal"></div>
+          <span class="hint" id="sunnote"></span>
+        </div>
+        <div class="set">
+          <label for="price">What you pay per kWh</label>
+          <div class="money"><span aria-hidden="true">₦</span><input id="price" type="number" min="0" max="10000" step="0.01" inputmode="decimal"></div>
+          <div class="presets" id="bands"></div>
+          <span class="hint" id="bandnote"></span>
+        </div>
+        <div class="set">
+          <span class="lab" id="whenlab">When you use most of your power</span>
+          <div class="seg" id="when" role="group" aria-labelledby="whenlab"></div>
+        </div>
+        <div class="set">
+          <label for="budget">Your budget</label>
+          <div class="money"><span aria-hidden="true">₦</span><input id="budget" inputmode="numeric" value="5,000,000"></div>
         <div class="presets" id="presets">
           <button class="preset" type="button" data-b="3000000">₦3M</button><button class="preset" type="button" data-b="5000000">₦5M</button><button class="preset" type="button" data-b="10000000">₦10M</button><button class="preset" type="button" data-b="20000000">₦20M</button>
+        </div>
         </div>
       </div>
     </div>
   </section>
 
   <div class="plan">
+    <div class="pickcol">
     <div id="groups"></div>
+    <form class="own" id="own" novalidate>
+      <h3>Add your own appliance</h3>
+      <div class="row">
+        <label>Name<input id="o-name" type="text" maxlength="40" placeholder="Deep freezer"></label>
+        <label>Watts<input id="o-w" type="number" min="1" max="20000" inputmode="numeric" placeholder="200"></label>
+        <label>How many<input id="o-q" type="number" min="1" max="30" value="1" inputmode="numeric"></label>
+        <label>Hours a day<input id="o-h" type="number" min="0.5" max="24" step="0.5" value="4" inputmode="decimal"></label>
+      </div>
+      <label class="motor"><input id="o-m" type="checkbox"><span>It has a motor or compressor, like a fridge, freezer or pump. This adds a start-up surge of <span id="o-x">3</span> times its watts.</span></label>
+      <p class="hint">Adding an air conditioner? Use the AC tiles above, so the design’s limit on air conditioners applies.</p>
+      <div class="ownact"><button class="btn ghost" type="submit">Add to my list</button><span class="hint" id="o-msg" role="status"></span></div>
+    </form>
+    </div>
     <aside class="result">
       <p class="sr" id="r-say" role="status" aria-live="polite"></p>
       <div class="r-sec">
@@ -385,6 +446,16 @@ footer a{color:inherit}
           <div class="kpi"><div class="v" id="k-surge">0<small>W</small></div><div class="k">Start-up surge</div></div>
           <div class="kpi"><div class="v" id="k-kwh">0<small>kWh</small></div><div class="k">Per day</div></div>
         </div>
+      </div>
+      <div class="r-sec">
+        <p class="eyebrow">On the grid</p>
+        <div class="gridc" id="g-cost"></div>
+        <div class="pick-sub" id="g-sub"></div>
+      </div>
+      <div class="r-sec">
+        <p class="eyebrow">The solar that covers it</p>
+        <table class="need-t" id="need-t"></table>
+        <div class="pick-sub" id="need-sub"></div>
       </div>
       <div class="r-sec">
         <p class="eyebrow" id="r-eyebrow">Smallest system that covers it</p>
@@ -451,9 +522,24 @@ SYS.forEach(s=>{s.partsCost=s.parts.reduce((a,p)=>a+P[p.p].p*p.q,0);s.bos=Math.r
 const LIVE=SYS.map((s,i)=>i).filter(i=>SYS[i].state==="live"),FIRST=LIVE[0],LAST=LIVE[LIVE.length-1];
 
 /* ---------- planner ---------- */
-const S={budget:5000000,sel:{}};
+const PL=G.plan,R=PL.rules,sunOf=n=>(PL.states.find(s=>s[0]===n)||PL.states[0])[1];
+const S={budget:5000000,sel:{},state:PL.defaults.state,sun:sunOf(PL.defaults.state),sunEdited:false,price:PL.defaults.price,when:PL.defaults.when};
 const CONSULT=!!(G.consult&&G.consult.url);
 APPS.forEach(a=>S.sel[a.id]={on:a.on,q:a.q,h:a.h});
+/* appliances the reader types in. They behave like the built-in ones, with a start-up surge if they have a motor. */
+const OWN=[];let ownN=0;const ALL=()=>APPS.concat(OWN);
+function addOwn(name,w,q,h,motor,on){if(OWN.length>=20)return null;const id="own"+(++ownN);
+  OWN.push({id,g:"Your own",i:"plug-zap",n:name,w,s:motor?Math.round(w*R.ownSurge):0,own:true,motor:!!motor});S.sel[id]={on:on!==false,q,h};return id;}
+/* the rest of a shared link: &state=&sun=&price=&when=&own=name~watts~qty~hours~motor~on|... */
+function restoreMore(q){
+  const st=q.get("state");if(PL.states.some(s=>s[0]===st)){S.state=st;S.sun=sunOf(st);}
+  const sun=parseFloat(q.get("sun"));if(sun>=2&&sun<=8){S.sun=Math.round(sun*10)/10;S.sunEdited=true;}
+  const pr=parseFloat(q.get("price"));if(pr>=0&&pr<=10000)S.price=pr;
+  if(PL.when.some(w=>w.id===q.get("when")))S.when=q.get("when");
+  (q.get("own")||"").split("|").filter(Boolean).slice(0,20).forEach(x=>{const [n,w,qt,h,m,on]=x.split("~"),W=parseFloat(w),Q=parseInt(qt,10),H=parseFloat(h);
+    if(n&&W>=1&&W<=20000&&Q>=1&&Q<=30&&H>=0.5&&H<=24)addOwn(n.slice(0,40),Math.round(W),Q,Math.round(H*2)/2,m==="1",on!=="0");});}
+const shareMore=()=>"&state="+encodeURIComponent(S.state)+(S.sunEdited?"&sun="+S.sun:"")+"&price="+S.price+"&when="+S.when+
+  (OWN.length?"&own="+encodeURIComponent(OWN.map(a=>{const s=S.sel[a.id];return [a.n.replace(/[|~]/g," "),a.w,s.q,s.h,a.motor?1:0,s.on?1:0].join("~");}).join("|")):"");
 /* a shared link restores the load: ?load=id:qty:hours,...&budget=N. Anything it doesn't recognise is ignored. */
 (function(){let q;try{q=new URLSearchParams(location.search);}catch(_){return;}
   const l=q.get("load"),b=parseInt(q.get("budget"),10);
@@ -461,9 +547,9 @@ APPS.forEach(a=>S.sel[a.id]={on:a.on,q:a.q,h:a.h});
     l.split(",").forEach(x=>{const [id,qt,h]=x.split(":"),s=S.sel[id];if(!s)return;s.on=true;
       const n=parseInt(qt,10);if(n>=1)s.q=Math.min(30,n);
       const hh=parseFloat(h);if(s.h!=null&&hh>=0.5)s.h=Math.min(24,Math.round(hh*2)/2);});}
-  if(b>=100000)S.budget=Math.min(b,500000000);})();
+  if(b>=100000)S.budget=Math.min(b,500000000);restoreMore(q);})();
 const BASE=/^https?:$/.test(location.protocol)?location.origin+location.pathname:"https://project.anor.openculture.org.ng/";
-const shareURL=()=>BASE+"?load="+APPS.filter(a=>S.sel[a.id].on).map(a=>{const s=S.sel[a.id];return a.id+":"+s.q+(s.h!=null?":"+s.h:"");}).join(",")+"&budget="+S.budget;
+const shareURL=()=>BASE+"?load="+APPS.filter(a=>S.sel[a.id].on).map(a=>{const s=S.sel[a.id];return a.id+":"+s.q+(s.h!=null?":"+s.h:"");}).join(",")+"&budget="+S.budget+shareMore();
 let touched=false;   /* the address only changes once the reader changes something */
 function tile(a){const s=S.sel[a.id];
   return `<div class="app ${s.on?"on":""}" data-id="${a.id}">
@@ -471,12 +557,12 @@ function tile(a){const s=S.sel[a.id];
    <label class="top-row" for="c-${a.id}"><span class="ico">${ico(a.i)}</span><span><span class="nm">${esc(a.n)}</span><br><span class="w">${fmt(a.w)} W${a.s?" · surge "+fmt(a.s)+" W":""}</span></span><span class="tick">${ico("check",3)}</span></label>
    ${s.on?`<div class="steps"><div class="step"><span>Qty</span><div class="stp"><button type="button" data-k="q" data-d="-1" aria-label="Fewer ${esc(a.n)}">−</button><output>${s.q}</output><button type="button" data-k="q" data-d="1" aria-label="More ${esc(a.n)}">+</button></div></div>
      ${a.kd?`<div class="step"><span>Runs all day</span><div class="fix" style="padding-top:7px">about ${a.kd} kWh</div></div>`:`<div class="step"><span>Hrs / day</span><div class="stp"><button type="button" data-k="h" data-d="-1" aria-label="Fewer hours for ${esc(a.n)}">−</button><output>${s.h}</output><button type="button" data-k="h" data-d="1" aria-label="More hours for ${esc(a.n)}">+</button></div></div>`}</div>
-     ${a.min>FIRST?`<div class="need">${ico("alert",2).replace("<svg","<svg width='13' height='13'")}Needs ${esc(SYS[a.min].n)} or bigger</div>`:""}`:""}
+     ${a.min>FIRST?`<div class="need">${ico("alert",2).replace("<svg","<svg width='13' height='13'")}Needs ${esc(SYS[a.min].n)} or bigger</div>`:""}`:""}${a.own?`<button type="button" class="rm" data-rm aria-label="Remove ${esc(a.n)}">Remove</button>`:""}
   </div>`;}
-function renderApps(){const gs=[...new Set(APPS.map(a=>a.g))];
-  $("#groups").innerHTML=gs.map(g=>`<div class="grp"><h3>${esc(g)}</h3><span>${APPS.filter(a=>a.g===g&&S.sel[a.id].on).length} selected</span></div><div class="apps">${APPS.filter(a=>a.g===g).map(tile).join("")}</div>`).join("");}
+function renderApps(){const gs=[...new Set(ALL().map(a=>a.g))];
+  $("#groups").innerHTML=gs.map(g=>`<div class="grp"><h3>${esc(g)}</h3><span>${ALL().filter(a=>a.g===g&&S.sel[a.id].on).length} selected</span></div><div class="apps">${ALL().filter(a=>a.g===g).map(tile).join("")}</div>`).join("");}
 function calc(){let base=0,ext=0,kwh=0,minT=0,big=0;const on=[],acw=[];
-  APPS.forEach(a=>{const s=S.sel[a.id];if(!s.on)return;on.push(a);if(a.s)ext=Math.max(ext,a.s-a.w);
+  ALL().forEach(a=>{const s=S.sel[a.id];if(!s.on)return;on.push(a);if(a.s)ext=Math.max(ext,a.s-a.w);
     if(a.ac){for(let i=0;i<s.q;i++)acw.push(a.w);if(a.big)big+=s.q;}else base+=a.w*s.q;
     kwh+=a.kd?a.kd*s.q:a.w*s.q*s.h/1000;if(a.min)minT=Math.max(minT,a.min);});
   acw.sort((x,y)=>y-x);const all=base+acw.reduce((x,y)=>x+y,0);
@@ -484,29 +570,58 @@ function calc(){let base=0,ext=0,kwh=0,minT=0,big=0;const on=[],acw=[];
   return{peak:all,surge:all+ext,kwh,minT,acs:acw.length,big,ext,on,peakFor:t=>base+acw.slice(0,t.acAt).reduce((x,y)=>x+y,0)};}
 /* the smallest system that carries the load; -1 when nothing in this guide does */
 const idleK=t=>(t.idle||0)*24/1000;   /* the inverter’s own use, kWh a day */
+const up1=x=>(Math.ceil(x*10-1e-9)/10).toFixed(1);   /* round up to one decimal, so a need is never understated */
+/* sums:start (what a load needs from a design; kept free of page code so it can be tested on its own) */
+function sizeNeed(kwh,idleKwh,share,sun,R){const E=kwh+idleKwh,night=E*share;
+  return{E,share,night,bat:night/R.batUse,kwp:((E-night)+night/(1-R.batLoss))/(sun*R.pvLoss)};}
+/* sums:end */
+const need=(r,t)=>sizeNeed(r.kwh,idleK(t),(PL.when.find(w=>w.id===S.when)||PL.when[0]).night,S.sun,R);
+/* a sized design must hold the night's energy in its battery and make the day's energy from its panels */
+const energyFits=(r,t)=>{if(t.bat==null)return r.kwh+idleK(t)<=t.kwh;const n=need(r,t);return n.bat<=t.bat+1e-9&&n.kwp<=t.pv+1e-9;};
 function tierFor(r){for(let i=r.minT;i<SYS.length;i++){const t=SYS[i];if(t.state==="scope")break;
-  const pk=r.peakFor(t);if(pk<=t.cont&&pk+r.ext<=t.surge&&r.kwh+idleK(t)<=t.kwh&&r.acs<=t.ac&&r.big<=t.ac2)return i;}return -1;}
+  const pk=r.peakFor(t);if(pk<=t.cont&&pk+r.ext<=t.surge&&energyFits(r,t)&&r.acs<=t.ac&&r.big<=t.ac2)return i;}return -1;}
 function whyUp(r,ti){ /* one line on what pushed the pick up a size */
   if(ti<=FIRST)return "";const p=SYS[ti-1];
   const drv=r.on.find(a=>a.min===ti);if(drv&&drv.why)return drv.why;
   if(r.acs>p.ac)return `${r.acs} air conditioner${r.acs>1?"s":""} is more than ${esc(p.n)} is designed for (${p.ac||"none"}).`;
   if(r.big>p.ac2)return `${esc(p.n)} isn’t designed for a 2 HP air conditioner.`;
   if(r.peakFor(p)>p.cont)return `${fmt(r.peakFor(p))} W running at once is more than ${esc(p.n)}’s ${fmt(p.cont)} W.`;
-  if(r.kwh+idleK(p)>p.kwh)return `${r.kwh.toFixed(1)} kWh a day${idleK(p)?`, plus ${idleK(p).toFixed(1)} kWh for the inverter itself,`:""} is more than ${esc(p.n)}’s panels make on a typical day (about ${p.kwh} kWh).`;
+  if(p.bat!=null){const n=need(r,p);
+    if(n.bat>p.bat+1e-9)return `You need ${up1(n.bat)} kWh of battery to get through the night. ${esc(p.n)} has ${p.bat} kWh.`;
+    if(n.kwp>p.pv+1e-9)return `You need ${up1(n.kwp)} kWp of panels in ${esc(S.state)}. ${esc(p.n)} has ${p.pv} kWp.`;}
+  if(p.bat==null&&r.kwh+idleK(p)>p.kwh)return `${r.kwh.toFixed(1)} kWh a day${idleK(p)?`, plus ${idleK(p).toFixed(1)} kWh for the inverter itself,`:""} is more than ${esc(p.n)}’s panels make on a typical day (about ${p.kwh} kWh).`;
   if(r.surge>p.surge)return `The start-up surge is more than ${esc(p.n)} can take.`;return "";}
+/* the grid cost, and what the load needs beside what the chosen design has */
+function drawNeed(r,t,pk){const n=need(r,t),any=r.on.length>0,month=r.kwh*R.days,cost=month*S.price;
+  $("#g-cost").textContent=any?"about "+naira(cost>=10000?Math.round(cost/100)*100:cost)+" a month":"₦0 a month";
+  $("#g-sub").textContent=any?`${fmt(month)} kWh a month at ₦${S.price.toLocaleString("en-NG",{minimumFractionDigits:2,maximumFractionDigits:2})} per kWh.`:"Tick an appliance to see what it costs on the grid.";
+  const rows=[["load","Inverter",pk/R.invLoad/1000,t.cont/R.invLoad/1000,"kW"],["batt","Lithium battery",n.bat,t.bat,"kWh"],["solar","Solar panels",n.kwp,t.pv,"kWp"]];
+  $("#need-t").innerHTML=`<thead><tr><th scope="col"><span class="sr">Part</span></th><th scope="col">You need</th><th scope="col">${esc(t.n)} has</th></tr></thead><tbody>`+
+    rows.map(([c,nm,nd,has,u])=>`<tr><th scope="row"><i style="background:var(--${c})"></i>${nm}</th><td>${any?up1(nd):"0.0"} ${u}</td><td class="${!any||nd<=has+1e-9?"ok":"short"}">${+(+has).toFixed(2)} ${u}</td></tr>`).join("")+"</tbody>";
+  $("#need-sub").textContent=`Sized for ${S.sun.toFixed(1)} good sun hours in ${S.state}, with ${Math.round(n.share*100)}% of your power used after sunset${any&&idleK(t)?`, plus ${idleK(t).toFixed(1)} kWh a day for the inverter itself`:""}.`;}
+function drawSets(){
+  $("#sunnote").textContent=S.sunEdited?`Your own figure. The average for ${S.state} is ${sunOf(S.state).toFixed(1)}.`:PL.sunNote.replace("{state}",S.state);
+  document.querySelectorAll("#when button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===S.when));
+  document.querySelectorAll("#bands button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.p===S.price));}
+function initSets(){
+  $("#state").innerHTML=PL.states.map(s=>`<option>${esc(s[0])}</option>`).join("");$("#state").value=S.state;
+  $("#sun").value=S.sun.toFixed(1);$("#price").value=S.price;$("#o-x").textContent=R.ownSurge;$("#bandnote").textContent=PL.bandNote;
+  $("#bands").innerHTML=PL.bands.map(b=>`<button type="button" class="chip" data-p="${b.price}">${esc(b.name)}</button>`).join("");
+  $("#when").innerHTML=PL.when.map(w=>`<button type="button" data-id="${esc(w.id)}">${esc(w.label)}</button>`).join("");}
 let sayT=0;
 function update(){
   if(touched){try{history.replaceState(null,"",shareURL());}catch(_){}}touched=true;
-  const r=calc(),b=S.budget,tips=[];let ti=tierFor(r);
+  drawSets();const r=calc(),b=S.budget,tips=[];let ti=tierFor(r);
   const pk=ti<0?r.peak:r.peakFor(SYS[ti]);
   $("#k-peak").innerHTML=fmt(pk)+"<small>W</small>";$("#k-surge").innerHTML=fmt(pk+r.ext)+"<small>W</small>";$("#k-kwh").innerHTML=r.kwh.toFixed(1)+"<small>kWh</small>";
   const pill=$("#r-pill"),bar=$("#r-bar"),go=$("#r-go"),gol=$("#r-gol");
   const scope=ti<0,pending=!scope&&SYS[ti].state==="pending";
   const show=scope?LAST:pending?FIRST:ti,t=SYS[show];   /* the dashboard the button opens */
+  drawNeed(r,t,scope?r.peak:r.peakFor(t));
   $("#r-eyebrow").textContent=scope?"Bigger than this guide covers":pending?"A small 12 V system would do":"Smallest system that covers it";
   if(scope){$("#r-tier").textContent="Out of scope";$("#r-cost").textContent="";$("#r-sys").textContent="More than the largest design here carries.";
     bar.hidden=true;$("#r-barl").hidden=true;pill.className="pill bad";pill.textContent="Larger systems are outside this guide";
-    tips.push(`The largest design is <strong>${esc(t.n)}</strong> (${esc(t.sys)}), about ${naira(t.cost)}. It carries ${fmt(t.cont)} W at once and about ${t.kwh} kWh a day, with at most ${t.ac} air conditioners, ${t.acAt} running at once and no more than ${t.ac2} of them 2 HP.`);
+    tips.push(`The largest design is <strong>${esc(t.n)}</strong> (${esc(t.sys)}), about ${naira(t.cost)}. It carries ${fmt(t.cont)} W at once, with ${t.bat} kWh of battery and ${t.pv} kWp of panels, and at most ${t.ac} air conditioners, ${t.acAt} running at once and no more than ${t.ac2} of them 2 HP.`);
     tips.push(CONSULT?G.consult.tip.replace("<a>",`<a href="${esc(G.consult.url)}" target="_blank" rel="noopener">`):"Above that, or for three-phase, ask an installer for a custom design.");
     /* first try fewer of one appliance, then try dropping it */
     let cut=null;r.on.forEach(a=>{const s=S.sel[a.id],q0=s.q;for(let q=q0-1;q>=1&&!cut;q--){s.q=q;if(tierFor(calc())>=0)cut={a,q};}s.q=q0;});
@@ -517,7 +632,7 @@ function update(){
   else{bar.hidden=false;$("#r-barl").hidden=false;
     $("#r-tier").textContent=pending?SYS[ti].n+" · 12 V":t.n;$("#r-cost").textContent=pending?"":"about "+naira(t.cost);$("#r-sys").textContent=pending?"Dashboard pending":t.sys+(t.roof?` · ${t.panels} panels, about ${Math.round(t.roof)} m² of roof`:"");
     if(pending){tips.push(`The small 12 V dashboard isn’t published yet. The nearest one that is live is <strong>${esc(t.n)}</strong> (${esc(t.sys)}), about ${naira(t.cost)}.`);}
-    else{const w=whyUp(r,ti);if(w)tips.push(w);
+    else{const w=whyUp(r,ti);if(w)tips.push(`<strong>Why not ${esc(SYS[ti-1].n)}?</strong> ${w}`);
       if(r.acs>t.acAt)tips.push(`Run no more than <strong>${t.acAt} air conditioners at once</strong> on ${esc(t.n)}.`);}
     const max=Math.max(t.cost,b)*1.1;bar.classList.toggle("over",t.cost>b);
     bar.querySelector("b").style.width=(t.cost/max*100)+"%";bar.querySelector("i").style.left=`calc(${b/max*100}% - 1.5px)`;
@@ -546,11 +661,26 @@ document.addEventListener("change",e=>{const el=e.target.closest(".app");if(!el|
 document.addEventListener("click",e=>{const b=e.target.closest(".stp button");if(!b)return;const id=b.closest(".app").dataset.id,s=S.sel[id],k=b.dataset.k,d=+b.dataset.d;
   if(k==="q")s.q=Math.min(30,Math.max(1,s.q+d));else s.h=Math.min(24,Math.max(0.5,s.h+(s.h<1||(s.h===1&&d<0)?d*.5:d)));
   b.parentElement.querySelector("output").textContent=s[k];update();});
+$("#state").addEventListener("change",e=>{S.state=e.target.value;S.sun=sunOf(S.state);S.sunEdited=false;$("#sun").value=S.sun.toFixed(1);update();});
+$("#sun").addEventListener("change",e=>{const v=parseFloat(e.target.value);if(v>=2&&v<=8){S.sun=Math.round(v*10)/10;S.sunEdited=true;}e.target.value=S.sun.toFixed(1);update();});
+$("#price").addEventListener("input",e=>{const v=parseFloat(e.target.value);if(v>=0&&v<=10000){S.price=v;update();}});
+$("#bands").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;S.price=+b.dataset.p;$("#price").value=S.price;update();});
+$("#when").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;S.when=b.dataset.id;update();});
+$("#own").addEventListener("submit",e=>{e.preventDefault();
+  const msg=$("#o-msg"),name=$("#o-name").value.trim(),w=parseFloat($("#o-w").value),q=parseInt($("#o-q").value,10),h=parseFloat($("#o-h").value);
+  if(!name){msg.textContent="Give it a name.";$("#o-name").focus();return;}
+  if(!(w>=1&&w<=20000)){msg.textContent="Enter its watts, from the label or the manual.";$("#o-w").focus();return;}
+  if(!(q>=1&&q<=30)){msg.textContent="How many should be between 1 and 30.";$("#o-q").focus();return;}
+  if(!(h>=0.5&&h<=24)){msg.textContent="Hours a day should be between 0.5 and 24.";$("#o-h").focus();return;}
+  if(!addOwn(name.slice(0,40),Math.round(w),q,Math.round(h*2)/2,$("#o-m").checked)){msg.textContent="That is the most the planner can hold. Remove one to add another.";return;}
+  $("#o-name").value="";$("#o-w").value="";$("#o-m").checked=false;msg.textContent=`${name} added.`;renderApps();update();});
+document.addEventListener("click",e=>{const b=e.target.closest("[data-rm]");if(!b)return;const id=b.closest(".app").dataset.id,i=OWN.findIndex(a=>a.id===id);
+  if(i>=0){OWN.splice(i,1);delete S.sel[id];renderApps();update();}});
 $("#budget").addEventListener("input",e=>{S.budget=+e.target.value.replace(/\D/g,"")||0;update();});
 $("#budget").addEventListener("blur",e=>e.target.value=fmt(S.budget));
 document.querySelectorAll(".preset").forEach(p=>p.onclick=()=>{S.budget=+p.dataset.b;$("#budget").value=fmt(S.budget);update();});
 $("#r-copy").onclick=async e=>{const t=e.currentTarget,r=calc(),ti=tierFor(r);
-  const txt=`${ti<0?"Out of scope":SYS[ti].n} · budget ${short(S.budget)} · `+APPS.filter(a=>S.sel[a.id].on).map(a=>`${a.n} ×${S.sel[a.id].q}`).join(", ");
+  const txt=`${ti<0?"Out of scope":SYS[ti].n} · budget ${short(S.budget)} · `+ALL().filter(a=>S.sel[a.id].on).map(a=>`${a.n} ×${S.sel[a.id].q}`).join(", ");
   try{await navigator.clipboard.writeText(txt);t.textContent="Copied";}catch(_){t.textContent="Couldn’t copy";}
   setTimeout(()=>t.textContent="Copy plan",1600);};
 $("#r-link").onclick=async e=>{const t=e.currentTarget;
@@ -571,7 +701,7 @@ $("#psrc").innerHTML=`<thead><tr><th>Item</th><th class="n">Price used</th><th>L
 {const R=G.ref,c=$("#refcard");c.href=R.url;c.innerHTML=`<span class="tn">${esc(R.name)}</span><span class="ts">${esc(R.sys)}</span>${R.text.split(/\n\s*\n/).map(x=>`<p>${esc(x.trim())}</p>`).join("")}<span class="go">Open the home dashboard ↗</span>`;}
 $("#readlist").innerHTML=G.reading.map(r=>`<li><a href="${r.url}" target="_blank" rel="noopener"><b>${esc(r.title)} ↗</b><span>${esc(r.text)}</span></a></li>`).join("");
 if(!G.reading.length)$("#reading").hidden=true;
-renderApps();$("#budget").value=fmt(S.budget);update();
+initSets();renderApps();$("#budget").value=fmt(S.budget);update();
 if(G.audit)$("#audit a").href=G.audit;else $("#audit").hidden=true;
 </script>
 </body>

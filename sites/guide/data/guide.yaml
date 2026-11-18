@@ -67,10 +67,91 @@ prices:
 allowance_pct: 15
 allowance_text: Breakers, the solar combiner box, surge protectors, battery connection bars, distribution boards, cable and panel mounting. An estimate, not a quoted price.
 
+# ---------------------------------------------------------------------------
+# The planner's settings: where the reader is, what they pay, and when they
+# use their power. These decide the battery and panel sizes the reader needs,
+# and so which design is picked.
+planner:
+  # What the page starts with.
+  defaults:
+    state: "FCT, Abuja"
+    price: 209.5        # naira per kWh
+    when: even          # one of the ids under `when`
+
+  # The sizing rules, shown to the reader in the "solar that covers it" table.
+  rules:
+    inverter_load: 0.8  # an inverter runs at 80% of its rating or less (cont_w below already allows for this)
+    battery_use: 0.8    # a lithium battery goes down to 20% and no lower
+    battery_loss: 0.03  # share lost putting energy into the battery and taking it out
+    panel_losses: 0.75  # what is left after heat, dust, cable and inverter losses
+    own_surge: 3        # start-up surge of a typed-in appliance with a motor, as a multiple of its watts
+    days_in_month: 30
+
+  # Quick-pick prices, in naira per kWh.
+  # Home (non-MD) rates for Abuja Electric, from NERC order ORDER/NERC/2025/059,
+  # effective 1 July 2025: https://nerc.gov.ng/wp-content/uploads/2025/08/AEDC_July_2025_059.pdf
+  bands:
+    - {name: Band A, price: 209.5}
+    - {name: B, price: 63.35}
+    - {name: C, price: 51.79}
+    - {name: D, price: 33.95}
+  band_note: Band prices are Abuja Electric home rates from NERC's July 2025 tariff order. Other DisCos differ a little, so check your bill.
+
+  # `night` is the share of a day's energy used after sunset.
+  when:
+    - {id: day, label: Mostly daytime, night: 0.3}
+    - {id: even, label: "About even, day and night", night: 0.5}
+    - {id: night, label: Mostly at night, night: 0.7}
+
+  # Good sun hours a day for each state (yearly average, kWh per square metre a day).
+  # PROVISIONAL: estimates by region that still need replacing with figures from a
+  # published source. Update `sun_note` when that is done.
+  sun_note: "Yearly average for {state}. Provisional figure. Change it if you know yours."
+  states:
+    Abia: 4.4
+    Adamawa: 5.8
+    Akwa Ibom: 4.2
+    Anambra: 4.6
+    Bauchi: 5.9
+    Bayelsa: 4.0
+    Benue: 5.1
+    Borno: 6.2
+    Cross River: 4.3
+    Delta: 4.3
+    Ebonyi: 4.7
+    Edo: 4.5
+    Ekiti: 4.8
+    Enugu: 4.8
+    "FCT, Abuja": 5.4
+    Gombe: 5.9
+    Imo: 4.4
+    Jigawa: 6.1
+    Kaduna: 5.7
+    Kano: 6.0
+    Katsina: 6.1
+    Kebbi: 6.0
+    Kogi: 5.0
+    Kwara: 5.1
+    Lagos: 4.4
+    Nasarawa: 5.3
+    Niger: 5.5
+    Ogun: 4.6
+    Ondo: 4.6
+    Osun: 4.8
+    Oyo: 4.9
+    Plateau: 5.6
+    Rivers: 4.0
+    Sokoto: 6.2
+    Taraba: 5.4
+    Yobe: 6.2
+    Zamfara: 6.0
+
 # cont_w is what a system should carry at once: 80% of the inverter's rated power in kW,
 # which leaves room for heat. An inverter rated in kVA is first converted at 0.8 kW per kVA.
 # idle_w is the inverter's own use, added to the daily energy. The SRNE datasheet gives 50 W.
 # Growatt and Deye don't publish a figure, so 50 W per inverter is an allowance for them.
+# battery_kwh and pv_kwp are the design's battery and panel sizes. The planner checks them
+# against what the reader needs. A pending design without them uses kwh_day, a flat daily limit.
 systems:
   - id: small
     name: Small
@@ -92,7 +173,8 @@ systems:
     cont_w: 2640
     idle_w: 50
     surge_w: 6000
-    kwh_day: 9
+    battery_kwh: 5.12
+    pv_kwp: 3.25
     max_ac: 0
     parts:
       - {price: srne-3k3, qty: 1}
@@ -108,7 +190,8 @@ systems:
     cont_w: 4800
     idle_w: 50
     surge_w: 12000
-    kwh_day: 14.5
+    battery_kwh: 14.3
+    pv_kwp: 5.2
     max_ac: 1
     parts:
       - {price: growatt-6k, qty: 1}
@@ -124,7 +207,8 @@ systems:
     cont_w: 6400
     idle_w: 50
     surge_w: 16000
-    kwh_day: 29
+    battery_kwh: 28.7
+    pv_kwp: 10.4
     max_ac: 2
     parts:
       - {price: deye-8k, qty: 1}
@@ -140,7 +224,8 @@ systems:
     cont_w: 12800
     idle_w: 100
     surge_w: 32000
-    kwh_day: 58
+    battery_kwh: 57.3
+    pv_kwp: 20.8
     max_ac: 5
     ac_at_once: 4
     max_ac_2hp: 2

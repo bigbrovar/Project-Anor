@@ -38,6 +38,61 @@ def is_num(v):
     return isinstance(v, (int, float)) and not isinstance(v, bool)
 
 
+def planner(block):
+    """Check the planner settings and return them in the shape the page reads."""
+    if not isinstance(block, dict):
+        problem("planner", "is missing. It holds the states, price bands and sizing rules")
+        return {}
+    rules = block.get("rules") or {}
+    limits = {"inverter_load": (0.3, 1), "battery_use": (0.3, 1), "battery_loss": (0, 0.3),
+              "panel_losses": (0.4, 1), "own_surge": (1, 10), "days_in_month": (28, 31)}
+    for key, (low, high) in limits.items():
+        if not is_num(rules.get(key)) or not low <= rules[key] <= high:
+            problem(f"planner.rules.{key}", f"should be a number from {low} to {high}")
+    for key in rules:
+        if key not in limits:
+            problem(f"planner.rules.{key}", "isn't a rule the planner uses. Check the spelling")
+    bands = []
+    for i, band in enumerate(block.get("bands") or [], 1):
+        if not isinstance(band, dict) or not band.get("name") or not is_num(band.get("price")) or band["price"] < 0:
+            problem(f"planner.bands, entry {i}", "needs a name and a price (a number)")
+            continue
+        bands.append({"name": str(band["name"]), "price": band["price"]})
+    when, when_ids = [], []
+    for i, choice in enumerate(block.get("when") or [], 1):
+        if (not isinstance(choice, dict) or not choice.get("id") or not choice.get("label")
+                or not is_num(choice.get("night")) or not 0 <= choice["night"] <= 1):
+            problem(f"planner.when, entry {i}", "needs an id, a label and night (a number from 0 to 1)")
+            continue
+        when.append({"id": str(choice["id"]), "label": str(choice["label"]), "night": choice["night"]})
+        when_ids.append(str(choice["id"]))
+    if not when:
+        problem("planner.when", "needs at least one choice")
+    states = block.get("states") or {}
+    if not isinstance(states, dict) or not states:
+        problem("planner.states", "should list each state with its sun hours")
+        states = {}
+    for name, hours in states.items():
+        if not is_num(hours) or not 2 <= hours <= 8:
+            problem(f"planner.states.{name}", "sun hours should be a number from 2 to 8")
+    defaults = block.get("defaults") or {}
+    if defaults.get("state") not in states:
+        problem("planner.defaults.state", f"`{defaults.get('state')}` isn't in the states list")
+    if not is_num(defaults.get("price")) or defaults["price"] < 0:
+        problem("planner.defaults.price", "should be a number")
+    if defaults.get("when") not in when_ids:
+        problem("planner.defaults.when", f"`{defaults.get('when')}` isn't one of the ids under when")
+    if not str(block.get("sun_note", "")).strip():
+        problem("planner.sun_note", "is missing")
+    return {"rules": {"invLoad": rules.get("inverter_load"), "batUse": rules.get("battery_use"),
+                      "batLoss": rules.get("battery_loss"), "pvLoss": rules.get("panel_losses"),
+                      "ownSurge": rules.get("own_surge"), "days": rules.get("days_in_month")},
+            "bands": bands, "bandNote": str(block.get("band_note", "")), "when": when,
+            "states": [[str(name), hours] for name, hours in states.items()],
+            "sunNote": str(block.get("sun_note", "")),
+            "defaults": {"state": defaults.get("state"), "price": defaults.get("price"), "when": defaults.get("when")}}
+
+
 def main():
     path = ROOT / "data" / "guide.yaml"
     try:
@@ -70,15 +125,22 @@ def main():
         out = {"id": str(s["id"]), "n": str(s["name"]), "tag": str(s.get("tag", "")), "state": s.get("state"),
                "sys": str(s.get("sys", "")), "good": str(s.get("good", "")), "url": str(s.get("url", "")), "parts": []}
         if s.get("state") != "scope":
-            for key in ("cont_w", "surge_w", "kwh_day", "max_ac"):
+            for key in ("cont_w", "surge_w", "max_ac"):
                 if not is_num(s.get(key)):
                     problem(where, f"`{key}` should be a number")
+            sized = is_num(s.get("battery_kwh")) and is_num(s.get("pv_kwp"))
+            if s.get("state") == "live" and not sized:
+                problem(where, "a live system needs `battery_kwh` and `pv_kwp`, both numbers")
+            if not sized and not is_num(s.get("kwh_day")):
+                problem(where, "needs `battery_kwh` and `pv_kwp`, or `kwh_day` for a design that isn't sized yet")
             for key in ("ac_at_once", "max_ac_2hp"):
                 if s.get(key) is not None and not is_num(s[key]):
                     problem(where, f"`{key}` should be a number")
             out.update({"cont": s.get("cont_w"), "surge": s.get("surge_w"), "kwh": s.get("kwh_day"), "ac": s.get("max_ac"),
                         "acAt": s.get("ac_at_once", s.get("max_ac")), "ac2": s.get("max_ac_2hp", 0),
                         "idle": s.get("idle_w", 0) if is_num(s.get("idle_w", 0)) else 0})
+            if sized:
+                out.update({"bat": s["battery_kwh"], "pv": s["pv_kwp"]})
         if s.get("state") == "live":
             if not out["url"].startswith("https://"):
                 problem(where, "a live system needs its https:// url")
@@ -123,6 +185,8 @@ def main():
             out["why"] = str(a.get("why", ""))
         apps.append(out)
 
+    plan = planner(doc.get("planner"))
+
     ref = doc.get("reference") or {}
     if not str(ref.get("url", "")).startswith("https://"):
         problem("reference", "needs its https:// url")
@@ -138,7 +202,7 @@ def main():
     updated = doc.get("updated", "")
     if isinstance(updated, datetime.date):
         updated = f"{updated.day} {updated.strftime('%b %Y')}"
-    data = {"prices": prices, "systems": systems, "apps": apps, "bos": doc["allowance_pct"],
+    data = {"prices": prices, "systems": systems, "apps": apps, "plan": plan, "bos": doc["allowance_pct"],
             "bosText": str(doc.get("allowance_text", "")),
             "ref": {k: str(ref.get(k, "")) for k in ("name", "url", "sys", "text")},
             "audit": str(doc.get("audit_url", "")),
