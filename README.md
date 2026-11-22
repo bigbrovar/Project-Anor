@@ -38,7 +38,7 @@ The files in `diagrams/` open with [draw.io](https://app.diagrams.net/). They ar
 
 ## Sun hours
 
-Each state's good sun hours in the planner come from [NASA POWER](https://power.larc.nasa.gov): the long-term average of sunlight on a flat surface at the state capital. `data/sun-hours.csv` holds the yearly figure, every month and the lowest month. To fetch them again, run `python3 tools/sun_hours.py`, or run the "Sun hours from NASA" workflow from the Actions tab on a branch.
+The planner sizes panels for the lowest month of the year in each state, so a design keeps up in the worst month. Those figures, and the yearly averages shown beside them, come from [NASA POWER](https://power.larc.nasa.gov): the long-term average of sunlight on a flat surface at the state capital. `data/sun-hours.csv` holds the yearly figure, every month and the lowest month. To fetch them again, run `python3 tools/sun_hours.py`, or run the "Sun hours from NASA" workflow from the Actions tab on a branch.
 
 ## Building
 

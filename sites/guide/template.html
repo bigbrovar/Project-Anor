@@ -602,7 +602,8 @@ function drawNeed(r,t,pk){const n=need(r,t),any=r.on.length>0,month=r.kwh*R.days
     rows.map(([c,nm,nd,has,u])=>`<tr><th scope="row"><i style="background:var(--${c})"></i>${nm}</th><td>${any?up1(nd):"0.0"} ${u}</td><td class="${!any||nd<=has+1e-9?"ok":"short"}">${+(+has).toFixed(2)} ${u}</td></tr>`).join("")+"</tbody>";
   $("#need-sub").textContent=`Sized for ${S.sun.toFixed(1)} good sun hours in ${S.state}, with ${Math.round(n.share*100)}% of your power used after sunset${any&&idleK(t)?`, plus ${idleK(t).toFixed(1)} kWh a day for the inverter itself`:""}.`;}
 function drawSets(){
-  $("#sunnote").textContent=S.sunEdited?`Your own figure. The average for ${S.state} is ${sunOf(S.state).toFixed(1)}.`:PL.sunNote.replace("{state}",S.state);
+  {const st=PL.states.find(s=>s[0]===S.state)||PL.states[0];
+  $("#sunnote").textContent=S.sunEdited?`Your own figure. For ${st[0]}, the lowest month is ${st[1].toFixed(1)} (${st[2]}) and the yearly average is ${st[3].toFixed(1)}.`:PL.sunNote.replace("{state}",st[0]).replace("{month}",st[2]).replace("{yearly}",st[3].toFixed(1));}
   document.querySelectorAll("#when button").forEach(b=>b.setAttribute("aria-pressed",b.dataset.id===S.when));
   document.querySelectorAll("#bands button").forEach(b=>b.setAttribute("aria-pressed",+b.dataset.p===S.price));}
 function initSets(){

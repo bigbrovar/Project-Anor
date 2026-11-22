@@ -120,49 +120,53 @@ planner:
     - {id: even, label: "About even, day and night", night: 0.5}
     - {id: night, label: Mostly at night, night: 0.7}
 
-  # Good sun hours a day for each state (yearly average, kWh per square metre a day).
+  # Good sun hours a day for each state, in kWh per square metre a day.
+  #   low     the lowest month of the year. The planner sizes panels for this, so a
+  #           design keeps up in the worst month, not only on an average day.
+  #   month   which month that is
+  #   yearly  the yearly average, shown in the note for comparison
   # From NASA POWER: the long-term average of sunlight on a flat surface (ALLSKY_SFC_SW_DWN)
   # at each state capital, rounded to one decimal. The full figures, with every month, are in
   # data/sun-hours.csv at the top of the repo. tools/sun_hours.py fetches them again.
-  sun_note: "Yearly average at the capital of {state}, from NASA. The rainy season is lower. Change it if you know yours."
+  sun_note: "Sized for {month}, the lowest month in {state}, so the system keeps up all year. The yearly average is {yearly}. From NASA. Change it if you know yours."
   states:
-    Abia: 4.5
-    Adamawa: 5.7
-    Akwa Ibom: 4.5
-    Anambra: 4.7
-    Bauchi: 5.8
-    Bayelsa: 4.2
-    Benue: 5.0
-    Borno: 6.0
-    Cross River: 4.2
-    Delta: 4.6
-    Ebonyi: 4.9
-    Edo: 4.5
-    Ekiti: 4.7
-    Enugu: 4.7
-    "FCT, Abuja": 5.3
-    Gombe: 5.8
-    Imo: 4.5
-    Jigawa: 5.9
-    Kaduna: 5.6
-    Kano: 6.0
-    Katsina: 5.9
-    Kebbi: 5.8
-    Kogi: 4.9
-    Kwara: 5.0
-    Lagos: 4.6
-    Nasarawa: 5.2
-    Niger: 5.2
-    Ogun: 4.6
-    Ondo: 4.7
-    Osun: 4.6
-    Oyo: 4.6
-    Plateau: 5.3
-    Rivers: 4.1
-    Sokoto: 6.0
-    Taraba: 5.4
-    Yobe: 6.0
-    Zamfara: 5.8
+    Abia: {low: 3.8, month: August, yearly: 4.5}
+    Adamawa: {low: 4.7, month: August, yearly: 5.7}
+    Akwa Ibom: {low: 3.8, month: August, yearly: 4.5}
+    Anambra: {low: 3.9, month: August, yearly: 4.7}
+    Bauchi: {low: 5.1, month: August, yearly: 5.8}
+    Bayelsa: {low: 3.3, month: July, yearly: 4.2}
+    Benue: {low: 4.1, month: August, yearly: 5.0}
+    Borno: {low: 5.1, month: August, yearly: 6.0}
+    Cross River: {low: 3.1, month: August, yearly: 4.2}
+    Delta: {low: 3.9, month: August, yearly: 4.6}
+    Ebonyi: {low: 4.0, month: August, yearly: 4.9}
+    Edo: {low: 3.7, month: August, yearly: 4.5}
+    Ekiti: {low: 3.8, month: August, yearly: 4.7}
+    Enugu: {low: 3.9, month: August, yearly: 4.7}
+    "FCT, Abuja": {low: 4.1, month: August, yearly: 5.3}
+    Gombe: {low: 4.9, month: August, yearly: 5.8}
+    Imo: {low: 3.8, month: August, yearly: 4.5}
+    Jigawa: {low: 5.3, month: August, yearly: 5.9}
+    Kaduna: {low: 4.6, month: August, yearly: 5.6}
+    Kano: {low: 5.5, month: December, yearly: 6.0}
+    Katsina: {low: 5.4, month: August, yearly: 5.9}
+    Kebbi: {low: 5.2, month: August, yearly: 5.8}
+    Kogi: {low: 4.1, month: August, yearly: 4.9}
+    Kwara: {low: 4.0, month: August, yearly: 5.0}
+    Lagos: {low: 3.8, month: July, yearly: 4.6}
+    Nasarawa: {low: 4.2, month: August, yearly: 5.2}
+    Niger: {low: 4.1, month: August, yearly: 5.2}
+    Ogun: {low: 3.6, month: August, yearly: 4.6}
+    Ondo: {low: 3.8, month: August, yearly: 4.7}
+    Osun: {low: 3.5, month: August, yearly: 4.6}
+    Oyo: {low: 3.6, month: August, yearly: 4.6}
+    Plateau: {low: 4.1, month: August, yearly: 5.3}
+    Rivers: {low: 3.2, month: July, yearly: 4.1}
+    Sokoto: {low: 5.5, month: December, yearly: 6.0}
+    Taraba: {low: 4.3, month: August, yearly: 5.4}
+    Yobe: {low: 5.3, month: August, yearly: 6.0}
+    Zamfara: {low: 5.3, month: August, yearly: 5.8}
 # cont_w is what a system should carry at once: 80% of the inverter's rated power in kW,
 # which leaves room for heat. An inverter rated in kVA is first converted at 0.8 kW per kVA.
 # idle_w is the inverter's own use, added to the daily energy. The SRNE datasheet gives 50 W.
