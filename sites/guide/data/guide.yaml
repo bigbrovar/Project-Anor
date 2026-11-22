@@ -1,4 +1,4 @@
-# The Project Anor guide (project.anor.openculture.org.ng): the planner that
+# The Solar Planner guide (project.anor.openculture.org.ng): the planner that
 # points visitors to the dashboard that fits their loads and budget.
 #
 #   prices      reference prices, each with the sources it came from
@@ -315,7 +315,7 @@ consult:
 
 # The author's own install: documented as built, not one of the recommendations.
 reference:
-  name: Project Anor, my home build
+  name: My home build
   url: https://home.anor.openculture.org.ng
   sys: "48 V · Victron · 16 kVA · 57.3 kWh · 18.3 kWp"
   # A blank line starts a new paragraph.

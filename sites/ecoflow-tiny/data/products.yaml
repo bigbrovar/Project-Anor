@@ -42,7 +42,7 @@ products:
     icon: pv
     about: Solar panel. Turns sunlight into DC electricity.
     why:
-      - "The same panel as every other Project Anor design, so a later move up keeps it."
+      - "The same panel as every other Solar Planner design, so a later move up keeps it."
       - "Its voltage is low enough for the unit’s 60 V solar input, with room to spare on a cold morning."
       - "Fouani is the most reliable source of genuine Jinko panels in Nigeria."
     specs:
