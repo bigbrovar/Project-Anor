@@ -26,6 +26,7 @@ except ImportError:
 
 ROOT = pathlib.Path(__file__).resolve().parent
 OUT = ROOT / "dist" / "index.html"
+MONTHS = ("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
 STATES = {"kit", "live", "pending", "scope"}
 SHOWN = {"kit", "live"}   # priced, and picked by the planner
 errors = []
@@ -73,9 +74,10 @@ def planner(block):
     if not isinstance(states, dict) or not states:
         problem("planner.states", "should list each state with its sun hours")
         states = {}
-    for name, hours in states.items():
-        if not is_num(hours) or not 2 <= hours <= 8:
-            problem(f"planner.states.{name}", "sun hours should be a number from 2 to 8")
+    for name, s in states.items():
+        if not (isinstance(s, dict) and all(is_num(s.get(k)) and 2 <= s[k] <= 8 for k in ("low", "yearly"))
+                and s.get("month") in MONTHS and s["low"] <= s["yearly"]):
+            problem(f"planner.states.{name}", "needs `low` and `yearly` (numbers from 2 to 8, low not above yearly) and `month` (a month name)")
     defaults = block.get("defaults") or {}
     if defaults.get("state") not in states:
         problem("planner.defaults.state", f"`{defaults.get('state')}` isn't in the states list")
@@ -89,7 +91,7 @@ def planner(block):
                       "batLoss": rules.get("battery_loss"), "pvLoss": rules.get("panel_losses"),
                       "ownSurge": rules.get("own_surge"), "days": rules.get("days_in_month")},
             "bands": bands, "bandNote": str(block.get("band_note", "")), "when": when,
-            "states": [[str(name), hours] for name, hours in states.items()],
+            "states": [[str(name), s.get("low"), s.get("month"), s.get("yearly")] for name, s in states.items() if isinstance(s, dict)],
             "sunNote": str(block.get("sun_note", "")),
             "defaults": {"state": defaults.get("state"), "price": defaults.get("price"), "when": defaults.get("when")}}
 

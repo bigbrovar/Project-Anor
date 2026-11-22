@@ -36,6 +36,10 @@ diagrams/          source wiring diagrams (.drawio), opened with draw.io
 
 The files in `diagrams/` open with [draw.io](https://app.diagrams.net/). They are reference drawings of what connects to what; the sites draw their own schematics from their data.
 
+## Sun hours
+
+The planner sizes panels for the lowest month of the year in each state, so a design keeps up in the worst month. Those figures, and the yearly averages shown beside them, come from [NASA POWER](https://power.larc.nasa.gov): the long-term average of sunlight on a flat surface at the state capital. `data/sun-hours.csv` holds the yearly figure, every month and the lowest month. To fetch them again, run `python3 tools/sun_hours.py`, or run the "Sun hours from NASA" workflow from the Actions tab on a branch.
+
 ## Building
 
 Each site builds on its own, from its folder, into one self-contained `dist/index.html`:

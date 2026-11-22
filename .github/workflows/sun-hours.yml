@@ -1,0 +1,38 @@
+# Fetches each state's sun hours from NASA POWER and saves them in data/sun-hours.csv.
+# Run it from the Actions tab ("Run workflow"), or push to a branch whose name starts
+# with sun-hours. It commits the file to the branch it ran on, never to main directly.
+name: Sun hours from NASA
+
+on:
+  workflow_dispatch:
+  push:
+    branches: ["sun-hours**"]
+    paths: ["tools/sun_hours.py", ".github/workflows/sun-hours.yml"]
+
+permissions:
+  contents: write
+
+jobs:
+  fetch:
+    name: fetch
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Ask NASA POWER for every state
+        run: python tools/sun_hours.py
+      - name: Save the file to this branch
+        run: |
+          if [ "$GITHUB_REF_NAME" = "main" ]; then
+            echo "On main: not committing. Run this on a branch and open a pull request."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/sun-hours.csv
+          git diff --cached --quiet && { echo "No change"; exit 0; }
+          git commit -m "Update sun hours from NASA POWER"
+          git push
