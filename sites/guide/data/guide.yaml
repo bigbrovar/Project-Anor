@@ -121,48 +121,48 @@ planner:
     - {id: night, label: Mostly at night, night: 0.7}
 
   # Good sun hours a day for each state (yearly average, kWh per square metre a day).
-  # PROVISIONAL: estimates by region that still need replacing with figures from a
-  # published source. Update `sun_note` when that is done.
-  sun_note: "Yearly average for {state}. Provisional figure. Change it if you know yours."
+  # From NASA POWER: the long-term average of sunlight on a flat surface (ALLSKY_SFC_SW_DWN)
+  # at each state capital, rounded to one decimal. The full figures, with every month, are in
+  # data/sun-hours.csv at the top of the repo. tools/sun_hours.py fetches them again.
+  sun_note: "Yearly average at the capital of {state}, from NASA. The rainy season is lower. Change it if you know yours."
   states:
-    Abia: 4.4
-    Adamawa: 5.8
-    Akwa Ibom: 4.2
-    Anambra: 4.6
-    Bauchi: 5.9
-    Bayelsa: 4.0
-    Benue: 5.1
-    Borno: 6.2
-    Cross River: 4.3
-    Delta: 4.3
-    Ebonyi: 4.7
+    Abia: 4.5
+    Adamawa: 5.7
+    Akwa Ibom: 4.5
+    Anambra: 4.7
+    Bauchi: 5.8
+    Bayelsa: 4.2
+    Benue: 5.0
+    Borno: 6.0
+    Cross River: 4.2
+    Delta: 4.6
+    Ebonyi: 4.9
     Edo: 4.5
-    Ekiti: 4.8
-    Enugu: 4.8
-    "FCT, Abuja": 5.4
-    Gombe: 5.9
-    Imo: 4.4
-    Jigawa: 6.1
-    Kaduna: 5.7
+    Ekiti: 4.7
+    Enugu: 4.7
+    "FCT, Abuja": 5.3
+    Gombe: 5.8
+    Imo: 4.5
+    Jigawa: 5.9
+    Kaduna: 5.6
     Kano: 6.0
-    Katsina: 6.1
-    Kebbi: 6.0
-    Kogi: 5.0
-    Kwara: 5.1
-    Lagos: 4.4
-    Nasarawa: 5.3
-    Niger: 5.5
+    Katsina: 5.9
+    Kebbi: 5.8
+    Kogi: 4.9
+    Kwara: 5.0
+    Lagos: 4.6
+    Nasarawa: 5.2
+    Niger: 5.2
     Ogun: 4.6
-    Ondo: 4.6
-    Osun: 4.8
-    Oyo: 4.9
-    Plateau: 5.6
-    Rivers: 4.0
-    Sokoto: 6.2
+    Ondo: 4.7
+    Osun: 4.6
+    Oyo: 4.6
+    Plateau: 5.3
+    Rivers: 4.1
+    Sokoto: 6.0
     Taraba: 5.4
-    Yobe: 6.2
-    Zamfara: 6.0
-
+    Yobe: 6.0
+    Zamfara: 5.8
 # cont_w is what a system should carry at once: 80% of the inverter's rated power in kW,
 # which leaves room for heat. An inverter rated in kVA is first converted at 0.8 kW per kVA.
 # idle_w is the inverter's own use, added to the daily energy. The SRNE datasheet gives 50 W.
