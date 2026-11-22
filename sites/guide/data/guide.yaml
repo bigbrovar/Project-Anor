@@ -3,7 +3,7 @@
 #
 #   prices      reference prices, each with the sources it came from
 #   systems     the designs, smallest first. state is kit (a plug-in power
-#               station with one panel, shown on this page, no dashboard), live,
+#               station with one panel), live,
 #               pending (dashboard not published yet) or scope (too big for this guide)
 #   appliances  the planner tiles
 #
@@ -171,7 +171,7 @@ planner:
 # against what the reader needs. A pending design without them uses kwh_day, a flat daily limit.
 #
 # A kit is a power station (inverter, battery and solar charger in one box) with one panel.
-# It has no dashboard: its card under "Reference prices" carries the `kit` notes instead.
+# Its card under "Reference prices" also carries the `kit` notes: how it goes together and its limits.
 # For a kit, pv_kwp is the most the unit accepts from the panel, not the panel's rating, and
 # idle_w is an allowance (EcoFlow publishes no figure). allowance_pct and allowance_text
 # replace the page-wide allowance, since a kit has no breakers or boards to buy.
@@ -181,6 +181,7 @@ systems:
     name: Tiny
     tag: Plug-in kit
     state: kit
+    url: https://tiny.anor.openculture.org.ng
     sys: "500 W · 0.96 kWh · one 650 W panel"
     good: "Lights, a fan, a TV, a laptop and phones."
     cont_w: 400
@@ -195,16 +196,17 @@ systems:
       - {price: ecoflow-d3-1000air, qty: 1}
       - {price: jinko-650, qty: 1}
     kit:
-      manual: https://manuals.ecoflow.com/product/delta-3-1000-air
+      manual: https://ng.ecoflow.com/products/ecoflow-delta-3-air-1000-portable-power-station
       notes:
         - "How it goes together: the panel's two leads plug into an MC4 to XT60i solar cable, and that cable plugs into the unit's solar port. Appliances plug into the unit's sockets. There is nothing else to wire."
-        - "The unit accepts up to 60 V, 15 A and 500 W from solar. One Jinko 650 W reaches about 51.5 V on a cold morning, so it fits. The unit takes at most 500 W and leaves the rest."
+        - "The unit accepts up to 60 V, 15 A and 500 W from solar. One Jinko 650 W reaches about 52 V on a 10 °C morning, so it fits. The unit takes at most 500 W and leaves the rest."
         - "Use one panel only. Two in series would go past 60 V and damage the unit."
         - "It will not run a fridge through the night. The battery is under 1 kWh."
   - id: small
     name: Small
     tag: Plug-in kit
     state: kit
+    url: https://small.anor.openculture.org.ng
     sys: "1.8 kW · 1.0 kWh · one 650 W panel"
     good: "The same, plus a fridge by day and a blender."
     cont_w: 1440
@@ -222,7 +224,7 @@ systems:
       manual: https://manuals.ecoflow.com/product/delta-3-classic
       notes:
         - "How it goes together: the panel's two leads plug into an MC4 to XT60i solar cable, and that cable plugs into the unit's solar port. Appliances plug into the unit's sockets. There is nothing else to wire."
-        - "The unit accepts up to 60 V, 15 A and 500 W from solar. One Jinko 650 W reaches about 51.5 V on a cold morning, so it fits. The unit takes at most 500 W and leaves the rest."
+        - "The unit accepts up to 60 V, 15 A and 500 W from solar. One Jinko 650 W reaches about 52 V on a 10 °C morning, so it fits. The unit takes at most 500 W and leaves the rest."
         - "Use one panel only. Two in series would go past 60 V and damage the unit."
         - "It carries more at once than Tiny, but its battery is about the same size. Heavy loads will run for minutes, not hours."
       alt: "Alternative: the Bluetti AC180 (1.8 kW, 1,152 Wh, solar input 12 to 60 V, 10 A, 500 W) does the same job with the same panel. No price is given for it. On the day it was checked, Nigerian listings ran from about ₦800,000 to over ₦1,700,000, with no official store, which is too inconsistent to list. Check current prices and do your own research before buying."

@@ -1,0 +1,116 @@
+# This kit: the parts used, the page text, the three energy-flow views and
+# the check settings. Products are described in products.yaml; positions on
+# the drawing live in layout.yaml.
+
+version: "0.96"
+updated: 2026-11-22   # shown in the footer, with the version
+
+# Text at the top of the page and in the "Why this design" section.
+# Text fields can use <b> for bold.
+page:
+  host: tiny.anor.openculture.org.ng   # the site's address, with no https:// and no slash
+  title: Project Anor · Tiny plug-in kit, one EcoFlow and one panel
+  description: The smallest Project Anor design. One EcoFlow DELTA 3 1000 Air power station and one Jinko 650 W panel, for lights, a fan, a TV, a laptop and phones.
+  brand: tiny kit
+  eyebrow: Tiny · plug-in kit · EcoFlow DELTA 3 1000 Air
+  h1: A power station and one panel
+  lead: The smallest design here, with nothing to wire. One EcoFlow DELTA 3 1000 Air holds the inverter, the battery and the solar charger. One Jinko 650 W panel charges it through a single cable. It runs lights, a fan, a TV, a laptop and phones.
+  inverters_label: Output
+  glance:
+    - {icon: pv, cat: solar, title: One panel, text: "One Jinko 650 W panel, about 52 V on a cold morning, inside the unit’s 60 V limit. The unit takes up to 500 W from it."}
+    - {icon: inverter, cat: batt, title: One box, text: "The EcoFlow DELTA 3 1000 Air is the inverter, a 0.96 kWh LiFePO4 battery and the solar charger together."}
+    - {icon: home, cat: load, title: Plug-in loads, text: "Appliances plug straight into its sockets. Plan on 400 W at once and about 1 kWh a day."}
+  budget:
+    eyebrow: What it runs
+    title: About 240 W on at once, 1.1 kWh a day
+    lead: "The unit gives 500 W, but plan on 400 W. The hours are a typical day; wattages are typical figures, so check your own appliances’ labels. The battery holds under 1 kWh, so what runs after sunset matters most."
+    budget_w: 400
+    light_kwh: 0
+    sun_hours: 4
+    derate: 0.7
+    rows:
+      - {load: LED bulb, watts: 10, qty: 4, hours: 5}
+      - {load: Standing fan, watts: 50, qty: 1, hours: 6}
+      - {load: "LED TV, 32 inch", watts: 50, qty: 1, hours: 4}
+      - {load: Wi-Fi router, watts: 12, qty: 1, hours: 8}
+      - {load: Laptop, watts: 65, qty: 1, hours: 4}
+      - {load: Phone charging, watts: 10, qty: 2, hours: 2}
+      - {load: Fridge, watts: 150, qty: 0, hours: 0, note: Not on this kit. A fridge uses more in a night than the battery holds., status: "no"}
+      - {load: "Pressing iron, kettle or microwave", watts: 1200, qty: 0, hours: 0, note: Not on this kit. They draw more than the unit gives., status: "no"}
+      - {load: Air conditioner, watts: 900, qty: 0, hours: 0, note: Not on this kit., status: "no"}
+    settings:
+      - "<b>Charge from the panel first.</b> Plug into a wall socket only when the battery is low and there is no sun."
+      - "<b>Keep the unit indoors</b>, in the shade and off the floor. Only the panel goes outside."
+      - "<b>Switch off the AC sockets</b> when nothing is plugged in. The unit uses power just keeping them on."
+      - "If the EcoFlow app offers a <b>discharge limit</b>, set it to 20%. That is the range this guide sizes the battery for."
+  upgrades:
+    - "<b>For more at once</b>, the <a href=\"https://small.anor.openculture.org.ng\">Small kit</a> gives 1.8 kW from the same panel. Its battery is about the same size."
+    - "<b>For a fridge or fans through the night</b>, move up to <a href=\"https://msmall.anor.openculture.org.ng\">Medium small</a>: 24 V, 3.3 kW and a 5.1 kWh battery. The same panel is used there, so it carries over."
+    - "This unit’s battery cannot be added to, and it takes one panel only."
+  notes:
+    title: Why this design
+    lead: For a room, a shop counter or a small flat that wants light, a fan and a screen through an outage, without an installer.
+    items:
+      - {h: What it runs, text: "LED bulbs, a standing fan, a TV, Wi-Fi, a laptop and phones. No fridge overnight, and nothing that heats or cools."}
+      - {h: Why a power station, text: "The inverter, battery, charger and protection come as one tested unit. There are no battery cables, breakers or boards to get wrong."}
+      - {h: Why one 650 W panel, text: "The unit takes at most 500 W, and a 650 W panel reaches that earlier in the day and holds it for longer than a smaller one. It is also the panel every larger design here uses."}
+      - {h: Why 60 V matters, text: "The unit’s solar input stops at 60 V. This panel reaches about 52 V on a 10 °C morning. A second panel in series would pass the limit and damage the unit."}
+    alt_title: Alternative
+    alternatives:
+      - {name: "EcoFlow DELTA 3 Classic, 1.8 kW, 1,024 Wh", url: "https://small.anor.openculture.org.ng", text: "The Small kit. More power at once from the same panel, with about the same battery."}
+  footer:
+    - "The EcoFlow and Fouani links are not affiliate links."
+    - "Prices and stock change. Check both before buying."
+
+parts:
+  - {id: pv-a, product: jinko-tiger-neo-650, qty: 1, series: 1, parallel: 1, layout: One panel, feeds: unit}
+  - {id: cable, product: solar-cable, qty: 1}
+  - {id: unit, product: ecoflow-delta-3-1000-air, qty: 1}
+
+short_names:
+  pv-a: Solar panel
+
+groups:
+  - title: Solar panel
+    cards: [[pv-a], [cable]]
+  - title: Power station
+    cards: [[unit]]
+
+other_blocks:
+  grid:
+    title: Wall socket
+    icon: grid
+    category: grid
+    about: Optional. Plugged into a wall socket, the unit passes grid power to what is plugged in and recharges its battery. The kit works with no grid at all.
+    rows:
+      - [Needed, "No"]
+      - [Use it for, Topping up after cloudy days]
+  loads:
+    title: What it runs
+    icon: home
+    category: load
+    about: "Plugged into the unit’s sockets: LED bulbs, a standing fan, a TV, Wi-Fi, a laptop and phones."
+    rows:
+      - [Plugged into, The unit’s AC sockets and USB ports]
+      - [In an outage, Stay on]
+      - [Plan on, "400 W at most"]
+
+modes:
+  day:
+    caption: <b>Sunny day.</b> The panel feeds the unit’s solar port. The unit runs what is plugged in and charges its battery.
+    flowing: [w-pv, w-cable, w-load]
+    reversed: []
+  night:
+    caption: <b>Night.</b> No solar. The unit runs what is plugged in from its 0.96 kWh battery.
+    flowing: [w-load]
+    reversed: []
+  grid:
+    caption: <b>Plugged into the wall.</b> The unit passes grid power to what is plugged in and recharges its battery. This is optional.
+    flowing: [w-grid, w-load]
+    reversed: []
+
+# The battery is inside the unit, so the unit is named as both.
+checks:
+  battery: unit
+  inverters: [unit]
+  chargers: []
