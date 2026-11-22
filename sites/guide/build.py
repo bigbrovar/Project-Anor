@@ -142,8 +142,8 @@ def main():
                         "idle": s.get("idle_w", 0) if is_num(s.get("idle_w", 0)) else 0})
             if sized:
                 out.update({"bat": s["battery_kwh"], "pv": s["pv_kwp"]})
-        if s.get("state") == "live" and not out["url"].startswith("https://"):
-            problem(where, "a live system needs its https:// url")
+        if s.get("state") in SHOWN and not out["url"].startswith("https://"):
+            problem(where, "a live system or kit needs the https:// url of its dashboard")
         if s.get("state") in SHOWN and not s.get("parts"):
             problem(where, "a live system or kit needs parts, for its reference price")
         if s.get("allowance_pct") is not None:
@@ -158,7 +158,6 @@ def main():
                 problem(where, "a kit needs `kit.notes`: how it goes together and its limits")
             if not str(kit.get("manual", "")).startswith("https://"):
                 problem(where, "a kit needs `kit.manual`, the https:// address of the maker's manual")
-            out["url"] = "#kit-" + out["id"]   # its card on this page
             out["kit"] = {"notes": notes, "alt": str(kit.get("alt", "")), "manual": str(kit.get("manual", ""))}
         for part in s.get("parts") or []:
             if not isinstance(part, dict) or part.get("price") not in prices or not is_num(part.get("qty")):

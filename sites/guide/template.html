@@ -392,7 +392,7 @@ footer a{color:inherit}
     <div class="hero">
       <p class="eyebrow">Solar planner for Nigerian homes</p>
       <h1 id="h1p">Select what you want to power.<br>See the setup that fits.</h1>
-      <p class="lead">Pick your state, tick your appliances and set a budget. The planner matches them to one of two plug-in kits or four worked designs, based on my current install. The smallest is a 500 W kit: a power station and one solar panel for lights, a fan and a TV. The largest is a 16 kW system that runs a full house with air conditioners. Each worked design has its own dashboard with the wiring, parts, settings and sizing checks. The limits are conservative on purpose: an efficient load is cheaper than generating more power.</p>
+      <p class="lead">Pick your state, tick your appliances and set a budget. The planner matches them to one of two plug-in kits or four worked designs, based on my current install. The smallest is a 500 W kit: a power station and one solar panel for lights, a fan and a TV. The largest is a 16 kW system that runs a full house with air conditioners. Each has its own dashboard with the wiring, parts, settings and sizing checks. The limits are conservative on purpose: an efficient load is cheaper than generating more power.</p>
       <p class="audit" id="audit">Not sure what your appliances draw? <a target="_blank" rel="noopener">How to do a home energy audit</a> shows how to add it up first.</p>
       <div class="sets">
         <div class="set">
@@ -644,7 +644,7 @@ function update(){
       if(best){const t2=SYS[best.t];tips.push(`Drop the <strong>${esc(best.a.n)}</strong> and <strong>${esc(t2.n)}</strong> covers the rest for about ${naira(t2.cost)}${t2.cost<=b?", inside your budget.":"."}`);}
       let af=-1;LIVE.forEach(i=>{if(SYS[i].cost<=b)af=i;});
       tips.push(af<0?`The smallest live design starts at about <strong>${naira(SYS[FIRST].cost)}</strong>.`:`Your budget reaches <strong>${esc(SYS[af].n)}</strong> (about ${naira(SYS[af].cost)}).`);}
-    gol.textContent=pending?"See "+t.n+" instead":t.kitted?"See the "+t.n+" kit":"Open the "+t.n+" dashboard";}
+    gol.textContent=pending?"See "+t.n+" instead":"Open the "+t.n+" dashboard";}
   go.href=t.url;
   clearTimeout(sayT);sayT=setTimeout(()=>{$("#r-say").textContent=[$("#r-eyebrow").textContent+":",$("#r-tier").textContent,$("#r-cost").textContent+".",pill.textContent+"."].join(" ");},600);
   $("#r-tips").innerHTML=tips.map(x=>`<li>${ico("arrow-right",2.2)}<span>${x}</span></li>`).join("");
@@ -653,9 +653,9 @@ function update(){
   $("#track").innerHTML=SYS.map((s,i)=>{const live=s.shown;
     const inner=`<div class="badges">${i===mark?'<span class="bdg need">You need</span>':""}${live&&s.cost<=b?'<span class="bdg fit">In budget</span>':""}${s.state==="pending"?'<span class="bdg ph">Pending</span>':""}${s.state==="scope"?'<span class="bdg ph">Out of scope</span>':""}</div>
     <div class="lv">${SYS.map((_,j)=>`<i class="${j<=i?"f":""}"></i>`).join("")}</div><div class="tn">${esc(s.n)}</div><div class="tt">${esc(s.tag)}</div><div class="ts">${esc(s.sys)}</div>${s.roof?`<div class="ts">${s.panels} panel${s.panels===1?"":"s"} · about ${Math.round(s.roof)} m² of roof</div>`:""}<div class="tg">${esc(s.good)}</div>
-    <div class="tc">${live?"about "+short(s.cost):s.state==="pending"?"Dashboard pending":CONSULT?esc(G.consult.card):"Outside this guide"}</div>${s.kitted?'<div class="go">See the kit ↓</div>':live?'<div class="go">Open dashboard ↗</div>':s.state==="scope"&&CONSULT?`<div class="go">${esc(G.consult.label)} ↗</div>`:""}`;
+    <div class="tc">${live?"about "+short(s.cost):s.state==="pending"?"Dashboard pending":CONSULT?esc(G.consult.card):"Outside this guide"}</div>${live?'<div class="go">Open dashboard ↗</div>':s.state==="scope"&&CONSULT?`<div class="go">${esc(G.consult.label)} ↗</div>`:""}`;
     if(s.state==="scope"&&CONSULT)return `<a class="tier consult ${i===mark?"need":""}" href="${esc(G.consult.url)}" target="_blank" rel="noopener">${inner}</a>`;
-    return s.kitted?`<a class="tier ${i===mark?"need":""}" href="${s.url}">${inner}</a>`:live?`<a class="tier ${i===mark?"need":""}" href="${s.url}" target="_blank" rel="noopener">${inner}</a>`:`<div class="tier off ${i===mark?"need":""}">${inner}</div>`;}).join("");
+    return live?`<a class="tier ${i===mark?"need":""}" href="${s.url}" target="_blank" rel="noopener">${inner}</a>`:`<div class="tier off ${i===mark?"need":""}">${inner}</div>`;}).join("");
 }
 document.addEventListener("change",e=>{const el=e.target.closest(".app");if(!el||e.target.type!=="checkbox")return;
   S.sel[el.dataset.id].on=e.target.checked;renderApps();update();document.getElementById("c-"+el.dataset.id).focus({preventScroll:true});});
@@ -697,7 +697,7 @@ $("#pgrid").innerHTML=SYS.filter(s=>s.shown).map(s=>`<div class="pcard"${s.kitte
   <table class="ptable"><thead><tr><th>Part</th><th class="n">Qty</th><th class="n">Each</th><th class="n">Total</th></tr></thead><tbody>
   ${s.parts.map(p=>`<tr><td>${pname(P[p.p])}</td><td class="n">${p.q}</td><td class="n">${naira(P[p.p].p)}</td><td class="n">${naira(P[p.p].p*p.q)}</td></tr>`).join("")}
   <tr><td colspan="3">Allowance for the rest, ${s.bosPct==null?G.bos:s.bosPct}%<small>${esc(s.bosText||G.bosText)}</small></td><td class="n">${naira(s.bos)}</td></tr>
-  <tr class="tot"><td colspan="3">Reference total, before installation</td><td class="n">${naira(s.partsCost+s.bos)}</td></tr></tbody></table>${s.kitted?`<ul class="kitn">${s.kit.notes.map(n=>`<li>${esc(n)}</li>`).join("")}${s.kit.alt?`<li class="alt">${esc(s.kit.alt)}</li>`:""}</ul><a class="kitm" href="${esc(s.kit.manual)}" target="_blank" rel="noopener">The maker’s manual ↗</a>`:""}</div>`).join("");
+  <tr class="tot"><td colspan="3">Reference total, before installation</td><td class="n">${naira(s.partsCost+s.bos)}</td></tr></tbody></table>${s.kitted?`<ul class="kitn">${s.kit.notes.map(n=>`<li>${esc(n)}</li>`).join("")}${s.kit.alt?`<li class="alt">${esc(s.kit.alt)}</li>`:""}</ul><a class="kitm" href="${esc(s.url)}" target="_blank" rel="noopener">Open the ${esc(s.n)} dashboard ↗</a> · <a class="kitm" href="${esc(s.kit.manual)}" target="_blank" rel="noopener">The maker’s page ↗</a>`:""}</div>`).join("");
 $("#psrc").innerHTML=`<thead><tr><th>Item</th><th class="n">Price used</th><th>Listed at</th><th>Source</th></tr></thead><tbody>${Object.values(P).map(p=>`<tr><td>${pname(p)}${p.note?`<small>${esc(p.note)}</small>`:""}</td><td class="n">${naira(p.p)}</td><td>${esc(p.range||naira(p.p))}</td><td>${p.src.map(x=>`<a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)} ↗</a>`).join(" · ")}</td></tr>`).join("")}</tbody>`;
 {const R=G.ref,c=$("#refcard");c.href=R.url;c.innerHTML=`<span class="tn">${esc(R.name)}</span><span class="ts">${esc(R.sys)}</span>${R.text.split(/\n\s*\n/).map(x=>`<p>${esc(x.trim())}</p>`).join("")}<span class="go">Open the home dashboard ↗</span>`;}
 $("#readlist").innerHTML=G.reading.map(r=>`<li><a href="${r.url}" target="_blank" rel="noopener"><b>${esc(r.title)} ↗</b><span>${esc(r.text)}</span></a></li>`).join("");

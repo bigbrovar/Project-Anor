@@ -1,0 +1,109 @@
+# Every product in the kit: the panel, the solar cable and the power station.
+# build.yaml refers to them by id (the name ending in a colon).
+#
+#   name      the exact model, shown in small text under the plain name
+#   plain     the everyday name shown as the main text, like Power station or Solar panel
+#   short     optional short name, used in the sizing checks
+#   icon      pv, inverter, cable, grid or home
+#   about     one line on what it does
+#   specs     key: value pairs. Each key needs a label in spec_labels below.
+#             Use null for a value you don't know yet: it stays hidden on the page
+#             and the build lists it, so you can see what's still missing.
+#   note, advice   optional extra lines in the detail panel
+#   links     datasheet, buy, alternatives and read
+#   why       optional line, or list of lines, on why this product was picked.
+#             Put quotes around a line that has a colon in it.
+
+spec_labels:   # spec key: [label shown on the page, unit]
+  pmax_w: [Power, W]
+  voc_v: [Voc, V]
+  isc_a: [Isc, A]
+  imp_a: [Imp, A]
+  voc_coef_pct: [Voc temp. coeff., "%/°C"]
+  max_fuse_a: [Max series fuse, A]
+  cont_w_25c: [Rated output, W]
+  surge_w: [Surge, W]
+  kwh: [Battery, kWh]
+  chem: [Chemistry, ""]
+  pv_voc_max_v: ["Solar input voltage, max", V]
+  pv_op_a: [Max solar input current, A]
+  pv_w_max: [Max solar input power, W]
+  expand: [Extra batteries, ""]
+  weight: [Weight, ""]
+  size: [Size, ""]
+  plugs: [Plugs, ""]
+
+products:
+
+  jinko-tiger-neo-650:
+    name: Jinko Tiger Neo 3.0 N-type 66QL6, 650 W
+    plain: Solar panel
+    short: Jinko 650 W
+    icon: pv
+    about: Solar panel. Turns sunlight into DC electricity.
+    why:
+      - "The same panel as every other Project Anor design, so a later move up keeps it."
+      - "Its voltage is low enough for the unit’s 60 V solar input, with room to spare on a cold morning."
+      - "Fouani is the most reliable source of genuine Jinko panels in Nigeria."
+    specs:
+      pmax_w: 650
+      voc_v: 50.26
+      isc_a: 15.98
+      imp_a: 15.27
+      voc_coef_pct: -0.24
+      max_fuse_a: 35
+    note: "One panel only. Two in series would pass 60 V and damage the unit. Fouani sells the bifacial version of this panel (model ending BDV). Before connecting it, read the Voc on the panel’s own label and confirm it is under 55 V."
+    advice: "Fake and relabelled panels are common. Buy from a distributor listed on the maker’s official website, check the serial number on the label with the maker, compare the label with the official datasheet, and walk away from prices far below other sellers."
+    links:
+      datasheet: https://jinkosolar.com/en/site/tigerneo_3
+      buy:
+        - name: Jinko 650 W at Fouani
+          url: https://fouanistore.com/nigeria-en/product/1158?jinko-650w-tiger-neo-3-0-bifacial-solar-panel-up-to-25-efficiency
+
+  solar-cable:
+    name: "Solar charging cable, MC4 to XT60i"
+    plain: Solar charging cable
+    icon: cable
+    about: Joins the panel’s two leads to the unit’s solar port. It is the only cable to buy.
+    why:
+      - "The unit does not come with one. EcoFlow sells it as an accessory."
+    specs:
+      plugs: "MC4 pair to XT60i"
+    note: "The panel’s leads end in MC4 plugs, which click into the cable. The other end pushes into the unit’s solar port."
+    advice: "Check the plug against the solar port on your unit before buying. For a panel more than a few metres away, add an MC4 extension cable in 4 mm² or thicker."
+    links:
+      buy:
+        - name: EcoFlow Nigeria
+          url: https://ng.ecoflow.com/
+
+  ecoflow-delta-3-classic:
+    name: "EcoFlow DELTA 3 Classic, 1.8 kW, 1,024 Wh"
+    plain: Power station
+    short: DELTA 3 Classic
+    icon: inverter
+    about: An inverter, a lithium battery and a solar charger in one box. The panel plugs in on one side and appliances on the other.
+    why:
+      - "EcoFlow is a globally known maker, and it sells direct in Nigeria through its own store."
+      - "It publishes its solar input limits, so the panel can be checked against them."
+      - "Nothing to wire. There is no separate battery, breaker or board to install."
+    specs:
+      cont_w_25c: 1800
+      surge_w: 3600
+      kwh: 1.024
+      chem: LiFePO4
+      pv_voc_max_v: 60
+      pv_op_a: 15
+      pv_w_max: 500
+      expand: None
+      weight: 12.1 kg
+    note: "Plan on 1,440 W at once, which is 80% of its rating. The battery cannot be added to later, and at about 1 kWh it empties fast under a heavy load."
+    advice: "The solar limits here are from reviews that cite EcoFlow’s manual. Check them against the manual in the box before connecting the panel. The voltage limit is the one that matters: going over 60 V can damage the unit."
+    links:
+      datasheet: https://manuals.ecoflow.com/product/delta-3-classic
+      buy:
+        - name: EcoFlow Nigeria
+          url: https://ng.ecoflow.com/products/ecoflow-delta-3-classic-portable-power-station
+      alternatives:
+        - name: "Bluetti AC180, 1.8 kW, 1,152 Wh"
+          url: https://www.bluettipower.com/
+          note: "Solar input 12 to 60 V, 10 A, 500 W, so the same panel fits. No price is given: Nigerian listings ran from about ₦800,000 to over ₦1,700,000 on the day they were checked, with no official store. Check current prices and do your own research."

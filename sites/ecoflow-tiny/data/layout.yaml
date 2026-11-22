@@ -1,0 +1,27 @@
+# Where everything sits on the schematic. You only need this file to add, move
+# or re-route something on the drawing; specs and parts live in the other files.
+#
+#   at      for a block: [x, y, width, height], measured from the top-left corner
+#   style   tile (picture on top, the default), side (icon on the left) or stack
+#   path    an SVG path for a wire. "M310 240 V290" starts at x=310, y=240 and runs
+#           down to y=290. H runs sideways to an x, V up or down to a y.
+
+canvas: [1200, 790]
+
+blocks:
+  - {id: pv-a, part: pv-a, short: Solar panel, at: [30, 30, 560, 210], title: Solar panel · 650 W, subtitle: "1 × Jinko Tiger Neo 650 W", icon: pv, photo_height: 130, panels: {count: 1, cols: 1, size: 84}}
+  - {id: cable, part: cable, short: Solar charging cable, at: [30, 290, 560, 84], title: Solar charging cable, subtitle: "MC4 to XT60i, bought separately", icon: cable, style: side}
+  - {id: unit, part: unit, short: Power station, at: [30, 430, 560, 250], title: Power station · 500 W · 0.96 kWh, subtitle: "EcoFlow DELTA 3 1000 Air · inverter, battery and charger", icon: inverter, photo_height: 170, ports: [[solar, SOLAR], [grid, AC IN], [load, AC OUT]]}
+  - {id: grid, at: [830, 30, 340, 84], title: Wall socket, subtitle: "Optional, for topping up", icon: grid, style: side}
+  - {id: loads, at: [830, 300, 340, 200], title: What it runs, subtitle: "Lights, a fan, TV, laptop and phones", icon: home, photo_height: 120, loads: [lightbulb, fan, tv, router, laptop]}
+
+wires:
+  - {id: w-pv, from: pv-a, to: cable, type: solar, path: M310 240 V290, size: "The panel’s own leads, MC4 plugs"}
+  - {id: w-cable, from: cable, to: unit, type: solar, path: M310 374 V430, size: "XT60i plug into the solar port"}
+  - {id: w-grid, from: grid, to: unit, type: grid, path: M830 72 H710 V480 H590, size: "The unit’s own mains lead"}
+  - {id: w-load, from: unit, to: loads, type: load, path: M590 600 H760 V400 H830, size: "Appliance plugs and extension leads"}
+
+labels:
+  - {text: SOLAR, at: [318, 420]}
+  - {text: AC IN, at: [600, 472]}
+  - {text: AC OUT, at: [600, 592]}

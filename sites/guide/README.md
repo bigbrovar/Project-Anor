@@ -18,7 +18,7 @@ wrangler.jsonc     tells Cloudflare to serve dist/ as the site (Worker: anor-gui
 
 **Add a system.** Add it to `systems` in size order, with the most it runs at once (`cont_w`), its surge (`surge_w`), its battery and panel sizes (`battery_kwh`, `pv_kwp`) and how many air conditioners it's designed for (`max_ac`). A `live` system also needs its dashboard `url` and its `parts`.
 
-**Add a plug-in kit.** A kit is a power station with one panel, and has no dashboard. Give it `state: kit`, its `parts`, and a `kit` block with `notes` (how it goes together and its limits), the maker's `manual` and, if there is one, an `alt`. Only list a unit whose maker publishes its solar limits. For a kit, `pv_kwp` is the most the unit accepts from the panel, and `allowance_pct` with `allowance_text` replaces the page-wide allowance.
+**Add a plug-in kit.** A kit is a power station with one panel. Give it `state: kit`, its dashboard `url`, its `parts`, and a `kit` block with `notes` (how it goes together and its limits), the maker's page or `manual` and, if there is one, an `alt`. Only list a unit whose maker publishes its solar limits. For a kit, `pv_kwp` is the most the unit accepts from the panel, and `allowance_pct` with `allowance_text` replaces the page-wide allowance.
 
 **Change the allowance.** `allowance_pct` is added to every system's parts for breakers, boards, cable and mounting. A system can set its own.
 
