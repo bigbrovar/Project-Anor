@@ -1,4 +1,6 @@
-# Project Anor
+# Solar Planner
+
+The public name is Solar Planner. Project Anor is the development name, and it stays in the repository, folder, Worker and address names.
 
 Open schematics and interactive write-ups of solar and power builds, by [bigbrovar](https://x.com/bigbrovar).
 
