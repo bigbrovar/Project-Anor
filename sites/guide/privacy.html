@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<!-- Template for build.py: the privacy page. Its text comes from data/privacy.yaml. -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>__TITLE__ · Solar Planner</title>
+<meta name="description" content="__DESC__">
+<link rel="canonical" href="https://project.anor.openculture.org.ng/privacy">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Solar Planner">
+<meta property="og:title" content="__TITLE__ · Solar Planner">
+<meta property="og:description" content="__DESC__">
+<meta property="og:image" content="https://project.anor.openculture.org.ng/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0A0E12" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#F4F6F8" media="(prefers-color-scheme: light)">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=Figtree:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --bg:#0A0E12; --surface:#121920; --line:#222C36;
+  --ink:#EAF0F4; --muted:#8C99A6; --solar:#F7B53B; --ok:#2ED3A6; --ok-t:rgba(46,211,166,.13); --on-accent:#1A1300;
+  --f-d:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif;
+  --f-b:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-m:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+  --r:14px;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme: light){:root:not([data-theme="dark"]){
+  --bg:#F4F6F8; --surface:#FFFFFF; --line:#DFE5EB;
+  --ink:#0E1620; --muted:#5A6774; --solar:#C47F00; --ok:#0B9B76; --ok-t:rgba(11,155,118,.11); --on-accent:#FFFFFF; color-scheme:light}}
+:root[data-theme="light"]{
+  --bg:#F4F6F8; --surface:#FFFFFF; --line:#DFE5EB;
+  --ink:#0E1620; --muted:#5A6774; --solar:#C47F00; --ok:#0B9B76; --ok-t:rgba(11,155,118,.11); --on-accent:#FFFFFF; color-scheme:light}
+:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--f-b);-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--solar);outline-offset:2px;border-radius:6px}
+.wrap{max-width:760px;margin:0 auto;padding-left:max(18px,env(safe-area-inset-left,0px));padding-right:max(18px,env(safe-area-inset-right,0px))}
+.top{border-bottom:1px solid var(--line)}
+.top .wrap{max-width:1200px;display:flex;align-items:center;gap:16px;padding-block:12px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--f-d);font-weight:760;font-size:1.08rem;letter-spacing:-.02em}
+.brand .logo{width:28px;height:28px;border-radius:8px;display:grid;place-items:center;background:var(--solar);color:var(--on-accent)}
+.brand .logo svg{width:17px;height:17px}
+.brand small{font:500 .82rem var(--f-b);color:var(--muted);letter-spacing:0}
+.back{margin-left:auto;font-weight:600;font-size:.88rem;text-decoration:none;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:6px 14px;background:var(--surface)}
+.back:hover{color:var(--ink)}
+main{padding-block:44px 56px;display:grid;gap:34px}
+.eyebrow{font:600 .74rem/1 var(--f-b);letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+h1,h2{font-family:var(--f-d);margin:0;line-height:1.1;text-wrap:balance;letter-spacing:-.02em}
+h1{font-size:clamp(2rem,5vw,2.9rem);font-weight:760}
+h2{font-size:1.3rem;font-weight:720;margin-bottom:10px}
+.lead{font-size:1.1rem;color:var(--muted);margin:14px 0 0}
+p{margin:0 0 12px}
+section p:last-child{margin-bottom:0}
+.short{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+.short li{display:grid;grid-template-columns:22px minmax(0,1fr);gap:12px;align-items:start;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px}
+.short svg{width:22px;height:22px;padding:4px;border-radius:7px;color:var(--ok);background:var(--ok-t);margin-top:1px}
+.tscroll{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:520px;font-size:.93rem}
+th,td{text-align:left;vertical-align:top;padding:12px 16px;border-bottom:1px solid var(--line)}
+tr:last-child td{border-bottom:0}
+thead th{font:600 .72rem/1 var(--f-b);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+td:first-child{font-weight:600;width:42%}
+td:last-child{color:var(--muted)}
+footer{border-top:1px solid var(--line);padding-block:24px;font-size:.84rem;color:var(--muted)}
+footer .m{font-family:var(--f-m);font-size:.8rem;color:var(--ink)}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <a class="brand" href="./"><span class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg></span>openculture <small>Solar Planner</small></a>
+  <a class="back" href="./">Back to the planner</a>
+</div></header>
+<main class="wrap">
+  <div>
+    <p class="eyebrow">Privacy</p>
+    <h1>__TITLE__</h1>
+    <p class="lead">__LEAD__</p>
+  </div>
+__BODY__
+</main>
+<footer><div class="wrap"><span class="m">Solar Planner · __UPDATED__</span> · By <a href="https://x.com/bigbrovar" target="_blank" rel="noopener">bigbrovar</a></div></footer>
+</body>
+</html>

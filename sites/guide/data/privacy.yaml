@@ -1,0 +1,52 @@
+# The privacy page (project.anor.openculture.org.ng/privacy): what happens to
+# a visitor's data on the planner and the dashboards. Every site's footer links here.
+#
+# Keep this true. If analytics, a form, a cookie or browser storage is ever
+# added to any site, update this page in the same change.
+#
+#   short     the plain answers at the top
+#   sections  each has a heading (h) and paragraphs (p). A paragraph can use
+#             <b> for bold and <a href="..."> for links.
+#   table     what each kind of information is and where it goes
+
+title: How your data is handled
+lead: Solar Planner collects nothing about you, stores nothing about you and does not track you. This page explains what that means, and the few places where another company's servers are involved.
+
+short:
+  - "<b>No accounts and no forms.</b> There is nothing to sign up for and nothing to send."
+  - "<b>No cookies and no browser storage.</b> The pages save nothing on your device."
+  - "<b>No analytics, no tracking scripts and no adverts.</b>"
+  - "<b>The sums run on your device.</b> What you tick and type is never sent anywhere."
+
+table:
+  head: [Information, What happens to it]
+  rows:
+    - ["Your state, appliances, electricity price and budget", "Used by the page in your browser to work out the result. Never sent to a server."]
+    - ["An appliance you type in yourself", "The same. It stays in your browser."]
+    - ["A link you share", "Your choices are written into the link so it opens the same way for the person you send it to. See below."]
+    - ["Your IP address and browser type", "Seen by the hosting company and the font provider when the page loads, as with any website. See below."]
+    - ["Your name, email, phone number or location", "Never asked for."]
+
+sections:
+  - h: What you enter
+    p:
+      - "The planner is a single page. When it loads, everything it needs is already in it: the appliances, the prices, the designs and the sums. Ticking an appliance or changing your state runs the sums again on your own phone or computer. Nothing is sent back."
+      - "Closing the page clears it. The next visit starts fresh, because the page saves nothing on your device."
+  - h: Share links
+    p:
+      - "As you make choices, the planner writes them into the page address, so the link can be copied, bookmarked or sent to someone. The link holds your appliances, state, sun hours, electricity price and budget. It holds nothing that identifies you."
+      - "Two things follow from that. Anyone you send the link to sees those choices. And when a link is opened, the full address reaches the hosting server, as every web address does."
+  - h: Hosting
+    p:
+      - "The pages are served by Cloudflare. To deliver a page, any web host has to receive the request for it, which includes your IP address, your browser type and the address you asked for. Cloudflare uses this to serve the page and to block abuse, under <a href=\"https://www.cloudflare.com/privacypolicy/\">its own privacy policy</a>."
+      - "I do not add analytics on top of that, and I do not look at or keep visitor records."
+  - h: Fonts
+    p:
+      - "The lettering is loaded from Google Fonts. Your browser asks Google's servers for the font files, so Google receives your IP address and browser type. Google says it sets no cookies for this and does not use it to profile people or target adverts. Its statement is <a href=\"https://developers.google.com/fonts/faq/privacy\">here</a>."
+  - h: Links to other sites
+    p:
+      - "The pages link to shops, makers' datasheets, blog posts, a booking page for consultations and a live view of my own system. Each of those is a separate site with its own rules, and what you do there is between you and that site."
+      - "Some dashboards carry AliExpress links marked <b>Affiliate</b>. Following one tells AliExpress that you came from here, so that a purchase can be credited. No other link is paid for."
+  - h: Check it yourself
+    p:
+      - "Everything here is open source. The code for every page is at <a href=\"https://github.com/bigbrovar/Project-Anor\">github.com/bigbrovar/Project-Anor</a>, and your browser's developer tools will show that no request is made after the page and its fonts have loaded."

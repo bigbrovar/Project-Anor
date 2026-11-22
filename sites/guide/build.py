@@ -94,6 +94,45 @@ def planner(block):
             "defaults": {"state": defaults.get("state"), "price": defaults.get("price"), "when": defaults.get("when")}}
 
 
+TICK = ('<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" '
+        'stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>')
+
+
+def privacy_page(updated):
+    """Write dist/privacy.html from data/privacy.yaml. Returns False if the page can't be built."""
+    path, template = ROOT / "data" / "privacy.yaml", ROOT / "privacy.html"
+    if not path.exists() or not template.exists():
+        problem("privacy", "needs data/privacy.yaml and privacy.html. Every site's footer links to this page")
+        return None
+    try:
+        doc = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+    except yaml.YAMLError as e:
+        problem("data/privacy.yaml", f"isn't valid YAML: {e}")
+        return None
+    for key in ("title", "lead", "short", "sections"):
+        if not doc.get(key):
+            problem("data/privacy.yaml", f"`{key}` is missing")
+    parts = ['  <ul class="short">' + "".join(f"<li>{TICK}<span>{line}</span></li>" for line in doc.get("short") or []) + "</ul>"]
+    table = doc.get("table") or {}
+    if table.get("rows"):
+        head = "".join(f"<th scope=\"col\">{h}</th>" for h in table.get("head") or [])
+        rows = "".join("<tr>" + "".join(f"<td>{cell}</td>" for cell in row) + "</tr>" for row in table["rows"])
+        parts.append(f'  <div class="tscroll"><table><thead><tr>{head}</tr></thead><tbody>{rows}</tbody></table></div>')
+    for i, s in enumerate(doc.get("sections") or [], 1):
+        if not isinstance(s, dict) or not s.get("h") or not s.get("p"):
+            problem(f"data/privacy.yaml sections, entry {i}", "needs a heading (h) and paragraphs (p)")
+            continue
+        parts.append(f"  <section><h2>{s['h']}</h2>" + "".join(f"<p>{para}</p>" for para in s["p"]) + "</section>")
+    html = template.read_text(encoding="utf-8")
+    plain = str(doc.get("lead", "")).replace('"', "&quot;")
+    for key, value in {"__TITLE__": str(doc.get("title", "")), "__DESC__": plain, "__LEAD__": str(doc.get("lead", "")),
+                       "__BODY__": "\n".join(parts), "__UPDATED__": str(updated)}.items():
+        if key not in html:
+            problem("privacy.html", f"should contain {key}")
+        html = html.replace(key, value)
+    return html
+
+
 def main():
     path = ROOT / "data" / "guide.yaml"
     try:
@@ -200,6 +239,11 @@ def main():
 
     plan = planner(doc.get("planner"))
 
+    updated = doc.get("updated", "")
+    if isinstance(updated, datetime.date):
+        updated = f"{updated.day} {updated.strftime('%b %Y')}"
+    privacy = privacy_page(updated)
+
     ref = doc.get("reference") or {}
     if not str(ref.get("url", "")).startswith("https://"):
         problem("reference", "needs its https:// url")
@@ -212,9 +256,6 @@ def main():
             print(f"  {msg}", file=sys.stderr)
         sys.exit(1)
 
-    updated = doc.get("updated", "")
-    if isinstance(updated, datetime.date):
-        updated = f"{updated.day} {updated.strftime('%b %Y')}"
     data = {"prices": prices, "systems": systems, "apps": apps, "plan": plan, "bos": doc["allowance_pct"],
             "bosText": str(doc.get("allowance_text", "")),
             "ref": {k: str(ref.get(k, "")) for k in ("name", "url", "sys", "text")},
@@ -230,6 +271,7 @@ def main():
         html = html.replace(key, value)
     OUT.parent.mkdir(exist_ok=True)
     OUT.write_text(html, encoding="utf-8")
+    (OUT.parent / "privacy.html").write_text(privacy, encoding="utf-8")
     # the link preview image (og:image) sits beside the page
     if (ROOT / "og.png").exists():
         shutil.copyfile(ROOT / "og.png", OUT.parent / "og.png")
@@ -240,6 +282,7 @@ def main():
         parts = sum(prices[p["p"]]["p"] * p["q"] for p in s["parts"])
         print(f"  {s['n']}: about ₦{round(parts * (1 + s.get('bosPct', doc['allowance_pct']) / 100)):,}")
     print(f"Wrote {OUT.relative_to(ROOT)} ({round(OUT.stat().st_size / 1024)} KB)")
+    print("Wrote dist/privacy.html")
 
 
 if __name__ == "__main__":
