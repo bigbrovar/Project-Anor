@@ -49,4 +49,4 @@ sections:
       - "Some dashboards carry AliExpress links marked <b>Affiliate</b>. Following one tells AliExpress that you came from here, so that a purchase can be credited. No other link is paid for."
   - h: Check it yourself
     p:
-      - "Everything here is open source. The code for every page is at <a href=\"https://github.com/bigbrovar/Project-Anor\">github.com/bigbrovar/Project-Anor</a>, and your browser's developer tools will show that no request is made after the page and its fonts have loaded."
+      - "Everything here is free software under the AGPL v3. The code for every page is at <a href=\"https://github.com/bigbrovar/Project-Anor\">github.com/bigbrovar/Project-Anor</a>, and your browser's developer tools will show that no request is made after the page and its fonts have loaded."
