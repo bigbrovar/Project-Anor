@@ -62,4 +62,8 @@ Sites don't share code. An improvement made in one folder is copied into another
 
 ## License
 
-Code is under the MIT License (see `LICENSE`). Data, writing and photos are under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/).
+Copyright (C) 2026 bigbrovar.
+
+The code is free software under the [GNU Affero General Public License, version 3](https://www.gnu.org/licenses/agpl-3.0.html) (see `LICENSE`). You may use, copy and change it. If you share your version, or run it as a website for other people, you must make its source available under the same licence. It comes with no warranty.
+
+Data, writing and photos are under [Creative Commons Attribution-ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/): credit bigbrovar, and share anything you build on them under the same licence.

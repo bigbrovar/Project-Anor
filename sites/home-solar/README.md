@@ -112,6 +112,6 @@ One-time setup in the Cloudflare dashboard:
 
 ## License
 
-The code (`template.html` and `build.py`) is under the MIT License; see `LICENSE` at the repository root. The data, writing and photos are under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/): reuse them freely, with credit.
+The code (`template.html` and `build.py`) is under the GNU Affero General Public License, version 3; see `LICENSE` at the repository root. The data, writing and photos are under [Creative Commons Attribution-ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/): credit bigbrovar, and share anything you build on them under the same licence: reuse them freely, with credit.
 
 This is a write-up of one build, not an installation guide. Have your own design checked by a qualified installer.

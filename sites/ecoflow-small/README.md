@@ -41,4 +41,4 @@ If the address changes, set `host` under `page` in `data/build.yaml`, and the ki
 
 ## License
 
-The code is under the MIT License (see `LICENSE` at the repository root). The data and writing are under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/).
+The code is under the GNU Affero General Public License, version 3 (see `LICENSE` at the repository root). The data and writing are under [Creative Commons Attribution-ShareAlike 4.0](https://creativecommons.org/licenses/by-sa/4.0/): credit bigbrovar, and share anything you build on them under the same licence.
