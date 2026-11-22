@@ -10,12 +10,12 @@ img{max-width:100%}
 [hidden]{display:none!important}
 </style>
 <title>Project Anor Solar Guide</title>
-<meta name="description" content="Pick your appliances and budget, and find the Project Anor solar design that fits: four worked systems for Nigerian homes, each with its own dashboard and reference prices.">
+<meta name="description" content="Pick your appliances and budget, and find the Project Anor solar design that fits: two plug-in kits and four worked systems for Nigerian homes, with reference prices.">
 <link rel="canonical" href="https://project.anor.openculture.org.ng/">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Project Anor">
 <meta property="og:title" content="Project Anor Solar Guide">
-<meta property="og:description" content="Pick your appliances and budget, and find the Project Anor solar design that fits: four worked systems for Nigerian homes, each with its own dashboard and reference prices.">
+<meta property="og:description" content="Pick your appliances and budget, and find the Project Anor solar design that fits: two plug-in kits and four worked systems for Nigerian homes, with reference prices.">
 <meta property="og:url" content="https://project.anor.openculture.org.ng/">
 <meta property="og:image" content="https://project.anor.openculture.org.ng/og.png">
 <meta property="og:image:width" content="1200">
@@ -277,6 +277,7 @@ main{padding-block:40px 80px}
 .two{display:grid;grid-template-columns:minmax(0,1fr) 380px;gap:28px;align-items:start}
 @media (max-width:980px){.two{grid-template-columns:minmax(0,1fr)}}
 .sec-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:14px}
+.kitn{margin:4px 0 0;padding-left:18px;display:grid;gap:7px;font-size:.86rem;line-height:1.5}.kitn .alt{color:var(--muted)}.kitm{font-size:.86rem;font-weight:600}.pcard[id]{scroll-margin-top:84px}
 .parts{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:12px}
 .part{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;display:grid;grid-template-rows:auto 1fr;transition:border-color .2s,box-shadow .2s}
 .part.lit{border-color:var(--solar);box-shadow:0 0 0 4px var(--solar-t)}
@@ -391,7 +392,7 @@ footer a{color:inherit}
     <div class="hero">
       <p class="eyebrow">Solar planner for Nigerian homes</p>
       <h1 id="h1p">Select what you want to power.<br>See the setup that fits.</h1>
-      <p class="lead">Pick your state, tick your appliances and set a budget. The planner matches them to one of four worked designs, based on my current install. The smallest is a 3.3 kW system for lights, fans, a TV and a fridge. The largest is a 16 kW system that runs a full house with air conditioners. Each design has its own dashboard with the wiring, parts, settings and sizing checks. The limits are conservative on purpose: an efficient load is cheaper than generating more power.</p>
+      <p class="lead">Pick your state, tick your appliances and set a budget. The planner matches them to one of two plug-in kits or four worked designs, based on my current install. The smallest is a 500 W kit: a power station and one solar panel for lights, a fan and a TV. The largest is a 16 kW system that runs a full house with air conditioners. Each worked design has its own dashboard with the wiring, parts, settings and sizing checks. The limits are conservative on purpose: an efficient load is cheaper than generating more power.</p>
       <p class="audit" id="audit">Not sure what your appliances draw? <a target="_blank" rel="noopener">How to do a home energy audit</a> shows how to add it up first.</p>
       <div class="sets">
         <div class="set">
@@ -414,7 +415,7 @@ footer a{color:inherit}
           <label for="budget">Your budget</label>
           <div class="money"><span aria-hidden="true">₦</span><input id="budget" inputmode="numeric" value="5,000,000"></div>
         <div class="presets" id="presets">
-          <button class="preset" type="button" data-b="3000000">₦3M</button><button class="preset" type="button" data-b="5000000">₦5M</button><button class="preset" type="button" data-b="10000000">₦10M</button><button class="preset" type="button" data-b="20000000">₦20M</button>
+          <button class="preset" type="button" data-b="1000000">₦1M</button><button class="preset" type="button" data-b="3000000">₦3M</button><button class="preset" type="button" data-b="5000000">₦5M</button><button class="preset" type="button" data-b="10000000">₦10M</button><button class="preset" type="button" data-b="20000000">₦20M</button>
         </div>
         </div>
       </div>
@@ -518,8 +519,8 @@ const short=n=>n>=1e6?"₦"+(+(n/1e6).toFixed(1))+"M":"₦"+Math.round(n/1000)+"
 const fmt=n=>Math.round(n).toLocaleString("en-NG");
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const SYS=G.systems,APPS=G.apps,P=G.prices;
-SYS.forEach(s=>{s.partsCost=s.parts.reduce((a,p)=>a+P[p.p].p*p.q,0);s.bos=Math.round(s.partsCost*G.bos/100);s.cost=s.state==="live"?Math.round((s.partsCost+s.bos)/10000)*10000:null;});
-const LIVE=SYS.map((s,i)=>i).filter(i=>SYS[i].state==="live"),FIRST=LIVE[0],LAST=LIVE[LIVE.length-1];
+SYS.forEach(s=>{s.partsCost=s.parts.reduce((a,p)=>a+P[p.p].p*p.q,0);s.kitted=s.state==="kit";s.shown=s.kitted||s.state==="live";s.bos=Math.round(s.partsCost*(s.bosPct==null?G.bos:s.bosPct)/100);s.cost=s.shown?Math.round((s.partsCost+s.bos)/10000)*10000:null;});
+const LIVE=SYS.map((s,i)=>i).filter(i=>SYS[i].shown),FIRST=LIVE[0],LAST=LIVE[LIVE.length-1];
 
 /* ---------- planner ---------- */
 const PL=G.plan,R=PL.rules,sunOf=n=>(PL.states.find(s=>s[0]===n)||PL.states[0])[1];
@@ -630,7 +631,7 @@ function update(){
     else if(best)tips.push(`Drop the <strong>${esc(best.a.n)}</strong> and <strong>${esc(SYS[best.t].n)}</strong> covers the rest.`);
     gol.textContent="See the "+t.n+" design";}
   else{bar.hidden=false;$("#r-barl").hidden=false;
-    $("#r-tier").textContent=pending?SYS[ti].n+" · 12 V":t.n;$("#r-cost").textContent=pending?"":"about "+naira(t.cost);$("#r-sys").textContent=pending?"Dashboard pending":t.sys+(t.roof?` · ${t.panels} panels, about ${Math.round(t.roof)} m² of roof`:"");
+    $("#r-tier").textContent=pending?SYS[ti].n+" · 12 V":t.n;$("#r-cost").textContent=pending?"":"about "+naira(t.cost);$("#r-sys").textContent=pending?"Dashboard pending":t.sys+(t.kitted?"":t.roof?` · ${t.panels} panels, about ${Math.round(t.roof)} m² of roof`:"");
     if(pending){tips.push(`The small 12 V dashboard isn’t published yet. The nearest one that is live is <strong>${esc(t.n)}</strong> (${esc(t.sys)}), about ${naira(t.cost)}.`);}
     else{const w=whyUp(r,ti);if(w)tips.push(`<strong>Why not ${esc(SYS[ti-1].n)}?</strong> ${w}`);
       if(r.acs>t.acAt)tips.push(`Run no more than <strong>${t.acAt} air conditioners at once</strong> on ${esc(t.n)}.`);}
@@ -643,18 +644,18 @@ function update(){
       if(best){const t2=SYS[best.t];tips.push(`Drop the <strong>${esc(best.a.n)}</strong> and <strong>${esc(t2.n)}</strong> covers the rest for about ${naira(t2.cost)}${t2.cost<=b?", inside your budget.":"."}`);}
       let af=-1;LIVE.forEach(i=>{if(SYS[i].cost<=b)af=i;});
       tips.push(af<0?`The smallest live design starts at about <strong>${naira(SYS[FIRST].cost)}</strong>.`:`Your budget reaches <strong>${esc(SYS[af].n)}</strong> (about ${naira(SYS[af].cost)}).`);}
-    gol.textContent=pending?"See "+t.n+" instead":"Open the "+t.n+" dashboard";}
+    gol.textContent=pending?"See "+t.n+" instead":t.kitted?"See the "+t.n+" kit":"Open the "+t.n+" dashboard";}
   go.href=t.url;
   clearTimeout(sayT);sayT=setTimeout(()=>{$("#r-say").textContent=[$("#r-eyebrow").textContent+":",$("#r-tier").textContent,$("#r-cost").textContent+".",pill.textContent+"."].join(" ");},600);
   $("#r-tips").innerHTML=tips.map(x=>`<li>${ico("arrow-right",2.2)}<span>${x}</span></li>`).join("");
   document.querySelectorAll(".preset").forEach(p=>p.classList.toggle("on",+p.dataset.b===b));
   const mark=scope?SYS.findIndex(s=>s.state==="scope"):ti;
-  $("#track").innerHTML=SYS.map((s,i)=>{const live=s.state==="live";
+  $("#track").innerHTML=SYS.map((s,i)=>{const live=s.shown;
     const inner=`<div class="badges">${i===mark?'<span class="bdg need">You need</span>':""}${live&&s.cost<=b?'<span class="bdg fit">In budget</span>':""}${s.state==="pending"?'<span class="bdg ph">Pending</span>':""}${s.state==="scope"?'<span class="bdg ph">Out of scope</span>':""}</div>
-    <div class="lv">${SYS.map((_,j)=>`<i class="${j<=i?"f":""}"></i>`).join("")}</div><div class="tn">${esc(s.n)}</div><div class="tt">${esc(s.tag)}</div><div class="ts">${esc(s.sys)}</div>${s.roof?`<div class="ts">${s.panels} panels · about ${Math.round(s.roof)} m² of roof</div>`:""}<div class="tg">${esc(s.good)}</div>
-    <div class="tc">${live?"about "+short(s.cost):s.state==="pending"?"Dashboard pending":CONSULT?esc(G.consult.card):"Outside this guide"}</div>${live?'<div class="go">Open dashboard ↗</div>':s.state==="scope"&&CONSULT?`<div class="go">${esc(G.consult.label)} ↗</div>`:""}`;
+    <div class="lv">${SYS.map((_,j)=>`<i class="${j<=i?"f":""}"></i>`).join("")}</div><div class="tn">${esc(s.n)}</div><div class="tt">${esc(s.tag)}</div><div class="ts">${esc(s.sys)}</div>${s.roof?`<div class="ts">${s.panels} panel${s.panels===1?"":"s"} · about ${Math.round(s.roof)} m² of roof</div>`:""}<div class="tg">${esc(s.good)}</div>
+    <div class="tc">${live?"about "+short(s.cost):s.state==="pending"?"Dashboard pending":CONSULT?esc(G.consult.card):"Outside this guide"}</div>${s.kitted?'<div class="go">See the kit ↓</div>':live?'<div class="go">Open dashboard ↗</div>':s.state==="scope"&&CONSULT?`<div class="go">${esc(G.consult.label)} ↗</div>`:""}`;
     if(s.state==="scope"&&CONSULT)return `<a class="tier consult ${i===mark?"need":""}" href="${esc(G.consult.url)}" target="_blank" rel="noopener">${inner}</a>`;
-    return live?`<a class="tier ${i===mark?"need":""}" href="${s.url}" target="_blank" rel="noopener">${inner}</a>`:`<div class="tier off ${i===mark?"need":""}">${inner}</div>`;}).join("");
+    return s.kitted?`<a class="tier ${i===mark?"need":""}" href="${s.url}">${inner}</a>`:live?`<a class="tier ${i===mark?"need":""}" href="${s.url}" target="_blank" rel="noopener">${inner}</a>`:`<div class="tier off ${i===mark?"need":""}">${inner}</div>`;}).join("");
 }
 document.addEventListener("change",e=>{const el=e.target.closest(".app");if(!el||e.target.type!=="checkbox")return;
   S.sel[el.dataset.id].on=e.target.checked;renderApps();update();document.getElementById("c-"+el.dataset.id).focus({preventScroll:true});});
@@ -692,11 +693,11 @@ document.addEventListener("click",e=>{const a=e.target.closest('a[href^="#"]');i
 
 /* ---------- prices and reference ---------- */
 const pname=p=>p.plain?`${esc(p.plain)}<small class="model">${esc(p.n)}</small>`:esc(p.n);   /* plain name, exact model under it */
-$("#pgrid").innerHTML=SYS.filter(s=>s.state==="live").map(s=>`<div class="pcard"><h3>${esc(s.n)} <span>about ${naira(s.cost)}</span></h3><div class="ts">${esc(s.sys)}</div>
+$("#pgrid").innerHTML=SYS.filter(s=>s.shown).map(s=>`<div class="pcard"${s.kitted?` id="kit-${esc(s.id)}"`:""}><h3>${esc(s.n)} <span>about ${naira(s.cost)}</span></h3><div class="ts">${esc(s.sys)}</div>
   <table class="ptable"><thead><tr><th>Part</th><th class="n">Qty</th><th class="n">Each</th><th class="n">Total</th></tr></thead><tbody>
   ${s.parts.map(p=>`<tr><td>${pname(P[p.p])}</td><td class="n">${p.q}</td><td class="n">${naira(P[p.p].p)}</td><td class="n">${naira(P[p.p].p*p.q)}</td></tr>`).join("")}
-  <tr><td colspan="3">Allowance for the rest, ${G.bos}%<small>${esc(G.bosText)}</small></td><td class="n">${naira(s.bos)}</td></tr>
-  <tr class="tot"><td colspan="3">Reference total, before installation</td><td class="n">${naira(s.partsCost+s.bos)}</td></tr></tbody></table></div>`).join("");
+  <tr><td colspan="3">Allowance for the rest, ${s.bosPct==null?G.bos:s.bosPct}%<small>${esc(s.bosText||G.bosText)}</small></td><td class="n">${naira(s.bos)}</td></tr>
+  <tr class="tot"><td colspan="3">Reference total, before installation</td><td class="n">${naira(s.partsCost+s.bos)}</td></tr></tbody></table>${s.kitted?`<ul class="kitn">${s.kit.notes.map(n=>`<li>${esc(n)}</li>`).join("")}${s.kit.alt?`<li class="alt">${esc(s.kit.alt)}</li>`:""}</ul><a class="kitm" href="${esc(s.kit.manual)}" target="_blank" rel="noopener">The maker’s manual ↗</a>`:""}</div>`).join("");
 $("#psrc").innerHTML=`<thead><tr><th>Item</th><th class="n">Price used</th><th>Listed at</th><th>Source</th></tr></thead><tbody>${Object.values(P).map(p=>`<tr><td>${pname(p)}${p.note?`<small>${esc(p.note)}</small>`:""}</td><td class="n">${naira(p.p)}</td><td>${esc(p.range||naira(p.p))}</td><td>${p.src.map(x=>`<a href="${x.u}" target="_blank" rel="noopener">${esc(x.n)} ↗</a>`).join(" · ")}</td></tr>`).join("")}</tbody>`;
 {const R=G.ref,c=$("#refcard");c.href=R.url;c.innerHTML=`<span class="tn">${esc(R.name)}</span><span class="ts">${esc(R.sys)}</span>${R.text.split(/\n\s*\n/).map(x=>`<p>${esc(x.trim())}</p>`).join("")}<span class="go">Open the home dashboard ↗</span>`;}
 $("#readlist").innerHTML=G.reading.map(r=>`<li><a href="${r.url}" target="_blank" rel="noopener"><b>${esc(r.title)} ↗</b><span>${esc(r.text)}</span></a></li>`).join("");

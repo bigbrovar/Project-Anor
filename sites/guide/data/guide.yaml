@@ -2,8 +2,9 @@
 # points visitors to the dashboard that fits their loads and budget.
 #
 #   prices      reference prices, each with the sources it came from
-#   systems     the designs, smallest first. state is live, pending (dashboard
-#               not published yet) or scope (too big for this guide)
+#   systems     the designs, smallest first. state is kit (a plug-in power
+#               station with one panel, shown on this page, no dashboard), live,
+#               pending (dashboard not published yet) or scope (too big for this guide)
 #   appliances  the planner tiles
 #
 # The limits are deliberately conservative. max_ac is the most air conditioners
@@ -11,7 +12,7 @@
 # (default: all of them) and max_ac_2hp how many may be as big as 2 HP
 # (default: none). No system here takes more than five.
 
-updated: 2026-11-10   # shown in the footer; also the date the prices were checked
+updated: 2026-11-22   # shown in the footer; also the date the prices were checked
 
 # Reference prices in naira, from public listings. `plain` is the everyday name
 # shown as the main text and `name` the exact model under it. `price` is the figure the
@@ -23,9 +24,25 @@ prices:
     area_m2: 2.7   # 2,382 x 1,134 mm, from the datasheet. Gives each system its panel area.
     price: 165000
     range: "₦156,500 to ₦175,000"
+    note: "Buy from Fouani, the most reliable source of Jinko panels in Nigeria. Its page did not show a price when this was checked, so the figure is from the other two listings. Fouani sells the bifacial version, model JKM650N-66QL6-BDV."
     sources:
+      - {name: Fouani, url: "https://fouanistore.com/nigeria-en/product/1158?jinko-650w-tiger-neo-3-0-bifacial-solar-panel-up-to-25-efficiency"}
       - {name: Thrillhouse, url: "https://www.thrillhouse.com.ng/shop/alternative-energy/solar-panels/650w-jinko-solar-panel/"}
       - {name: Leaf Solar, url: "https://leafsolar.ng/solar-prices-nigeria"}
+  ecoflow-d3-1000air:
+    name: "EcoFlow DELTA 3 1000 Air, 500 W, 960 Wh"
+    plain: Power station
+    price: 468000
+    note: "Sale price on EcoFlow's Nigerian store on 22 Nov 2026; the regular price is ₦739,199. Its product page showed it as a pre-order, so check stock."
+    sources:
+      - {name: EcoFlow Nigeria, url: "https://ng.ecoflow.com/products/ecoflow-delta-3-air-1000-portable-power-station"}
+  ecoflow-d3-classic:
+    name: "EcoFlow DELTA 3 Classic, 1.8 kW, 1,024 Wh"
+    plain: Power station
+    price: 692000
+    note: "Sale price on EcoFlow's Nigerian store on 22 Nov 2026; the regular price is ₦848,720."
+    sources:
+      - {name: EcoFlow Nigeria, url: "https://ng.ecoflow.com/products/ecoflow-delta-3-classic-portable-power-station"}
   srne-3k3:
     name: "SRNE HF2430S80-H, 3.3 kW"
     plain: Inverter
@@ -152,17 +169,63 @@ planner:
 # Growatt and Deye don't publish a figure, so 50 W per inverter is an allowance for them.
 # battery_kwh and pv_kwp are the design's battery and panel sizes. The planner checks them
 # against what the reader needs. A pending design without them uses kwh_day, a flat daily limit.
+#
+# A kit is a power station (inverter, battery and solar charger in one box) with one panel.
+# It has no dashboard: its card under "Reference prices" carries the `kit` notes instead.
+# For a kit, pv_kwp is the most the unit accepts from the panel, not the panel's rating, and
+# idle_w is an allowance (EcoFlow publishes no figure). allowance_pct and allowance_text
+# replace the page-wide allowance, since a kit has no breakers or boards to buy.
+# Solar limits (60 V, 15 A, 500 W on both units) are from EcoFlow's user manuals.
 systems:
+  - id: tiny
+    name: Tiny
+    tag: Plug-in kit
+    state: kit
+    sys: "500 W · 0.96 kWh · one 650 W panel"
+    good: "Lights, a fan, a TV, a laptop and phones."
+    cont_w: 400
+    idle_w: 15
+    surge_w: 1000
+    battery_kwh: 0.96
+    pv_kwp: 0.5
+    max_ac: 0
+    allowance_pct: 10
+    allowance_text: "The solar charging cable (MC4 to XT60i, sold separately), panel mounting and a short run of solar cable. An estimate, not a quoted price."
+    parts:
+      - {price: ecoflow-d3-1000air, qty: 1}
+      - {price: jinko-650, qty: 1}
+    kit:
+      manual: https://manuals.ecoflow.com/product/delta-3-1000-air
+      notes:
+        - "How it goes together: the panel's two leads plug into an MC4 to XT60i solar cable, and that cable plugs into the unit's solar port. Appliances plug into the unit's sockets. There is nothing else to wire."
+        - "The unit accepts up to 60 V, 15 A and 500 W from solar. One Jinko 650 W reaches about 51.5 V on a cold morning, so it fits. The unit takes at most 500 W and leaves the rest."
+        - "Use one panel only. Two in series would go past 60 V and damage the unit."
+        - "It will not run a fridge through the night. The battery is under 1 kWh."
   - id: small
     name: Small
-    tag: 12 V starter
-    state: pending
-    sys: "12 V · about 1.5 kW"
-    good: "Lights, fans, TV, laptops"
-    cont_w: 1000
-    surge_w: 3000
-    kwh_day: 4
+    tag: Plug-in kit
+    state: kit
+    sys: "1.8 kW · 1.0 kWh · one 650 W panel"
+    good: "The same, plus a fridge by day and a blender."
+    cont_w: 1440
+    idle_w: 15
+    surge_w: 3600
+    battery_kwh: 1.024
+    pv_kwp: 0.5
     max_ac: 0
+    allowance_pct: 10
+    allowance_text: "The solar charging cable (MC4 to XT60i, sold separately), panel mounting and a short run of solar cable. An estimate, not a quoted price."
+    parts:
+      - {price: ecoflow-d3-classic, qty: 1}
+      - {price: jinko-650, qty: 1}
+    kit:
+      manual: https://manuals.ecoflow.com/product/delta-3-classic
+      notes:
+        - "How it goes together: the panel's two leads plug into an MC4 to XT60i solar cable, and that cable plugs into the unit's solar port. Appliances plug into the unit's sockets. There is nothing else to wire."
+        - "The unit accepts up to 60 V, 15 A and 500 W from solar. One Jinko 650 W reaches about 51.5 V on a cold morning, so it fits. The unit takes at most 500 W and leaves the rest."
+        - "Use one panel only. Two in series would go past 60 V and damage the unit."
+        - "It carries more at once than Tiny, but its battery is about the same size. Heavy loads will run for minutes, not hours."
+      alt: "Alternative: the Bluetti AC180 (1.8 kW, 1,152 Wh, solar input 12 to 60 V, 10 A, 500 W) does the same job with the same panel. No price is given for it. On the day it was checked, Nigerian listings ran from about ₦800,000 to over ₦1,700,000, with no official store, which is too inconsistent to list. Check current prices and do your own research before buying."
   - id: msmall
     name: Medium small
     tag: 24 V essentials
@@ -283,14 +346,14 @@ appliances:
   - {group: Everyday, id: phone, icon: smartphone, name: Phone charging, watts: 10, hours: 3, qty: 3, selected: true}
   - {group: Kitchen, id: fridge, icon: refrigerator, name: Fridge, watts: 150, surge_w: 600, kwh_day: 1.2, qty: 1, selected: true}
   - {group: Kitchen, id: freezer, icon: snowflake, name: Chest freezer, watts: 120, surge_w: 500, kwh_day: 1.0, qty: 1}
-  - {group: Kitchen, id: micro, icon: microwave, name: Microwave, watts: 1200, hours: 0.5, qty: 1, needs: msmall, why: A microwave draws more than a 12 V starter should carry.}
+  - {group: Kitchen, id: micro, icon: microwave, name: Microwave, watts: 1200, hours: 0.5, qty: 1, needs: msmall, why: A microwave would empty a plug-in kit in minutes.}
   - {group: Kitchen, id: blend, icon: blend, name: Blender, watts: 400, surge_w: 800, hours: 0.5, qty: 1}
   - {group: Kitchen, id: cooker, icon: zap, name: Induction cooker, watts: 2000, hours: 1, qty: 1, needs: medium, why: Cooking needs a 48 V system. On 24 V it would drain the battery and strain the inverter.}
   - {group: Kitchen, id: oven, icon: microwave, name: Electric oven, watts: 2500, hours: 0.5, qty: 1, needs: large, why: An oven only fits on backup with the Large design. On the smaller ones it stays on the grid.}
   - {group: Heavy loads, id: iron, icon: shirt, name: Pressing iron, watts: 1000, hours: 0.5, qty: 1, needs: medium, why: Heating elements stay on the grid on the 24 V system.}
-  - {group: Heavy loads, id: wash, icon: washing-machine, name: Washing machine, watts: 500, surge_w: 1200, hours: 1, qty: 1, needs: msmall, why: A washing machine’s motor is too much for a 12 V starter.}
+  - {group: Heavy loads, id: wash, icon: washing-machine, name: Washing machine, watts: 500, surge_w: 1200, hours: 1, qty: 1, needs: msmall, why: A washing machine is more than a plug-in kit is meant for.}
   - {group: Heavy loads, id: pump, icon: droplets, name: "Pumping machine, 1 HP", watts: 750, surge_w: 2250, hours: 1, qty: 1, needs: medium, why: A 1 HP pump’s start-up surge needs a 48 V system.}
-  - {group: Heavy loads, id: ac1, icon: air-vent, name: "AC, 1 HP inverter", watts: 900, surge_w: 2700, hours: 6, qty: 1, ac: true, needs: medium, why: Air conditioners need a 48 V system. Hours of running would empty a 12 V or 24 V battery long before morning.}
-  - {group: Heavy loads, id: ac15, icon: air-vent, name: "AC, 1.5 HP inverter", watts: 1100, surge_w: 3300, hours: 6, qty: 1, ac: true, needs: medium, why: Air conditioners need a 48 V system. Hours of running would empty a 12 V or 24 V battery long before morning.}
+  - {group: Heavy loads, id: ac1, icon: air-vent, name: "AC, 1 HP inverter", watts: 900, surge_w: 2700, hours: 6, qty: 1, ac: true, needs: medium, why: Air conditioners need a 48 V system. Hours of running would empty a plug-in kit or a 24 V battery long before morning.}
+  - {group: Heavy loads, id: ac15, icon: air-vent, name: "AC, 1.5 HP inverter", watts: 1100, surge_w: 3300, hours: 6, qty: 1, ac: true, needs: medium, why: Air conditioners need a 48 V system. Hours of running would empty a plug-in kit or a 24 V battery long before morning.}
   - {group: Heavy loads, id: ac2, icon: air-vent, name: "AC, 2 HP inverter", watts: 1500, surge_w: 4500, hours: 6, qty: 1, ac: true, ac_2hp: true, needs: large, why: A 2 HP air conditioner only fits the Large design, and no more than two of them.}
   - {group: Heavy loads, id: heater, icon: droplets, name: Water heater, watts: 2000, hours: 1.5, qty: 1, needs: large, why: A water heater only fits on backup with the Large design. On the smaller ones it stays on the grid.}
