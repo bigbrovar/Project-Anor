@@ -49,4 +49,4 @@ Its own Worker, set up once:
 
 ## License
 
-The code is under the MIT License (see `LICENSE` at the repository root). The data and writing are under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/).
+The code is under the GNU General Public License, version 3 (see `LICENSE` at the repository root). The data and writing are under [Creative Commons Attribution 4.0](https://creativecommons.org/licenses/by/4.0/).
