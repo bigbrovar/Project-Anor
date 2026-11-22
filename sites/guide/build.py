@@ -26,7 +26,8 @@ except ImportError:
 
 ROOT = pathlib.Path(__file__).resolve().parent
 OUT = ROOT / "dist" / "index.html"
-STATES = {"live", "pending", "scope"}
+STATES = {"kit", "live", "pending", "scope"}
+SHOWN = {"kit", "live"}   # priced, and picked by the planner
 errors = []
 
 
@@ -121,7 +122,7 @@ def main():
             continue
         where = f"systems.{s['id']}"
         if s.get("state") not in STATES:
-            problem(where, "state should be live, pending or scope")
+            problem(where, "state should be kit, live, pending or scope")
         out = {"id": str(s["id"]), "n": str(s["name"]), "tag": str(s.get("tag", "")), "state": s.get("state"),
                "sys": str(s.get("sys", "")), "good": str(s.get("good", "")), "url": str(s.get("url", "")), "parts": []}
         if s.get("state") != "scope":
@@ -129,8 +130,8 @@ def main():
                 if not is_num(s.get(key)):
                     problem(where, f"`{key}` should be a number")
             sized = is_num(s.get("battery_kwh")) and is_num(s.get("pv_kwp"))
-            if s.get("state") == "live" and not sized:
-                problem(where, "a live system needs `battery_kwh` and `pv_kwp`, both numbers")
+            if s.get("state") in SHOWN and not sized:
+                problem(where, "a live system or kit needs `battery_kwh` and `pv_kwp`, both numbers")
             if not sized and not is_num(s.get("kwh_day")):
                 problem(where, "needs `battery_kwh` and `pv_kwp`, or `kwh_day` for a design that isn't sized yet")
             for key in ("ac_at_once", "max_ac_2hp"):
@@ -141,11 +142,24 @@ def main():
                         "idle": s.get("idle_w", 0) if is_num(s.get("idle_w", 0)) else 0})
             if sized:
                 out.update({"bat": s["battery_kwh"], "pv": s["pv_kwp"]})
-        if s.get("state") == "live":
-            if not out["url"].startswith("https://"):
-                problem(where, "a live system needs its https:// url")
-            if not s.get("parts"):
-                problem(where, "a live system needs parts, for its reference price")
+        if s.get("state") == "live" and not out["url"].startswith("https://"):
+            problem(where, "a live system needs its https:// url")
+        if s.get("state") in SHOWN and not s.get("parts"):
+            problem(where, "a live system or kit needs parts, for its reference price")
+        if s.get("allowance_pct") is not None:
+            if not is_num(s["allowance_pct"]) or not str(s.get("allowance_text", "")).strip():
+                problem(where, "`allowance_pct` should be a number, with an `allowance_text` saying what it covers")
+            else:
+                out.update({"bosPct": s["allowance_pct"], "bosText": str(s["allowance_text"])})
+        if s.get("state") == "kit":
+            kit = s.get("kit") or {}
+            notes = [str(n) for n in kit.get("notes") or [] if str(n).strip()]
+            if not notes:
+                problem(where, "a kit needs `kit.notes`: how it goes together and its limits")
+            if not str(kit.get("manual", "")).startswith("https://"):
+                problem(where, "a kit needs `kit.manual`, the https:// address of the maker's manual")
+            out["url"] = "#kit-" + out["id"]   # its card on this page
+            out["kit"] = {"notes": notes, "alt": str(kit.get("alt", "")), "manual": str(kit.get("manual", ""))}
         for part in s.get("parts") or []:
             if not isinstance(part, dict) or part.get("price") not in prices or not is_num(part.get("qty")):
                 problem(where, "each part needs price (an id from prices) and qty")
@@ -220,11 +234,12 @@ def main():
     # the link preview image (og:image) sits beside the page
     if (ROOT / "og.png").exists():
         shutil.copyfile(ROOT / "og.png", OUT.parent / "og.png")
-    live = [s for s in systems if s["state"] == "live"]
-    print(f"Read {len(systems)} systems ({len(live)} live), {len(prices)} prices, {len(apps)} appliances")
+    live = [s for s in systems if s["state"] in SHOWN]
+    kits = sum(s["state"] == "kit" for s in live)
+    print(f"Read {len(systems)} systems ({len(live) - kits} live, {kits} kits), {len(prices)} prices, {len(apps)} appliances")
     for s in live:
         parts = sum(prices[p["p"]]["p"] * p["q"] for p in s["parts"])
-        print(f"  {s['n']}: about ₦{round(parts * (1 + doc['allowance_pct'] / 100)):,}")
+        print(f"  {s['n']}: about ₦{round(parts * (1 + s.get('bosPct', doc['allowance_pct']) / 100)):,}")
     print(f"Wrote {OUT.relative_to(ROOT)} ({round(OUT.stat().st_size / 1024)} KB)")
 
 
