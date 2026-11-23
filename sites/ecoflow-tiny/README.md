@@ -32,10 +32,12 @@ Its own Worker, set up once:
 - Project name: `anor-tiny` (matches `name` in `wrangler.jsonc`)
 - Build command: `pip install pyyaml && python build.py`
 - Deploy command: `npx wrangler deploy`
-- Preview command: `npx wrangler versions upload`
+- Preview command: `env -u WRANGLER_CI_MATCH_TAG npx wrangler versions upload`
 - Path: `sites/ecoflow-tiny`
 - Build watch paths: `sites/ecoflow-tiny/*`
 - Custom domain: `tiny.anor.openculture.org.ng`
+
+The preview command is longer than on the other sites because of a Cloudflare fault. On this Worker, preview builds were given an ID that matches no Worker, and failed with "The name in your wrangler.jsonc file (anor-tiny) must match the name of your Worker", although the name was right. `env -u WRANGLER_CI_MATCH_TAG` skips that check for previews. Production builds are not affected. The fault is tracked at [cloudflare/workers-sdk#15682](https://github.com/cloudflare/workers-sdk/issues/15682); once it is fixed, the plain `npx wrangler versions upload` can go back.
 
 If the address changes, set `host` under `page` in `data/build.yaml`, and the kit's `url` in `sites/guide/data/guide.yaml`.
 
